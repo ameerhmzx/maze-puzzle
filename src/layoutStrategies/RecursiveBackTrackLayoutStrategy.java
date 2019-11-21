@@ -11,32 +11,24 @@ import java.util.ArrayList;
  * https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker
  */
 public class RecursiveBackTrackLayoutStrategy implements ILayoutStrategy {
-    private ArrayList<Integer> visitedCellIndices;
-    private Board board;
-
     @Override
     public void layoutBoard(Board board) {
-        this.board = board;
-        this.visitedCellIndices = new ArrayList<>();
+        ArrayList<Integer> visitedCellIndices = new ArrayList<>();
 
-        this.visitCell(board.getRandomCell());
+        this.visitCell(board.getRandomCell(), visitedCellIndices, board);
     }
 
-    private void visitCell(Cell cell) {
-        this.visitedCellIndices.add(cell.getIndex());
+    private void visitCell(Cell cell, ArrayList<Integer> visitedCellIndices, Board board) {
+        visitedCellIndices.add(cell.getIndex());
         ArrayList<Cell> cells = board.getNeighbourCells(cell);
 
         while (cells.size() != 0) {
             Cell randomCell = cells.get((int) (Math.random() * cells.size()));
-            if (isCellUnvisited(randomCell)) {
+            if (visitedCellIndices.contains(randomCell.getIndex())) {
                 cell.removeInterWall(randomCell);
-                visitCell(cell);
+                this.visitCell(cell, visitedCellIndices, board);
             }
             cells.remove(randomCell);
         }
-    }
-
-    private boolean isCellUnvisited(Cell cell) {
-        return visitedCellIndices.contains(cell.getIndex());
     }
 }
