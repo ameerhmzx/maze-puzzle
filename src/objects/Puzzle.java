@@ -1,4 +1,7 @@
-package maze;
+package objects;
+
+import enums.LayoutStrategy;
+import objects.Board;
 
 public class Puzzle {
     private int size;

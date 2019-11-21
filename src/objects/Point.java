@@ -1,4 +1,4 @@
-package maze;
+package objects;
 
 class Point {
     private int x;

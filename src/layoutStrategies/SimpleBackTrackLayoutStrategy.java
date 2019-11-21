@@ -1,4 +1,8 @@
-package maze;
+package layoutStrategies;
+
+import interfaces.ILayoutStrategy;
+import objects.Board;
+import objects.Cell;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -7,7 +11,7 @@ import java.util.Stack;
  * Stack based implementation of recursive backtrack maze generation algorithm
  * https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker
  */
-class SimpleBackTrackLayoutStrategy implements ILayoutStrategy {
+public class SimpleBackTrackLayoutStrategy implements ILayoutStrategy {
     private ArrayList<Integer> visitedCellIndices;
     private Stack<Cell> stack;
     private Cell currentCell;

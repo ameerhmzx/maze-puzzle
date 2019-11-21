@@ -1,9 +1,11 @@
-package maze;
+package objects;
+
+import enums.CellWall;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class Cell {
+public class Cell {
     private Point location;
     private Map<CellWall, Boolean> walls;
     private Map<CellWall, CellWall> opposingWalls;
@@ -31,7 +33,7 @@ class Cell {
         this.walls.put(wall, false);
     }
 
-    void removeInterWall(Cell cell) {
+    public void removeInterWall(Cell cell) {
         CellWall interWall;
         if (cell.getIndex() == this.getIndex() + 1) {
             interWall = CellWall.LEFT;
@@ -46,7 +48,7 @@ class Cell {
         cell.removeWall(opposingWalls.get(interWall));
     }
 
-    int getIndex() {
+    public int getIndex() {
         return this.location.index;
     }
 }

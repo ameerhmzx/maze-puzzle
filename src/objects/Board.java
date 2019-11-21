@@ -1,13 +1,13 @@
-package maze;
+package objects;
 
 import java.util.ArrayList;
 
-class Board {
+public class Board {
     private ArrayList<Cell> cells = new ArrayList<>();
     private int width;
     private int height;
 
-    Board(int width, int height) {
+    public Board(int width, int height) {
         this.height = height;
         this.width = width;
 
@@ -18,11 +18,11 @@ class Board {
         }
     }
 
-    Cell getRandomCell() {
+    public Cell getRandomCell() {
         return cells.get((int) (Math.random() * this.width * this.height));
     }
 
-    ArrayList<Cell> getNeighbourCells(Cell cell) {
+    public ArrayList<Cell> getNeighbourCells(Cell cell) {
         int cellIndex = cell.getIndex();
         ArrayList<Cell> neighbourCells = new ArrayList<>();
 
