@@ -1,3 +1,3 @@
 package maze;
 
-enum CellWall {LEFT, RIGHT, TOP, BOTTOM};
+enum CellWall {LEFT, RIGHT, TOP, BOTTOM}

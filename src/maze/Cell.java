@@ -5,21 +5,26 @@ import java.util.Map;
 
 class Cell {
     private Point location;
-    private Map<CellWall, Boolean> walls = new HashMap<>();
-
-    private Map<CellWall, CellWall> opposingWalls = Map.of(
-            CellWall.LEFT, CellWall.RIGHT,
-            CellWall.RIGHT, CellWall.LEFT,
-            CellWall.TOP, CellWall.BOTTOM,
-            CellWall.BOTTOM, CellWall.TOP
-    );
+    private Map<CellWall, Boolean> walls;
+    private Map<CellWall, CellWall> opposingWalls;
 
     Cell(Point location) {
+        initialize();
         this.location = location;
 
         for (CellWall wall : CellWall.values()) {
             walls.put(wall, true);
         }
+    }
+
+    private void initialize() {
+        walls = new HashMap<>();
+        opposingWalls = new HashMap<>();
+
+        opposingWalls.put(CellWall.LEFT, CellWall.RIGHT);
+        opposingWalls.put(CellWall.RIGHT, CellWall.LEFT);
+        opposingWalls.put(CellWall.TOP, CellWall.BOTTOM);
+        opposingWalls.put(CellWall.BOTTOM, CellWall.TOP);
     }
 
     private void removeWall(CellWall wall) {
