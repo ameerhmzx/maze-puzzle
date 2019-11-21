@@ -11,8 +11,8 @@ public class Board {
         this.height = height;
         this.width = width;
 
-        for (int y = 0; y <= height; y++) {
-            for (int x = 0; x <= width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 cells.add(new Cell(new Point(x, y, y * height + x)));
             }
         }
