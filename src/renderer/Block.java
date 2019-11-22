@@ -1,9 +1,10 @@
 package renderer;
 
+import interfaces.Constants;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class Block {
+public class Block implements Constants {
     private boolean top, right, bottom, left;
     Region box;
 
@@ -18,8 +19,7 @@ public class Block {
         this.right = right;
 
         box = new Region();
-        box.setMinSize(20, 20);
-        box.resize(20, 20);
+        box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
         box.setBorder(
                 new Border(
                         new BorderStroke(
@@ -37,7 +37,7 @@ public class Block {
                                 )));
     }
 
-    public Region getCell(){
+    public Region getBox(){
         return box;
     }
 }

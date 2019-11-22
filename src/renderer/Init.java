@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import objects.Player;
+import objects.Puzzle;
 
 public class Init extends Application implements Constants {
 
@@ -19,9 +20,9 @@ public class Init extends Application implements Constants {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //Puzzle puzzle = new Puzzle(20, LayoutStrategy.RECURSIVE_BACK_TRACK);
+        Puzzle puzzle = new Puzzle(10, LayoutStrategy.RECURSIVE_BACK_TRACK);
 
-        Parent root = (new RenderEngine()).getRoot();
+        Parent root = (new RenderEngine(puzzle)).getRoot();
         Scene scene = new Scene(root, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
 
