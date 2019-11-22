@@ -11,4 +11,5 @@ public interface Constants {
     float ANIMATION_RATE = .1f;
 
     Color BORDER_COLOR = Color.BLACK;
+    Color PLAYER_COLOR = Color.color(.09, .46, .82);
 }

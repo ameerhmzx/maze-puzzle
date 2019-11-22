@@ -3,7 +3,6 @@ package objects;
 import enums.Direction;
 import interfaces.Constants;
 import javafx.animation.TranslateTransition;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -17,37 +16,39 @@ public class Player implements Constants {
     }
 
     public Rectangle getShape() {
-        if(rect == null){
-            rect = new Rectangle(PIXEL_SIZE, PIXEL_SIZE, Color.RED);
-            rect.relocate(0,0);
-            location = new int[]{0,0};
+        if (rect == null) {
+            rect = new Rectangle(PIXEL_SIZE - 6, PIXEL_SIZE - 6, PLAYER_COLOR);
+            rect.relocate(3, 3);
+            rect.setArcHeight(5.0);
+            rect.setArcWidth(5.0);
+            location = new int[]{0, 0};
         }
         return rect;
     }
 
-    public void reset(){
-        rect.relocate(0,0);
-        location = new int[]{0,0};
-        move(0,0);
+    public void reset() {
+        rect.relocate(0, 0);
+        location = new int[]{0, 0};
+        move(0, 0);
     }
 
-    protected void move(Direction direction){
+    protected void move(Direction direction) {
         TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
-        switch (direction){
+        switch (direction) {
             case UP:
-                tt.setToY(location[1]-PIXEL_SIZE);
+                tt.setToY(location[1] - PIXEL_SIZE);
                 location[1] -= PIXEL_SIZE;
                 break;
             case LEFT:
-                tt.setToX(location[0]-PIXEL_SIZE);
+                tt.setToX(location[0] - PIXEL_SIZE);
                 location[0] -= PIXEL_SIZE;
                 break;
             case RIGHT:
-                tt.setToX(location[0]+PIXEL_SIZE);
+                tt.setToX(location[0] + PIXEL_SIZE);
                 location[0] += PIXEL_SIZE;
                 break;
             case DOWN:
-                tt.setToY(location[1]+PIXEL_SIZE);
+                tt.setToY(location[1] + PIXEL_SIZE);
                 location[1] += PIXEL_SIZE;
                 break;
         }
@@ -55,7 +56,7 @@ public class Player implements Constants {
         tt.play();
     }
 
-    protected void move(int x, int y){
+    protected void move(int x, int y) {
         TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
         tt.setToX(x);
         tt.setToY(y);
