@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cell {
-    private static Map<CellWall, CellWall> opposingWalls = new HashMap<>() {{
+    private static Map<CellWall, CellWall> opposingWalls = new HashMap<CellWall, CellWall>() {{
         opposingWalls.put(CellWall.LEFT, CellWall.RIGHT);
         opposingWalls.put(CellWall.RIGHT, CellWall.LEFT);
         opposingWalls.put(CellWall.TOP, CellWall.BOTTOM);

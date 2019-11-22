@@ -48,4 +48,16 @@ public class Board {
 
         return neighbourCells;
     }
+
+    public ArrayList<Cell> getCells() {
+        return cells;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

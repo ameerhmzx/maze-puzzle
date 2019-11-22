@@ -2,9 +2,6 @@ package renderer;
 
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-
-import java.awt.*;
 
 public class Block {
     private boolean top, right, bottom, left;
@@ -21,8 +18,8 @@ public class Block {
         this.right = right;
 
         box = new Region();
-        box.setMinSize(25, 25);
-        box.resize(25, 25);
+        box.setMinSize(20, 20);
+        box.resize(20, 20);
         box.setBorder(
                 new Border(
                         new BorderStroke(

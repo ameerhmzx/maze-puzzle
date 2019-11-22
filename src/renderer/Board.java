@@ -21,7 +21,7 @@ public class Board {
         table = new GridPane();
         for (int i = 0; i < side; i++) {
             for (int j = 0; j < side; j++) {
-                table.add((new Block(Math.random()>0.5, Math.random()>0.5, Math.random()>0.5, Math.random()>0.5).getCell()), i, j);
+                table.add((new Block(false, false, Math.random()>0.5, Math.random()>0.5).getCell()), i, j);
             }
         }
     }
