@@ -19,14 +19,6 @@ public class Board {
         }
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
     public ArrayList<Cell> getCells() {
         return cells;
     }
