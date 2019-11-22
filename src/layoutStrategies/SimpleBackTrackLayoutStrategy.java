@@ -23,10 +23,17 @@ public class SimpleBackTrackLayoutStrategy implements ILayoutStrategy {
             visitedCellIndices.add(cell.getIndex());
             ArrayList<Cell> neighbourCells = board.getNeighbourCells(cell);
 
-            for (Cell neighbourCell : neighbourCells) {
-                if (visitedCellIndices.contains(neighbourCell.getIndex())) {
+            while (neighbourCells.size() != 0) {
+                Cell randomCell = neighbourCells.get((int) (Math.random() * neighbourCells.size()));
+                if (!visitedCellIndices.contains(randomCell.getIndex())) {
+                    cell.removeInterWall(randomCell);
+
                     stack.push(cell);
+                    visitedCellIndices.add(randomCell.getIndex());
+                    stack.push(randomCell);
                     break;
+                } else {
+                    neighbourCells.remove(randomCell);
                 }
             }
         }
