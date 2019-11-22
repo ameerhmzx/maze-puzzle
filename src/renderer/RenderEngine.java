@@ -6,12 +6,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import jdk.nashorn.internal.ir.Block;
 import objects.Cell;
 import objects.Player;
 import objects.Puzzle;
 
-import java.util.ArrayList;
 
 public class RenderEngine implements Constants {
 
@@ -26,12 +24,10 @@ public class RenderEngine implements Constants {
         this.puzzle = puzzle;
     }
 
-
     public Parent getRoot(){
         borderPane = new BorderPane();
         stackPane = new StackPane();
         grid = renderBoard();
-//        grid = renderer.Board.getInstance(20).getTable();
         canvas = new Pane();
 
         canvas.getChildren().add(Player.getPlayer());
@@ -43,13 +39,17 @@ public class RenderEngine implements Constants {
     }
 
     private GridPane renderBoard() {
-        ArrayList<Cell> cells = puzzle.getBoard().getCells();
         grid = new GridPane();
         for (int i = 0; i < puzzle.getBoard().getHeight(); i++) {
             for (int j = 0; j < puzzle.getBoard().getWidth(); j++) {
-//                grid.add((new Block(false, false, Math.random()>0.5, Math.random()>0.5).getCell()), i, j);
-                Cell cell = cells.get(j+(i*puzzle.getBoard().getWidth()));
-                grid.add(renderCell(cell.hasWall(CellWall.TOP), cell.hasWall(CellWall.RIGHT),cell.hasWall(CellWall.BOTTOM),cell.hasWall(CellWall.LEFT)), i ,j);
+                Cell cell = puzzle.getBoard().getCell(j,i);
+                grid.add(
+                        renderCell(
+                                cell.hasWall(CellWall.TOP),
+                                (i != puzzle.getSize() - 1 || j != puzzle.getSize() - 1) && cell.hasWall(CellWall.RIGHT),
+                                cell.hasWall(CellWall.BOTTOM),
+                                (i != 0 || j != 0) && cell.hasWall(CellWall.LEFT)),
+                        i ,j);
             }
         }
         return grid;
@@ -61,10 +61,10 @@ public class RenderEngine implements Constants {
         box.setBorder(
                 new Border(
                         new BorderStroke(
-                                Color.valueOf("000000"),
-                                Color.valueOf("000000"),
-                                Color.valueOf("000000"),
-                                Color.valueOf("000000"),
+                                BORDER_COLOR,
+                                BORDER_COLOR,
+                                BORDER_COLOR,
+                                BORDER_COLOR,
                                 top?BorderStrokeStyle.SOLID:BorderStrokeStyle.NONE,
                                 right?BorderStrokeStyle.SOLID:BorderStrokeStyle.NONE,
                                 bottom?BorderStrokeStyle.SOLID:BorderStrokeStyle.NONE,

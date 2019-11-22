@@ -19,7 +19,7 @@ public class Init extends Application implements Constants {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Puzzle puzzle = new Puzzle(10, LayoutStrategy.SIMPLE_BACK_TRACK);
+        Puzzle puzzle = new Puzzle(20, LayoutStrategy.SIMPLE_BACK_TRACK);
 
         Parent root = (new RenderEngine(puzzle)).getRoot();
         Scene scene = new Scene(root, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
