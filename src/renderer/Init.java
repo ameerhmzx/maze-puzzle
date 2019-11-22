@@ -4,7 +4,6 @@ import enums.Direction;
 import enums.LayoutStrategy;
 import interfaces.Constants;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -20,7 +19,7 @@ public class Init extends Application implements Constants {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Puzzle puzzle = new Puzzle(10, LayoutStrategy.RECURSIVE_BACK_TRACK);
+        Puzzle puzzle = new Puzzle(10, LayoutStrategy.SIMPLE_BACK_TRACK);
 
         Parent root = (new RenderEngine(puzzle)).getRoot();
         Scene scene = new Scene(root, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
