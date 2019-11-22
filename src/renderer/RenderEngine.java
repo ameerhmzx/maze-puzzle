@@ -31,7 +31,7 @@ public class RenderEngine implements Constants {
         canvas.getChildren().add(puzzle.getPlayer().getShape());
 
         stackPane.setAlignment(Pos.CENTER);
-        stackPane.getChildren().addAll(grid, canvas);
+        stackPane.getChildren().addAll(canvas, grid);
         borderPane.setCenter(stackPane);
         return borderPane;
     }

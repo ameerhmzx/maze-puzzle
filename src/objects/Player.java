@@ -5,6 +5,7 @@ import interfaces.Constants;
 import javafx.animation.TranslateTransition;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 
 
@@ -20,6 +21,9 @@ public class Player implements Constants {
         if(rect == null){
             rect = new Rectangle(PIXEL_SIZE, PIXEL_SIZE, Color.RED);
             rect.relocate(0,0);
+            rect.setStrokeType(StrokeType.INSIDE);
+            rect.setStroke(Color.WHITE);
+            rect.setStrokeWidth(PIXEL_SIZE-CHARACTER_SIZE);
             location = new int[]{0,0};
         }
         return rect;

@@ -7,7 +7,7 @@ public interface Constants {
     int DEFAULT_WINDOW_WIDTH = 300;
     int DEFAULT_WINDOW_HEIGHT = 275;
     int PIXEL_SIZE = 20;
-    int CHARACTER_SIZE = 18;
+    int CHARACTER_SIZE = 16;
     float ANIMATION_RATE = .1f;
 
     Color BORDER_COLOR = Color.BLACK;

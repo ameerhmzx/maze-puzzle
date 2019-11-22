@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
@@ -26,4 +28,11 @@
             </children>
         </StackPane>
     </center>
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <items>
+            <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="0.0" prefWidth="501.0" style="-fx-min-width: parent;" />
+         </items>
+      </ToolBar>
+   </top>
 </BorderPane>
