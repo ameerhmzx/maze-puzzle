@@ -3,11 +3,12 @@ package objects;
 import java.util.ArrayList;
 
 public class Board {
-    private ArrayList<Cell> cells = new ArrayList<>();
+    private ArrayList<Cell> cells;
     private int width;
     private int height;
 
     public Board(int width, int height) {
+        this.cells = new ArrayList<>();
         this.height = height;
         this.width = width;
 
@@ -16,6 +17,18 @@ public class Board {
                 cells.add(new Cell(new Point(x, y, y * height + x)));
             }
         }
+    }
+
+    public ArrayList<Cell> getCells() {
+        return cells;
+    }
+
+    public Cell getCell(int n) {
+        return cells.get(n);
+    }
+
+    public Cell getCell(int y, int x) {
+        return cells.get(y * this.width + x);
     }
 
     public Cell getRandomCell() {
@@ -38,7 +51,7 @@ public class Board {
 
         // check left most column
         if (cellIndex % this.width != 0) {
-            neighbourCells.add(cells.get(cellIndex + 1));
+            neighbourCells.add(cells.get(cellIndex - 1));
         }
 
         // check bottom most row

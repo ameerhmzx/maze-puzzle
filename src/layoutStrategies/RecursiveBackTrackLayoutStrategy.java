@@ -24,9 +24,9 @@ public class RecursiveBackTrackLayoutStrategy implements ILayoutStrategy {
 
         while (cells.size() != 0) {
             Cell randomCell = cells.get((int) (Math.random() * cells.size()));
-            if (visitedCellIndices.contains(randomCell.getIndex())) {
+            if (!visitedCellIndices.contains(randomCell.getIndex())) {
                 cell.removeInterWall(randomCell);
-                this.visitCell(cell, visitedCellIndices, board);
+                this.visitCell(randomCell, visitedCellIndices, board);
             }
             cells.remove(randomCell);
         }
