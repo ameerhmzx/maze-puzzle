@@ -9,10 +9,14 @@ import javafx.util.Duration;
 
 
 public class Player implements Constants {
-    private static Rectangle rect;
-    private static int[] location; //(x,y)
+    private Rectangle rect;
+    private int[] location; //(x,y)
 
-    public static Rectangle getPlayer() {
+    public Player() {
+        getShape();
+    }
+
+    public Rectangle getShape() {
         if(rect == null){
             rect = new Rectangle(PIXEL_SIZE, PIXEL_SIZE, Color.RED);
             rect.relocate(0,0);
@@ -21,13 +25,13 @@ public class Player implements Constants {
         return rect;
     }
 
-    public static void reset(){
+    public void reset(){
         rect.relocate(0,0);
         location = new int[]{0,0};
-        moveCharacter(0,0);
+        move(0,0);
     }
 
-    public static void moveCharacter(Direction direction){
+    protected void move(Direction direction){
         TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
         switch (direction){
             case UP:
@@ -51,12 +55,14 @@ public class Player implements Constants {
         tt.play();
     }
 
-    public static void moveCharacter(int x, int y){
+    protected void move(int x, int y){
         TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
         tt.setToX(x);
         tt.setToY(y);
         tt.play();
     }
 
-
+    public int[] getLocation() {
+        return location;
+    }
 }

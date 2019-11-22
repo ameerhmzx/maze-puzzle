@@ -11,6 +11,7 @@ import layoutStrategies.LayoutStrategy;
 import objects.Puzzle;
 
 public class Init extends Application implements Constants {
+    private Puzzle puzzle;
 
     public static void main(String[] args) {
         Init.launch(args);
@@ -35,19 +36,19 @@ public class Init extends Application implements Constants {
         System.out.println("Key Pressed: " + ke.getCode());
         switch (ke.getCode()){
             case UP:
-                Player.moveCharacter(Direction.UP);
+                puzzle.movePlayer(Direction.UP);
                 break;
             case RIGHT:
-                Player.moveCharacter(Direction.RIGHT);
+                puzzle.movePlayer(Direction.RIGHT);
                 break;
             case LEFT:
-                Player.moveCharacter(Direction.LEFT);
+                puzzle.movePlayer(Direction.LEFT);
                 break;
             case DOWN:
-                Player.moveCharacter(Direction.DOWN);
+                puzzle.movePlayer(Direction.DOWN);
                 break;
             case R:
-                Player.reset();
+                puzzle.getPlayer().reset();
                 break;
         }
         ke.consume();
