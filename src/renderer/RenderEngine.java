@@ -5,9 +5,7 @@ import interfaces.Constants;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import objects.Cell;
-import objects.Player;
 import objects.Puzzle;
 
 
@@ -30,7 +28,7 @@ public class RenderEngine implements Constants {
         grid = renderBoard();
         canvas = new Pane();
 
-        canvas.getChildren().add(Player.getPlayer());
+        canvas.getChildren().add(puzzle.getPlayer().getShape());
 
         stackPane.setAlignment(Pos.CENTER);
         stackPane.getChildren().addAll(grid, canvas);
