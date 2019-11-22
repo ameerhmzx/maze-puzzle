@@ -4,6 +4,7 @@ import enums.Direction;
 import interfaces.Constants;
 import javafx.animation.TranslateTransition;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 
 

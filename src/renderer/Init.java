@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import layoutStrategies.LayoutStrategy;
+import enums.LayoutStrategy;
 import objects.Puzzle;
 
 public class Init extends Application implements Constants {
@@ -21,8 +21,8 @@ public class Init extends Application implements Constants {
     public void start(Stage primaryStage) throws Exception {
         puzzle = new Puzzle(20, LayoutStrategy.PRIM_RANDOMIZATION);
 
-        Parent root = new RenderEngine(puzzle).getRoot();
-        Scene scene = new Scene(root);
+        Parent root = (new RenderEngine(puzzle)).getRoot();
+        Scene scene = new Scene(root, 20*PIXEL_SIZE+10, 20*PIXEL_SIZE+10);
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
 
         primaryStage.setTitle(APP_NAME);
@@ -51,5 +51,4 @@ public class Init extends Application implements Constants {
         }
         ke.consume();
     }
-
 }

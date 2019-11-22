@@ -1,6 +1,9 @@
-package layoutStrategies;
+package enums;
 
 import interfaces.ILayoutStrategy;
+import layoutStrategies.PrimRandomizationLayoutStrategy;
+import layoutStrategies.RecursiveBackTrackLayoutStrategy;
+import layoutStrategies.SimpleBackTrackLayoutStrategy;
 import objects.Board;
 
 public enum LayoutStrategy implements ILayoutStrategy {
