@@ -33,6 +33,10 @@ public class Cell {
         return this.walls.get(wall);
     }
 
+    public void setWall(CellWall wall, boolean val) {
+        this.walls.put(wall, val);
+    }
+
     private void removeWall(CellWall wall) {
         this.walls.put(wall, false);
     }

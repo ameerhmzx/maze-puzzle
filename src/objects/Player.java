@@ -17,8 +17,8 @@ public class Player implements Constants {
 
     public Rectangle getShape() {
         if (rect == null) {
-            rect = new Rectangle(PIXEL_SIZE - 6, PIXEL_SIZE - 6, PLAYER_COLOR);
-            rect.relocate(3, 3);
+            rect = new Rectangle(PIXEL_SIZE - 8, PIXEL_SIZE - 8, PLAYER_COLOR);
+            rect.relocate(4, 4);
             rect.setArcHeight(5.0);
             rect.setArcWidth(5.0);
             location = new int[]{0, 0};

@@ -21,19 +21,17 @@ public class Init extends Application implements Constants {
     public void start(Stage primaryStage) throws Exception {
         puzzle = new Puzzle(20, LayoutStrategy.PRIM_RANDOMIZATION);
 
-
-        Parent root = (new RenderEngine(puzzle)).getRoot();
-        Scene scene = new Scene(root, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+        Parent root = new RenderEngine(puzzle).getRoot();
+        Scene scene = new Scene(root);
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
 
         primaryStage.setTitle(APP_NAME);
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
-
     }
 
     private void kbdEventsHandler(KeyEvent ke){
-        System.out.println("Key Pressed: " + ke.getCode());
         switch (ke.getCode()){
             case UP:
                 puzzle.movePlayer(Direction.UP);
