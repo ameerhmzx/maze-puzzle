@@ -1,7 +1,9 @@
 package objects;
 
 import enums.CellWall;
-import enums.LayoutStrategy;
+import enums.Direction;
+import interfaces.Constants;
+import layoutStrategies.LayoutStrategy;
 
 public class Puzzle {
     private int size;
@@ -14,6 +16,7 @@ public class Puzzle {
 
         this.board = new Board(size, size);
         layoutStrategy.layoutBoard(this.board);
+        drawBoard(this.board);
     }
 
     public int getSize() {
@@ -29,7 +32,7 @@ public class Puzzle {
     }
 
     public static void main(String[] args) {
-        new Puzzle(4, LayoutStrategy.SIMPLE_BACK_TRACK);
+        new Puzzle(4, LayoutStrategy.PRIM_RANDOMIZATION);
     }
 
     private void drawBoard(Board board) {

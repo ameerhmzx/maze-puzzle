@@ -1,14 +1,13 @@
 package renderer;
 
 import enums.Direction;
-import enums.LayoutStrategy;
 import interfaces.Constants;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import objects.Player;
+import layoutStrategies.LayoutStrategy;
 import objects.Puzzle;
 
 public class Init extends Application implements Constants {
@@ -19,7 +18,8 @@ public class Init extends Application implements Constants {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Puzzle puzzle = new Puzzle(10, LayoutStrategy.SIMPLE_BACK_TRACK);
+        puzzle = new Puzzle(20, LayoutStrategy.PRIM_RANDOMIZATION);
+
 
         Parent root = (new RenderEngine(puzzle)).getRoot();
         Scene scene = new Scene(root, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
