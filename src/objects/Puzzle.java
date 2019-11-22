@@ -5,14 +5,17 @@ import enums.Direction;
 import interfaces.Constants;
 import layoutStrategies.LayoutStrategy;
 
-public class Puzzle {
+public class Puzzle implements Constants {
     private int size;
     private LayoutStrategy layoutStrategy;
     private Board board;
+    private Player player;
 
     public Puzzle(int size, LayoutStrategy layoutStrategy) {
         this.size = size;
         this.layoutStrategy = layoutStrategy;
+
+        player = new Player();
 
         this.board = new Board(size, size);
         layoutStrategy.layoutBoard(this.board);
@@ -29,6 +32,32 @@ public class Puzzle {
 
     public Board getBoard() {
         return board;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void movePlayer(Direction direction){
+        Cell currCell = board.getCell(player.getLocation()[1]/PIXEL_SIZE, player.getLocation()[0]/PIXEL_SIZE);
+        switch (direction){
+            case UP:
+                if(!currCell.hasWall(CellWall.TOP))
+                    player.move(direction);
+                break;
+            case DOWN:
+                if(!currCell.hasWall(CellWall.BOTTOM))
+                    player.move(direction);
+                break;
+            case LEFT:
+                if(!currCell.hasWall(CellWall.LEFT))
+                    player.move(direction);
+                break;
+            case RIGHT:
+                if(!currCell.hasWall(CellWall.RIGHT))
+                    player.move(direction);
+                break;
+        }
     }
 
     public static void main(String[] args) {
