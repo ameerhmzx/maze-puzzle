@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import enums.LayoutStrategy;
+import layoutStrategies.LayoutStrategy;
 import objects.Puzzle;
 
 public class Init extends Application implements Constants {

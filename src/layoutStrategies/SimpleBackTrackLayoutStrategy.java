@@ -1,6 +1,5 @@
 package layoutStrategies;
 
-import interfaces.ILayoutStrategy;
 import objects.Board;
 import objects.Cell;
 

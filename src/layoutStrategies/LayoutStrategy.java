@@ -1,9 +1,5 @@
-package enums;
+package layoutStrategies;
 
-import interfaces.ILayoutStrategy;
-import layoutStrategies.PrimRandomizationLayoutStrategy;
-import layoutStrategies.RecursiveBackTrackLayoutStrategy;
-import layoutStrategies.SimpleBackTrackLayoutStrategy;
 import objects.Board;
 
 public enum LayoutStrategy implements ILayoutStrategy {
@@ -18,7 +14,6 @@ public enum LayoutStrategy implements ILayoutStrategy {
         }
     },
     PRIM_RANDOMIZATION {
-        @Override
         public void layoutBoard(Board board) {
             new PrimRandomizationLayoutStrategy().layoutBoard(board);
         }

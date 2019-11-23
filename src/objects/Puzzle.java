@@ -3,7 +3,7 @@ package objects;
 import enums.CellWall;
 import enums.Direction;
 import interfaces.Constants;
-import enums.LayoutStrategy;
+import layoutStrategies.LayoutStrategy;
 
 public class Puzzle implements Constants {
     private int size;

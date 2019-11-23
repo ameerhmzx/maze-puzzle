@@ -1,4 +1,4 @@
-package interfaces;
+package layoutStrategies;
 
 import objects.Board;
 
