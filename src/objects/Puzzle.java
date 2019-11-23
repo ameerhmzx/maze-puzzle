@@ -4,7 +4,7 @@ import enums.CellWall;
 import enums.Direction;
 import enums.GameState;
 import interfaces.Constants;
-import enums.LayoutStrategy;
+import layoutStrategies.LayoutStrategy;
 import renderer.GameEngine;
 
 public class Puzzle implements Constants {
