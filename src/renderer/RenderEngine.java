@@ -2,9 +2,16 @@ package renderer;
 
 import enums.CellWall;
 import interfaces.Constants;
+import interfaces.GameControls;
+import javafx.collections.FXCollections;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.SVGPath;
 import objects.Cell;
 import objects.Puzzle;
 
@@ -13,18 +20,37 @@ import java.util.Map;
 
 class RenderEngine implements Constants {
     private Puzzle puzzle;
+    private GameControls gameControls;
 
-    RenderEngine(Puzzle puzzle) {
+    RenderEngine(Puzzle puzzle, GameControls gameControls) {
         this.puzzle = puzzle;
+        this.gameControls = gameControls;
         int size = this.puzzle.getSize();
 //        this.puzzle.getBoard().getCell(0).setWall(CellWall.LEFT, false);
         this.puzzle.getBoard().getCell(size * size - 1).setWall(CellWall.RIGHT, false);
     }
 
     Parent getRoot() {
+        BorderPane root = new BorderPane();
         StackPane stackPane = new StackPane();
         GridPane grid = renderBoard();
         Pane canvas = new Pane();
+
+        final Pane leftSpacer = new Pane();
+        HBox.setHgrow(leftSpacer, Priority.SOMETIMES);
+
+        final Pane rightSpacer = new Pane();
+        HBox.setHgrow(rightSpacer, Priority.SOMETIMES);
+
+        ToolBar toolBar = new ToolBar(
+                leftSpacer,
+                new Button("SOLVE"),
+                ShuffleButton(),
+                sizeSelectComboBox(),
+                rightSpacer,
+                SettingButton()
+        );
+        toolBar.setMaxHeight(10);
 
         canvas.getChildren().add(puzzle.getPlayer().getShape());
 
@@ -39,7 +65,9 @@ class RenderEngine implements Constants {
         hBox.getChildren().add(vbox);
         hBox.setAlignment(Pos.CENTER);
 
-        return hBox;
+        root.setCenter(hBox);
+        root.setTop(toolBar);
+        return root;
     }
 
     private GridPane renderBoard() {
@@ -86,5 +114,35 @@ class RenderEngine implements Constants {
         return box;
     }
 
+    private Button SolveButton(){
+        Button btn = new Button("SOLVE");
+        btn.setOnAction((value)->gameControls.solve());
+        return btn;
+    }
+
+    private Button ShuffleButton(){
+        Button btn = new Button("SHUFFLE");
+        btn.setOnAction((value)->gameControls.shuffle());
+        return btn;
+    }
+
+    private ComboBox sizeSelectComboBox(){
+        ComboBox comboBox = new ComboBox<>(FXCollections.observableArrayList(SIZE_LIST));
+        comboBox.setPromptText(puzzle.getSize() + " x " + puzzle.getSize());
+        comboBox.setOnAction((value)->{
+            int size = SIZE_OF_GAME.get(comboBox.getSelectionModel().getSelectedItem().toString());
+            gameControls.changeSize(size);
+        });
+        return comboBox;
+    }
+
+    private Button SettingButton(){
+        Button btn = new Button();
+
+        btn.getStyleClass().add("icon-button");
+        btn.setPickOnBounds(true);
+
+        return btn;
+    }
 
 }

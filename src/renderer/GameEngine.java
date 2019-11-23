@@ -3,6 +3,7 @@ package renderer;
 import enums.Direction;
 import enums.GameState;
 import interfaces.Constants;
+import interfaces.GameControls;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,9 +15,10 @@ import objects.Puzzle;
 
 import static javafx.scene.input.KeyCode.*;
 
-public class GameEngine extends Application implements Constants {
+public class GameEngine extends Application implements Constants , GameControls {
     private Puzzle puzzle;
     private static GameState gameState;
+    private Stage primaryStage;
 
     public static void main(String[] args) {
         GameEngine.launch(args);
@@ -24,17 +26,8 @@ public class GameEngine extends Application implements Constants {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        puzzle = new Puzzle(Constants.DEFAULT_MAZE_SIZE, LayoutStrategy.PRIM_RANDOMIZATION);
-        gameState = GameState.PLAYING;
-
-        Parent root = (new RenderEngine(puzzle)).getRoot();
-        Scene scene = new Scene(root, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE);
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
-
-        primaryStage.setTitle(APP_NAME);
-        primaryStage.setScene(scene);
-        primaryStage.setMaximized(false);
-        primaryStage.show();
+        this.primaryStage = primaryStage;
+        newGame(DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
 
     private void kbdEventsHandler(KeyEvent ke){
@@ -75,5 +68,35 @@ public class GameEngine extends Application implements Constants {
 
     public static void setGameState(GameState gameState) {
         GameEngine.gameState = gameState;
+    }
+
+    private void newGame(int size, LayoutStrategy layoutStrategy){
+        puzzle = new Puzzle(size, layoutStrategy);
+        gameState = GameState.PLAYING;
+
+        Parent root = (new RenderEngine(puzzle, this)).getRoot();
+        Scene scene = new Scene(root, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE);
+        scene.getStylesheets().add(getClass().getResource("../styling/style.css").toExternalForm());
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
+
+        primaryStage.setTitle(APP_NAME);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.show();
+    }
+
+    @Override
+    public void shuffle() {
+        newGame(puzzle.getSize(), puzzle.getLayoutStrategy());
+    }
+
+    @Override
+    public void solve() {
+        // TODO:: SOLVE
+    }
+
+    @Override
+    public void changeSize(int size) {
+        newGame(size, puzzle.getLayoutStrategy());
     }
 }
