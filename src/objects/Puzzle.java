@@ -2,8 +2,10 @@ package objects;
 
 import enums.CellWall;
 import enums.Direction;
+import enums.GameState;
 import interfaces.Constants;
 import enums.LayoutStrategy;
+import renderer.GameEngine;
 
 public class Puzzle implements Constants {
     private int size;
@@ -39,7 +41,12 @@ public class Puzzle implements Constants {
     }
 
     public void movePlayer(Direction direction){
-        Cell currCell = board.getCell(player.getLocation()[1]/PIXEL_SIZE, player.getLocation()[0]/PIXEL_SIZE);
+        Cell currCell = board.getCell(player.getPixelLocation()[1], player.getPixelLocation()[0]);
+        if(currCell.equals(getBoard().getCell(size-1, size-1))){
+            GameEngine.setGameState(GameState.WON);
+            player.move(Direction.RIGHT);
+            return;
+        }
         switch (direction){
             case UP:
                 if(!currCell.hasWall(CellWall.TOP))

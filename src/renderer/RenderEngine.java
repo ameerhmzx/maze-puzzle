@@ -17,7 +17,7 @@ class RenderEngine implements Constants {
     RenderEngine(Puzzle puzzle) {
         this.puzzle = puzzle;
         int size = this.puzzle.getSize();
-        this.puzzle.getBoard().getCell(0).setWall(CellWall.LEFT, false);
+//        this.puzzle.getBoard().getCell(0).setWall(CellWall.LEFT, false);
         this.puzzle.getBoard().getCell(size * size - 1).setWall(CellWall.RIGHT, false);
     }
 

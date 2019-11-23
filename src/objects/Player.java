@@ -18,8 +18,8 @@ public class Player implements Constants {
 
     public Rectangle getShape() {
         if (rect == null) {
-            rect = new Rectangle(PIXEL_SIZE - 8, PIXEL_SIZE - 8, PLAYER_COLOR);
-            rect.relocate(4, 4);
+            rect = new Rectangle(CHARACTER_SIZE, CHARACTER_SIZE, PLAYER_COLOR);
+            rect.relocate((PIXEL_SIZE-CHARACTER_SIZE)/2, (PIXEL_SIZE-CHARACTER_SIZE)/2);
 
             // Causes jerky transition
             // rect.setArcHeight(5.0);
@@ -30,7 +30,7 @@ public class Player implements Constants {
     }
 
     public void reset() {
-        rect.relocate(0, 0);
+        rect.relocate((PIXEL_SIZE-CHARACTER_SIZE)/2, (PIXEL_SIZE-CHARACTER_SIZE)/2);
         location = new int[]{0, 0};
         move(0, 0);
     }
@@ -55,7 +55,7 @@ public class Player implements Constants {
                 location[1] += PIXEL_SIZE;
                 break;
         }
-        System.out.println(location[0] + ", " + location[1] + " :: new Position");
+        System.out.println(getPixelLocation()[0] + ", " + getPixelLocation()[1] + " :: new Position");
         tt.play();
     }
 
@@ -68,5 +68,8 @@ public class Player implements Constants {
 
     public int[] getLocation() {
         return location;
+    }
+    public int[] getPixelLocation(){
+        return new int[]{location[0] / PIXEL_SIZE, location[1] / PIXEL_SIZE};
     }
 }

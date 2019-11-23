@@ -1,28 +1,34 @@
 package renderer;
 
 import enums.Direction;
+import enums.GameState;
 import interfaces.Constants;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import enums.LayoutStrategy;
 import objects.Puzzle;
 
-public class Init extends Application implements Constants {
+import static javafx.scene.input.KeyCode.*;
+
+public class GameEngine extends Application implements Constants {
     private Puzzle puzzle;
+    private static GameState gameState;
 
     public static void main(String[] args) {
-        Init.launch(args);
+        GameEngine.launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        puzzle = new Puzzle(20, LayoutStrategy.PRIM_RANDOMIZATION);
+        puzzle = new Puzzle(10, LayoutStrategy.PRIM_RANDOMIZATION);
+        gameState = GameState.PLAYING;
 
         Parent root = (new RenderEngine(puzzle)).getRoot();
-        Scene scene = new Scene(root, 20*PIXEL_SIZE+10, 20*PIXEL_SIZE+10);
+        Scene scene = new Scene(root, 20*PIXEL_SIZE, 20*PIXEL_SIZE);
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
 
         primaryStage.setTitle(APP_NAME);
@@ -32,7 +38,22 @@ public class Init extends Application implements Constants {
     }
 
     private void kbdEventsHandler(KeyEvent ke){
-        switch (ke.getCode()){
+        KeyCode kc = ke.getCode();
+        if((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING){
+            gameControls(kc);
+        }else{
+            switch (kc){
+                case R:
+                    puzzle.getPlayer().reset();
+                    setGameState(GameState.PLAYING);
+                    break;
+            }
+        }
+        ke.consume();
+    }
+
+    private void gameControls(KeyCode kc){
+        switch (kc) {
             case UP:
                 puzzle.movePlayer(Direction.UP);
                 break;
@@ -45,10 +66,14 @@ public class Init extends Application implements Constants {
             case DOWN:
                 puzzle.movePlayer(Direction.DOWN);
                 break;
-            case R:
-                puzzle.getPlayer().reset();
-                break;
         }
-        ke.consume();
+    }
+
+    public static GameState getGameState() {
+        return gameState;
+    }
+
+    public static void setGameState(GameState gameState) {
+        GameEngine.gameState = gameState;
     }
 }

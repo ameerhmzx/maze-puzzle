@@ -1,8 +1,8 @@
-import renderer.Init;
+import renderer.GameEngine;
 
 public class Main {
 
     public static void main(String[] args) {
-        Init.main(args);
+        GameEngine.main(args);
     }
 }

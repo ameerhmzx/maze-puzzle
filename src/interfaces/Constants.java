@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 public interface Constants {
     String APP_NAME = "Maze Puzzle";
     int PIXEL_SIZE = 20;
-    int CHARACTER_SIZE = 16;
+    int CHARACTER_SIZE = 12;
     float ANIMATION_RATE = .1f;
 
     String BORDER_COLOR = "#333";
