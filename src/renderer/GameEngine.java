@@ -27,10 +27,6 @@ public class GameEngine extends Application implements Constants , GameControls 
 
     private boolean maximixed = DEFAULT_WINDOW_MAXIMIZED;
 
-    public static void main(String[] args) {
-        GameEngine.launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
