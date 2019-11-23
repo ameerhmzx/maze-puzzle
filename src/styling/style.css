@@ -13,3 +13,7 @@
 .icon-button:hover {
     -icon-paint: black;
 }
+
+.button {
+    -fx-padding: 5 20
+}

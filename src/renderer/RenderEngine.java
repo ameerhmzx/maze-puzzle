@@ -4,14 +4,12 @@ import enums.CellWall;
 import interfaces.Constants;
 import interfaces.GameControls;
 import javafx.collections.FXCollections;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.SVGPath;
 import objects.Cell;
 import objects.Puzzle;
 
@@ -44,7 +42,7 @@ class RenderEngine implements Constants {
 
         ToolBar toolBar = new ToolBar(
                 leftSpacer,
-                new Button("SOLVE"),
+                SolveButton(),
                 ShuffleButton(),
                 sizeSelectComboBox(),
                 rightSpacer,
@@ -114,29 +112,31 @@ class RenderEngine implements Constants {
         return box;
     }
 
-    private Button SolveButton(){
-        Button btn = new Button("SOLVE");
-        btn.setOnAction((value)->gameControls.solve());
+    private Button SolveButton() {
+        Button btn = new Button("Solve");
+        btn.getStyleClass().add("button");
+        btn.setOnAction((value) -> gameControls.solve());
         return btn;
     }
 
-    private Button ShuffleButton(){
-        Button btn = new Button("SHUFFLE");
-        btn.setOnAction((value)->gameControls.shuffle());
+    private Button ShuffleButton() {
+        Button btn = new Button("Shuffle");
+        btn.getStyleClass().add("button");
+        btn.setOnAction((value) -> gameControls.shuffle());
         return btn;
     }
 
-    private ComboBox sizeSelectComboBox(){
+    private ComboBox sizeSelectComboBox() {
         ComboBox comboBox = new ComboBox<>(FXCollections.observableArrayList(SIZE_LIST));
         comboBox.setPromptText(puzzle.getSize() + " x " + puzzle.getSize());
-        comboBox.setOnAction((value)->{
+        comboBox.setOnAction((value) -> {
             int size = SIZE_OF_GAME.get(comboBox.getSelectionModel().getSelectedItem().toString());
             gameControls.changeSize(size);
         });
         return comboBox;
     }
 
-    private Button SettingButton(){
+    private Button SettingButton() {
         Button btn = new Button();
 
         btn.getStyleClass().add("icon-button");
