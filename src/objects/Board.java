@@ -27,6 +27,8 @@ public class Board {
         return cells.get(n);
     }
 
+    public Cell getLastCell(){return getCell(width-1, height-1);}
+
     public Cell getCell(int y, int x) {
         return cells.get(y * this.width + x);
     }

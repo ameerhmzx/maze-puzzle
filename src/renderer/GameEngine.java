@@ -24,16 +24,16 @@ public class GameEngine extends Application implements Constants {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        puzzle = new Puzzle(10, LayoutStrategy.PRIM_RANDOMIZATION);
+        puzzle = new Puzzle(Constants.DEFAULT_MAZE_SIZE, LayoutStrategy.PRIM_RANDOMIZATION);
         gameState = GameState.PLAYING;
 
         Parent root = (new RenderEngine(puzzle)).getRoot();
-        Scene scene = new Scene(root, 20*PIXEL_SIZE, 20*PIXEL_SIZE);
+        Scene scene = new Scene(root, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE);
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
 
         primaryStage.setTitle(APP_NAME);
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
+        primaryStage.setMaximized(false);
         primaryStage.show();
     }
 

@@ -42,7 +42,7 @@ public class Puzzle implements Constants {
 
     public void movePlayer(Direction direction){
         Cell currCell = board.getCell(player.getPixelLocation()[1], player.getPixelLocation()[0]);
-        if(currCell.equals(getBoard().getCell(size-1, size-1))){
+        if(currCell.equals(board.getLastCell()) && direction == Direction.RIGHT){
             GameEngine.setGameState(GameState.WON);
             player.move(Direction.RIGHT);
             return;
