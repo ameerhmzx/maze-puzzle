@@ -42,6 +42,8 @@ public class Puzzle implements Constants {
 
     public void movePlayer(Direction direction){
         Cell currCell = board.getCell(player.getPixelLocation()[1], player.getPixelLocation()[0]);
+        Cell proceedingCell = board.getCell(currCell, direction);
+
         if(currCell.equals(board.getLastCell()) && direction == Direction.RIGHT){
             GameEngine.setGameState(GameState.WON);
             player.move(Direction.RIGHT);
@@ -49,20 +51,32 @@ public class Puzzle implements Constants {
         }
         switch (direction){
             case UP:
-                if(!currCell.hasWall(CellWall.TOP))
+                if(!currCell.hasWall(CellWall.TOP)) {
                     player.move(direction);
+                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
+                        movePlayer(direction);
+                }
                 break;
             case DOWN:
-                if(!currCell.hasWall(CellWall.BOTTOM))
+                if(!currCell.hasWall(CellWall.BOTTOM)) {
                     player.move(direction);
+                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
+                        movePlayer(direction);
+                }
                 break;
             case LEFT:
-                if(!currCell.hasWall(CellWall.LEFT))
+                if(!currCell.hasWall(CellWall.LEFT)) {
                     player.move(direction);
+                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
+                        movePlayer(direction);
+                }
                 break;
             case RIGHT:
-                if(!currCell.hasWall(CellWall.RIGHT))
+                if(!currCell.hasWall(CellWall.RIGHT)) {
                     player.move(direction);
+                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
+                        movePlayer(direction);
+                }
                 break;
         }
     }

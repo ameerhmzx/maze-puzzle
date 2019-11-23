@@ -1,5 +1,7 @@
 package objects;
 
+import enums.Direction;
+
 import java.util.ArrayList;
 
 public class Board {
@@ -31,6 +33,35 @@ public class Board {
 
     public Cell getCell(int y, int x) {
         return cells.get(y * this.width + x);
+    }
+
+    public Cell getCell(Cell currCell, Direction direction){
+
+        int cellIndex = currCell.getIndex();
+
+        switch (direction){
+            case UP:
+                // check top most row
+                if (cellIndex >= this.width)
+                    return cells.get(cellIndex - this.width);
+                break;
+            case DOWN:
+                // check bottom most row
+                if (cellIndex / this.width != this.height - 1)
+                    return (cells.get(cellIndex + this.height));
+                break;
+            case LEFT:
+                // check left most column
+                if (cellIndex % this.width != 0)
+                    return (cells.get(cellIndex - 1));
+                break;
+            case RIGHT:
+                // check right most column
+                if ((cellIndex + 1) % this.width != 0)
+                    return cells.get(cellIndex + 1);
+                break;
+        }
+        return currCell;
     }
 
     public Cell getRandomCell() {
