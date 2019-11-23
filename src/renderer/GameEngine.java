@@ -5,17 +5,19 @@ import enums.GameState;
 import interfaces.Constants;
 import interfaces.GameControls;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import layoutStrategies.LayoutStrategy;
 import objects.Puzzle;
+
+import javax.xml.stream.EventFilter;
+import javax.xml.stream.events.XMLEvent;
+import java.security.Key;
 
 import static javafx.scene.input.KeyCode.*;
 
@@ -34,7 +36,9 @@ public class GameEngine extends Application implements Constants , GameControls 
         newGame(DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
 
-    private void kbdEventsHandler(KeyEvent ke){
+    private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
+
+    private void kbdEvents(KeyEvent ke){
         KeyCode kc = ke.getCode();
         if((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING){
             gameControls(kc);
@@ -80,10 +84,11 @@ public class GameEngine extends Application implements Constants , GameControls 
 
         Parent root = (new RenderEngine(puzzle, this)).getRoot();
         scene.setRoot(root);
+        scene.removeEventHandler(KeyEvent.KEY_PRESSED,KbdEventsHandler);
         adjustStageSize(maximixed);
 
         scene.getStylesheets().add(getClass().getResource("../styling/style.css").toExternalForm());
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         primaryStage.maximizedProperty().addListener((ov, t, t1) -> {
             maximixed = t1;
             adjustStageSize(maximixed);
