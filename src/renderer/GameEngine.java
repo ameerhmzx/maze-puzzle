@@ -5,10 +5,14 @@ import enums.GameState;
 import interfaces.Constants;
 import interfaces.GameControls;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import layoutStrategies.LayoutStrategy;
 import objects.Puzzle;
@@ -19,6 +23,9 @@ public class GameEngine extends Application implements Constants , GameControls 
     private Puzzle puzzle;
     private static GameState gameState;
     private Stage primaryStage;
+    private Scene scene;
+
+    private boolean maximixed = DEFAULT_WINDOW_MAXIMIZED;
 
     public static void main(String[] args) {
         GameEngine.launch(args);
@@ -27,6 +34,7 @@ public class GameEngine extends Application implements Constants , GameControls 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
+        scene = new Scene(new Label("Loading..."));
         newGame(DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
 
@@ -75,14 +83,27 @@ public class GameEngine extends Application implements Constants , GameControls 
         gameState = GameState.PLAYING;
 
         Parent root = (new RenderEngine(puzzle, this)).getRoot();
-        Scene scene = new Scene(root, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE, (puzzle.getSize()+MAZE_PADDING)*PIXEL_SIZE);
+        scene.setRoot(root);
+        adjustStageSize(maximixed);
+
         scene.getStylesheets().add(getClass().getResource("../styling/style.css").toExternalForm());
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEventsHandler);
+        primaryStage.maximizedProperty().addListener((ov, t, t1) -> {
+            maximixed = t1;
+            adjustStageSize(maximixed);
+        });
 
         primaryStage.setTitle(APP_NAME);
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(maximixed);
         primaryStage.show();
+    }
+
+    private void adjustStageSize(boolean maximixed){
+        if(!maximixed) {
+            primaryStage.setWidth((puzzle.getSize() + MAZE_PADDING) * PIXEL_SIZE);
+            primaryStage.setHeight((puzzle.getSize() + MAZE_PADDING) * PIXEL_SIZE);
+        }
     }
 
     @Override

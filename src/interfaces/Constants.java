@@ -11,6 +11,7 @@ public interface Constants {
     float ANIMATION_RATE = .1f;
     int MAZE_PADDING = 5;
     int DEFAULT_MAZE_SIZE = 10;
+    boolean DEFAULT_WINDOW_MAXIMIZED = true;
 
     String[] SIZE_LIST = {"10 x 10" , "20 x 20", "50 x 50"};
     HashMap<String, Integer> SIZE_OF_GAME = new HashMap<String, Integer>(){{
