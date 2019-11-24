@@ -1,5 +1,6 @@
 package objects;
 
+import Helper.ScoreCounter;
 import enums.Direction;
 import enums.GameState;
 import interfaces.Constants;
@@ -16,11 +17,13 @@ public class Player implements Constants {
     private Board board;
     private int[] location; //(x,y)
     private WonSignal wonSignal;
+    private ScoreCounter scoreCounter;
 
     public Player(Board board, WonSignal wonSignal) {
         getShape();
         this.board = board;
         this.wonSignal = wonSignal;
+        scoreCounter = new ScoreCounter(board.getHeight());
     }
 
     public Rectangle getShape() {
@@ -52,7 +55,6 @@ public class Player implements Constants {
         boolean parallelCell2 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[1]);
 
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
-//            GameEngine.setGameState(GameState.WON);
             wonSignal.gameWon();
             move(board.getHeight()*PIXEL_SIZE, (board.getWidth()-1)*PIXEL_SIZE);
             return;
@@ -77,6 +79,7 @@ public class Player implements Constants {
                     location[1] += PIXEL_SIZE;
                     break;
             }
+            scoreCounter.increaseStep();
             System.out.println(getLocation()[0] + ", " + getLocation()[1] + " :: new Position");
             tt.play();
             if (parallelCell1 && parallelCell2)
@@ -91,6 +94,10 @@ public class Player implements Constants {
         tt.setToX(x);
         tt.setToY(y);
         tt.play();
+    }
+
+    public long getScore(){
+        return scoreCounter.getScore();
     }
 
     public int[] getLocation(){

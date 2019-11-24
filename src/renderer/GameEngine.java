@@ -103,5 +103,6 @@ public class GameEngine extends Application implements Constants , GameActions, 
     public void gameWon() {
         gameState = GameState.WON;
         System.out.println("WON");
+        System.out.println("SCORE : " + player.getScore());
     }
 }
