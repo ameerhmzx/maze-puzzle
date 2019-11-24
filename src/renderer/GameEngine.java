@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import layoutStrategies.LayoutStrategy;
+import objects.Player;
 import objects.Puzzle;
 
 import static javafx.scene.input.KeyCode.*;
@@ -22,6 +23,7 @@ public class GameEngine extends Application implements Constants , GameControls 
     private static GameState gameState;
     private Stage primaryStage;
     private Scene scene;
+    private Player player;
 
     private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
     private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
@@ -44,7 +46,7 @@ public class GameEngine extends Application implements Constants , GameControls 
         }else{
             switch (kc){
                 case R:
-                    puzzle.getPlayer().reset();
+                    player.reset();
                     setGameState(GameState.PLAYING);
                     break;
             }
@@ -55,16 +57,16 @@ public class GameEngine extends Application implements Constants , GameControls 
     private void gameControls(KeyCode kc){
         switch (kc) {
             case UP:
-                puzzle.movePlayer(Direction.UP);
+                player.movePlayer(Direction.UP);
                 break;
             case RIGHT:
-                puzzle.movePlayer(Direction.RIGHT);
+                player.movePlayer(Direction.RIGHT);
                 break;
             case LEFT:
-                puzzle.movePlayer(Direction.LEFT);
+                player.movePlayer(Direction.LEFT);
                 break;
             case DOWN:
-                puzzle.movePlayer(Direction.DOWN);
+                player.movePlayer(Direction.DOWN);
                 break;
         }
     }
@@ -79,9 +81,10 @@ public class GameEngine extends Application implements Constants , GameControls 
 
     private void newGame(int size, LayoutStrategy layoutStrategy){
         puzzle = new Puzzle(size, layoutStrategy);
+        player = new Player(puzzle.getBoard());
         gameState = GameState.PLAYING;
 
-        Parent root = (new RenderEngine(puzzle, this)).getRoot();
+        Parent root = (new RenderEngine(puzzle, player,this)).getRoot();
         scene.setRoot(root);
         scene.removeEventHandler(KeyEvent.KEY_PRESSED,KbdEventsHandler);
         adjustStageSize(maximized);

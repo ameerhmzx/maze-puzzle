@@ -11,6 +11,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.*;
 import objects.Cell;
+import objects.Player;
 import objects.Puzzle;
 
 import java.util.Map;
@@ -19,9 +20,11 @@ import java.util.Map;
 class RenderEngine implements Constants {
     private Puzzle puzzle;
     private GameControls gameControls;
+    private Player player;
 
-    RenderEngine(Puzzle puzzle, GameControls gameControls) {
+    RenderEngine(Puzzle puzzle, Player player, GameControls gameControls) {
         this.puzzle = puzzle;
+        this.player = player;
         this.gameControls = gameControls;
         int size = this.puzzle.getSize();
 //        this.puzzle.getBoard().getCell(0).setWall(CellWall.LEFT, false);
@@ -50,7 +53,7 @@ class RenderEngine implements Constants {
         );
         toolBar.setMaxHeight(10);
 
-        canvas.getChildren().add(puzzle.getPlayer().getShape());
+        canvas.getChildren().add(player.getShape());
 
         stackPane.setAlignment(Pos.CENTER);
         stackPane.getChildren().addAll(grid, canvas);

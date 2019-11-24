@@ -1,19 +1,24 @@
 package objects;
 
+import enums.CellWall;
 import enums.Direction;
+import enums.GameState;
 import interfaces.Constants;
 import javafx.animation.TranslateTransition;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
+import renderer.GameEngine;
 
 
 public class Player implements Constants {
     private Rectangle rect;
+    private Board board;
     private int[] location; //(x,y)
 
-    public Player() {
+    public Player(Board board) {
         getShape();
+        this.board = board;
     }
 
     public Rectangle getShape() {
@@ -33,6 +38,47 @@ public class Player implements Constants {
         rect.relocate((PIXEL_SIZE-CHARACTER_SIZE)/2, (PIXEL_SIZE-CHARACTER_SIZE)/2);
         location = new int[]{0, 0};
         move(0, 0);
+    }
+
+    public void movePlayer(Direction direction) {
+        Cell currCell = board.getCell(getPixelLocation()[1], getPixelLocation()[0]);
+        Cell proceedingCell = board.getCell(currCell, direction);
+
+        if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
+            GameEngine.setGameState(GameState.WON);
+            move(Direction.RIGHT);
+            return;
+        }
+        switch (direction) {
+            case UP:
+                if (!currCell.hasWall(CellWall.TOP)) {
+                    move(direction);
+                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
+                        movePlayer(direction);
+                }
+                break;
+            case DOWN:
+                if (!currCell.hasWall(CellWall.BOTTOM)) {
+                    move(direction);
+                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
+                        movePlayer(direction);
+                }
+                break;
+            case LEFT:
+                if (!currCell.hasWall(CellWall.LEFT)) {
+                    move(direction);
+                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
+                        movePlayer(direction);
+                }
+                break;
+            case RIGHT:
+                if (!currCell.hasWall(CellWall.RIGHT)) {
+                    move(direction);
+                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
+                        movePlayer(direction);
+                }
+                break;
+        }
     }
 
     protected void move(Direction direction) {

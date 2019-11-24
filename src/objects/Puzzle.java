@@ -1,23 +1,17 @@
 package objects;
 
 import enums.CellWall;
-import enums.Direction;
-import enums.GameState;
 import interfaces.Constants;
 import layoutStrategies.LayoutStrategy;
-import renderer.GameEngine;
 
 public class Puzzle implements Constants {
     private int size;
     private LayoutStrategy layoutStrategy;
     private Board board;
-    private Player player;
 
     public Puzzle(int size, LayoutStrategy layoutStrategy) {
         this.size = size;
         this.layoutStrategy = layoutStrategy;
-
-        player = new Player();
 
         this.board = new Board(size, size);
         layoutStrategy.layoutBoard(this.board);
@@ -39,53 +33,6 @@ public class Puzzle implements Constants {
     public Board getBoard() {
         return board;
     }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    // TODO: Not a part of main stream maze handling. Should be handled somewhere else
-    public void movePlayer(Direction direction) {
-        Cell currCell = board.getCell(player.getPixelLocation()[1], player.getPixelLocation()[0]);
-        Cell proceedingCell = board.getCell(currCell, direction);
-
-        if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
-            GameEngine.setGameState(GameState.WON);
-            player.move(Direction.RIGHT);
-            return;
-        }
-        switch (direction) {
-            case UP:
-                if (!currCell.hasWall(CellWall.TOP)) {
-                    player.move(direction);
-                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
-                        movePlayer(direction);
-                }
-                break;
-            case DOWN:
-                if (!currCell.hasWall(CellWall.BOTTOM)) {
-                    player.move(direction);
-                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
-                        movePlayer(direction);
-                }
-                break;
-            case LEFT:
-                if (!currCell.hasWall(CellWall.LEFT)) {
-                    player.move(direction);
-                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
-                        movePlayer(direction);
-                }
-                break;
-            case RIGHT:
-                if (!currCell.hasWall(CellWall.RIGHT)) {
-                    player.move(direction);
-                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
-                        movePlayer(direction);
-                }
-                break;
-        }
-    }
-
 
     private void drawBoard(Board board) {
         for (int x = 0; x < size * 2; x++) {
