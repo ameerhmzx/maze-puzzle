@@ -42,7 +42,7 @@ public class Player implements Constants {
     public void move(Direction direction){
         TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
 
-        Cell currCell = board.getCell(getPixelLocation()[1], getPixelLocation()[0]);
+        Cell currCell = board.getCell(getLocation()[1], getLocation()[0]);
         Cell proceedingCell = board.getCell(currCell, direction);
 
         boolean parallelCell1 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[0]);
@@ -73,7 +73,7 @@ public class Player implements Constants {
                     location[1] += PIXEL_SIZE;
                     break;
             }
-            System.out.println(getPixelLocation()[0] + ", " + getPixelLocation()[1] + " :: new Position");
+            System.out.println(getLocation()[0] + ", " + getLocation()[1] + " :: new Position");
             tt.play();
             if (parallelCell1 && parallelCell2)
                 move(direction);
@@ -89,10 +89,7 @@ public class Player implements Constants {
         tt.play();
     }
 
-    public int[] getLocation() {
-        return location;
-    }
-    public int[] getPixelLocation(){
+    public int[] getLocation(){
         return new int[]{location[0] / PIXEL_SIZE, location[1] / PIXEL_SIZE};
     }
 }
