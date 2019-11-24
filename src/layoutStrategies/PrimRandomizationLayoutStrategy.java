@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Prim's Randomization Algorithm
+ * https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim's_algorithm
+ *
+ * Generates relatively easy to solve mazes with short dead ends
+ */
 public class PrimRandomizationLayoutStrategy implements ILayoutStrategy {
     @Override
     public void layoutBoard(Board board) {

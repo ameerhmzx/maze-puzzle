@@ -8,6 +8,8 @@ import java.util.ArrayList;
 /**
  * Depth first recursive backtrack maze generation algorithm
  * https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker
+ *
+ * Generates long dead ends making the solution little difficult
  */
 public class RecursiveBackTrackLayoutStrategy implements ILayoutStrategy {
     @Override
