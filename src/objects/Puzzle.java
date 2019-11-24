@@ -40,6 +40,10 @@ public class Puzzle implements Constants {
         return player;
     }
 
+    public static void main(String[] args) {
+        new Puzzle(4, LayoutStrategy.PRIM_RANDOMIZATION);
+    }
+
     public void movePlayer(Direction direction){
         Cell currCell = board.getCell(player.getPixelLocation()[1], player.getPixelLocation()[0]);
         Cell proceedingCell = board.getCell(currCell, direction);
@@ -79,10 +83,6 @@ public class Puzzle implements Constants {
                 }
                 break;
         }
-    }
-
-    public static void main(String[] args) {
-        new Puzzle(4, LayoutStrategy.PRIM_RANDOMIZATION);
     }
 
     private void drawBoard(Board board) {

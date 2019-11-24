@@ -15,10 +15,6 @@ import javafx.stage.Stage;
 import layoutStrategies.LayoutStrategy;
 import objects.Puzzle;
 
-import javax.xml.stream.EventFilter;
-import javax.xml.stream.events.XMLEvent;
-import java.security.Key;
-
 import static javafx.scene.input.KeyCode.*;
 
 public class GameEngine extends Application implements Constants , GameControls {
@@ -27,7 +23,8 @@ public class GameEngine extends Application implements Constants , GameControls 
     private Stage primaryStage;
     private Scene scene;
 
-    private boolean maximixed = DEFAULT_WINDOW_MAXIMIZED;
+    private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
+    private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
 
     public static void main(String[] args) {
         launch(args);
@@ -39,8 +36,6 @@ public class GameEngine extends Application implements Constants , GameControls 
         scene = new Scene(new Label("Loading..."));
         newGame(DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
-
-    private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
 
     private void kbdEvents(KeyEvent ke){
         KeyCode kc = ke.getCode();
@@ -89,18 +84,18 @@ public class GameEngine extends Application implements Constants , GameControls 
         Parent root = (new RenderEngine(puzzle, this)).getRoot();
         scene.setRoot(root);
         scene.removeEventHandler(KeyEvent.KEY_PRESSED,KbdEventsHandler);
-        adjustStageSize(maximixed);
+        adjustStageSize(maximized);
 
         scene.getStylesheets().add(getClass().getResource("../styling/style.css").toExternalForm());
         scene.addEventFilter(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         primaryStage.maximizedProperty().addListener((ov, t, t1) -> {
-            maximixed = t1;
-            adjustStageSize(maximixed);
+            maximized = t1;
+            adjustStageSize(maximized);
         });
 
         primaryStage.setTitle(APP_NAME);
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(maximixed);
+        primaryStage.setMaximized(maximized);
         primaryStage.show();
     }
 
