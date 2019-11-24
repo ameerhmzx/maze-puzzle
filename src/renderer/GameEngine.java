@@ -2,7 +2,8 @@ package renderer;
 
 import enums.GameState;
 import interfaces.Constants;
-import interfaces.GameControls;
+import interfaces.GameActions;
+import interfaces.WonSignal;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -17,7 +18,7 @@ import objects.Puzzle;
 
 import static javafx.scene.input.KeyCode.*;
 
-public class GameEngine extends Application implements Constants , GameControls {
+public class GameEngine extends Application implements Constants , GameActions, WonSignal {
     private Puzzle puzzle;
     private static GameState gameState;
     private Stage primaryStage;
@@ -27,8 +28,8 @@ public class GameEngine extends Application implements Constants , GameControls 
     private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
     private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void runGame() {
+        launch();
     }
 
     @Override
@@ -46,24 +47,16 @@ public class GameEngine extends Application implements Constants , GameControls 
             switch (kc){
                 case R:
                     player.reset();
-                    setGameState(GameState.PLAYING);
+                    gameState = GameState.PLAYING;
                     break;
             }
         }
         ke.consume();
     }
 
-    public static GameState getGameState() {
-        return gameState;
-    }
-
-    public static void setGameState(GameState gameState) {
-        GameEngine.gameState = gameState;
-    }
-
     private void newGame(int size, LayoutStrategy layoutStrategy){
         puzzle = new Puzzle(size, layoutStrategy);
-        player = new Player(puzzle.getBoard());
+        player = new Player(puzzle.getBoard(), this);
         gameState = GameState.PLAYING;
 
         Parent root = (new RenderEngine(puzzle, player,this)).getRoot();
@@ -104,5 +97,11 @@ public class GameEngine extends Application implements Constants , GameControls 
     @Override
     public void changeSize(int size) {
         newGame(size, puzzle.getLayoutStrategy());
+    }
+
+    @Override
+    public void gameWon() {
+        gameState = GameState.WON;
+        System.out.println("WON");
     }
 }

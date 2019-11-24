@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface GameControls{
+public interface GameActions {
     void shuffle();
     void solve();
     void changeSize(int size);

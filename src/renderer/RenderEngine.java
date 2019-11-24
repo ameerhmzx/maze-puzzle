@@ -2,7 +2,7 @@ package renderer;
 
 import enums.CellWall;
 import interfaces.Constants;
-import interfaces.GameControls;
+import interfaces.GameActions;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -19,13 +19,13 @@ import java.util.Map;
 
 class RenderEngine implements Constants {
     private Puzzle puzzle;
-    private GameControls gameControls;
+    private GameActions gameActions;
     private Player player;
 
-    RenderEngine(Puzzle puzzle, Player player, GameControls gameControls) {
+    RenderEngine(Puzzle puzzle, Player player, GameActions gameActions) {
         this.puzzle = puzzle;
         this.player = player;
-        this.gameControls = gameControls;
+        this.gameActions = gameActions;
         int size = this.puzzle.getSize();
 //        this.puzzle.getBoard().getCell(0).setWall(CellWall.LEFT, false);
         this.puzzle.getBoard().getCell(size * size - 1).setWall(CellWall.RIGHT, false);
@@ -118,14 +118,14 @@ class RenderEngine implements Constants {
     private Button SolveButton() {
         Button btn = new Button("Solve");
         btn.getStyleClass().add("button");
-        btn.setOnAction((value) -> gameControls.solve());
+        btn.setOnAction((value) -> gameActions.solve());
         return btn;
     }
 
     private Button ShuffleButton() {
         Button btn = new Button("Shuffle");
         btn.getStyleClass().add("button");
-        btn.setOnAction((value) -> gameControls.shuffle());
+        btn.setOnAction((value) -> gameActions.shuffle());
         return btn;
     }
 
@@ -134,7 +134,7 @@ class RenderEngine implements Constants {
         comboBox.setPromptText(puzzle.getSize() + " x " + puzzle.getSize());
         comboBox.setOnAction((value) -> {
             int size = SIZE_OF_GAME.get(comboBox.getSelectionModel().getSelectedItem().toString());
-            gameControls.changeSize(size);
+            gameActions.changeSize(size);
         });
         return comboBox;
     }

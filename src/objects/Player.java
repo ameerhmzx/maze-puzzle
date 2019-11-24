@@ -3,6 +3,7 @@ package objects;
 import enums.Direction;
 import enums.GameState;
 import interfaces.Constants;
+import interfaces.WonSignal;
 import javafx.animation.TranslateTransition;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
@@ -14,10 +15,12 @@ public class Player implements Constants {
     private Rectangle rect;
     private Board board;
     private int[] location; //(x,y)
+    private WonSignal wonSignal;
 
-    public Player(Board board) {
+    public Player(Board board, WonSignal wonSignal) {
         getShape();
         this.board = board;
+        this.wonSignal = wonSignal;
     }
 
     public Rectangle getShape() {
@@ -49,7 +52,8 @@ public class Player implements Constants {
         boolean parallelCell2 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[1]);
 
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
-            GameEngine.setGameState(GameState.WON);
+//            GameEngine.setGameState(GameState.WON);
+            wonSignal.gameWon();
             move(board.getHeight()*PIXEL_SIZE, (board.getWidth()-1)*PIXEL_SIZE);
             return;
         }
