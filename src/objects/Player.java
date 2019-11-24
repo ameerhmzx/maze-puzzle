@@ -1,12 +1,11 @@
 package objects;
 
-import enums.CellWall;
 import enums.Direction;
 import enums.GameState;
 import interfaces.Constants;
 import javafx.animation.TranslateTransition;
+import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 import renderer.GameEngine;
 
@@ -40,71 +39,49 @@ public class Player implements Constants {
         move(0, 0);
     }
 
-    public void movePlayer(Direction direction) {
+    public void move(Direction direction){
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
+
         Cell currCell = board.getCell(getPixelLocation()[1], getPixelLocation()[0]);
         Cell proceedingCell = board.getCell(currCell, direction);
 
+        boolean parallelCell1 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[0]);
+        boolean parallelCell2 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[1]);
+
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
             GameEngine.setGameState(GameState.WON);
-            move(Direction.RIGHT);
+            move(board.getHeight()*PIXEL_SIZE, (board.getWidth()-1)*PIXEL_SIZE);
             return;
         }
-        switch (direction) {
-            case UP:
-                if (!currCell.hasWall(CellWall.TOP)) {
-                    move(direction);
-                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
-                        movePlayer(direction);
-                }
-                break;
-            case DOWN:
-                if (!currCell.hasWall(CellWall.BOTTOM)) {
-                    move(direction);
-                    if (proceedingCell.hasWall(CellWall.RIGHT) && proceedingCell.hasWall(CellWall.LEFT))
-                        movePlayer(direction);
-                }
-                break;
-            case LEFT:
-                if (!currCell.hasWall(CellWall.LEFT)) {
-                    move(direction);
-                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
-                        movePlayer(direction);
-                }
-                break;
-            case RIGHT:
-                if (!currCell.hasWall(CellWall.RIGHT)) {
-                    move(direction);
-                    if (proceedingCell.hasWall(CellWall.TOP) && proceedingCell.hasWall(CellWall.BOTTOM))
-                        movePlayer(direction);
-                }
-                break;
+
+        if (!currCell.hasWall(CELLWALL_CORR_DIR.get(direction))) {
+            switch (direction) {
+                case UP:
+                    tt.setToY(location[1] - PIXEL_SIZE);
+                    location[1] -= PIXEL_SIZE;
+                    break;
+                case LEFT:
+                    tt.setToX(location[0] - PIXEL_SIZE);
+                    location[0] -= PIXEL_SIZE;
+                    break;
+                case RIGHT:
+                    tt.setToX(location[0] + PIXEL_SIZE);
+                    location[0] += PIXEL_SIZE;
+                    break;
+                case DOWN:
+                    tt.setToY(location[1] + PIXEL_SIZE);
+                    location[1] += PIXEL_SIZE;
+                    break;
+            }
+            System.out.println(getPixelLocation()[0] + ", " + getPixelLocation()[1] + " :: new Position");
+            tt.play();
+            if (parallelCell1 && parallelCell2)
+                move(direction);
         }
     }
-
-    protected void move(Direction direction) {
-        TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
-        switch (direction) {
-            case UP:
-                tt.setToY(location[1] - PIXEL_SIZE);
-                location[1] -= PIXEL_SIZE;
-                break;
-            case LEFT:
-                tt.setToX(location[0] - PIXEL_SIZE);
-                location[0] -= PIXEL_SIZE;
-                break;
-            case RIGHT:
-                tt.setToX(location[0] + PIXEL_SIZE);
-                location[0] += PIXEL_SIZE;
-                break;
-            case DOWN:
-                tt.setToY(location[1] + PIXEL_SIZE);
-                location[1] += PIXEL_SIZE;
-                break;
-        }
-        System.out.println(getPixelLocation()[0] + ", " + getPixelLocation()[1] + " :: new Position");
-        tt.play();
+    public void move(KeyCode kc) {
+        move(DIR_CORR_KC.get(kc));
     }
-
     protected void move(int x, int y) {
         TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
         tt.setToX(x);

@@ -1,5 +1,8 @@
 package interfaces;
 
+import enums.CellWall;
+import enums.Direction;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 import java.util.HashMap;
@@ -19,6 +22,27 @@ public interface Constants {
         put(SIZE_LIST[1], 15);
         put(SIZE_LIST[2], 20);
         put(SIZE_LIST[3], 30);
+    }};
+
+    HashMap<KeyCode, Direction> DIR_CORR_KC = new HashMap<KeyCode, Direction>(){{
+        put(KeyCode.UP, Direction.UP);
+        put(KeyCode.DOWN, Direction.DOWN);
+        put(KeyCode.LEFT, Direction.LEFT);
+        put(KeyCode.RIGHT, Direction.RIGHT);
+    }};
+
+    HashMap<Direction, CellWall> CELLWALL_CORR_DIR = new HashMap<Direction, CellWall>(){{
+        put(Direction.UP, CellWall.TOP);
+        put(Direction.DOWN, CellWall.BOTTOM);
+        put(Direction.LEFT, CellWall.LEFT);
+        put(Direction.RIGHT, CellWall.RIGHT);
+    }};
+
+    HashMap<Direction, CellWall[]> CELLS_PER_DIR = new HashMap<Direction, CellWall[]>(){{
+        put(Direction.UP, new CellWall[]{CellWall.LEFT, CellWall.RIGHT});
+        put(Direction.DOWN, new CellWall[]{CellWall.LEFT, CellWall.RIGHT});
+        put(Direction.LEFT, new CellWall[]{CellWall.TOP, CellWall.BOTTOM});
+        put(Direction.RIGHT, new CellWall[]{CellWall.TOP, CellWall.BOTTOM});
     }};
 
     String BORDER_COLOR = "#333";

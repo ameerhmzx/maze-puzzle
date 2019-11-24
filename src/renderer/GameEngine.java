@@ -1,6 +1,5 @@
 package renderer;
 
-import enums.Direction;
 import enums.GameState;
 import interfaces.Constants;
 import interfaces.GameControls;
@@ -42,7 +41,7 @@ public class GameEngine extends Application implements Constants , GameControls 
     private void kbdEvents(KeyEvent ke){
         KeyCode kc = ke.getCode();
         if((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING){
-            gameControls(kc);
+            player.move(kc);
         }else{
             switch (kc){
                 case R:
@@ -52,23 +51,6 @@ public class GameEngine extends Application implements Constants , GameControls 
             }
         }
         ke.consume();
-    }
-
-    private void gameControls(KeyCode kc){
-        switch (kc) {
-            case UP:
-                player.movePlayer(Direction.UP);
-                break;
-            case RIGHT:
-                player.movePlayer(Direction.RIGHT);
-                break;
-            case LEFT:
-                player.movePlayer(Direction.LEFT);
-                break;
-            case DOWN:
-                player.movePlayer(Direction.DOWN);
-                break;
-        }
     }
 
     public static GameState getGameState() {
