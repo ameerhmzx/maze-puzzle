@@ -29,19 +29,28 @@ public class Cell {
         return walls;
     }
 
-    public boolean hasWall(CellWall wall) {
-        return this.walls.get(wall);
+    public int getIndex() {
+        return this.location.index;
     }
 
     public void setWall(CellWall wall, boolean val) {
         this.walls.put(wall, val);
     }
 
+    public boolean hasWall(CellWall wall) {
+        return this.walls.get(wall);
+    }
+
+    public boolean hasWall(Cell cell) {
+        CellWall interWall = getInterWall(cell);
+        return hasWall(interWall);
+    }
+
     private void removeWall(CellWall wall) {
         this.walls.put(wall, false);
     }
 
-    public void removeInterWall(Cell cell) {
+    CellWall getInterWall(Cell cell) {
         CellWall interWall;
         if (cell.getIndex() == this.getIndex() + 1) {
             interWall = CellWall.RIGHT;
@@ -52,11 +61,12 @@ public class Cell {
         } else {
             interWall = CellWall.BOTTOM;
         }
-        this.removeWall(interWall);
-        cell.removeWall(opposingWalls.get(interWall));
+        return interWall;
     }
 
-    public int getIndex() {
-        return this.location.index;
+    public void removeInterWall(Cell cell) {
+        CellWall interWall = getInterWall(cell);
+        this.removeWall(interWall);
+        cell.removeWall(opposingWalls.get(interWall));
     }
 }

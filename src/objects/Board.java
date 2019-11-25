@@ -25,21 +25,35 @@ public class Board {
         return cells;
     }
 
+    public ArrayList<Cell> getRow(int n) {
+        ArrayList<Cell> row = new ArrayList<>();
+        for (int x = 0; x < width; x++) {
+            row.add(getCell(n, x));
+        }
+        return row;
+    }
+
     public Cell getCell(int n) {
         return cells.get(n);
     }
-
-    public Cell getLastCell(){return getCell(width-1, height-1);}
 
     public Cell getCell(int y, int x) {
         return cells.get(y * this.width + x);
     }
 
-    public Cell getCell(Cell currCell, Direction direction){
+    public Cell getLastCell() {
+        return getCell(width - 1, height - 1);
+    }
+
+    public Cell getRandomCell() {
+        return cells.get((int) (Math.random() * this.width * this.height));
+    }
+
+    public Cell getNeighbourCell(Cell currCell, Direction direction) {
 
         int cellIndex = currCell.getIndex();
 
-        switch (direction){
+        switch (direction) {
             case UP:
                 // check top most row
                 if (cellIndex >= this.width)
@@ -62,10 +76,6 @@ public class Board {
                 break;
         }
         return currCell;
-    }
-
-    public Cell getRandomCell() {
-        return cells.get((int) (Math.random() * this.width * this.height));
     }
 
     public ArrayList<Cell> getNeighbourCells(Cell cell) {
@@ -92,6 +102,14 @@ public class Board {
             neighbourCells.add(cells.get(cellIndex + this.height));
         }
 
+        return neighbourCells;
+    }
+
+    public ArrayList<Cell> getVisitableNeighbourCells(Cell cell) {
+        ArrayList<Cell> neighbourCells = getNeighbourCells(cell);
+        for (Cell neighbourCell : neighbourCells) {
+            if (neighbourCell.hasWall(cell)) neighbourCells.remove(neighbourCell);
+        }
         return neighbourCells;
     }
 

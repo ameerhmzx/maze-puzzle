@@ -2,14 +2,12 @@ package objects;
 
 import Helper.ScoreCounter;
 import enums.Direction;
-import enums.GameState;
 import interfaces.Constants;
 import interfaces.WonSignal;
 import javafx.animation.TranslateTransition;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import renderer.GameEngine;
 
 
 public class Player implements Constants {
@@ -49,7 +47,7 @@ public class Player implements Constants {
         TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
 
         Cell currCell = board.getCell(getLocation()[1], getLocation()[0]);
-        Cell proceedingCell = board.getCell(currCell, direction);
+        Cell proceedingCell = board.getNeighbourCell(currCell, direction);
 
         boolean parallelCell1 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[0]);
         boolean parallelCell2 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[1]);
