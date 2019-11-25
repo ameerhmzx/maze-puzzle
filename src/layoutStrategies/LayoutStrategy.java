@@ -17,6 +17,11 @@ public enum LayoutStrategy implements ILayoutStrategy {
         public void layoutBoard(Board board) {
             new PrimRandomizationLayoutStrategy().layoutBoard(board);
         }
+    },
+    WILSON_MAZE("Wilson's Maze Algorithm") {
+        public void layoutBoard(Board board) {
+            new WilsonLayoutStrategy().layoutBoard(board);
+        }
     };
 
     private String name;
