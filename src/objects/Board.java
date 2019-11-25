@@ -16,7 +16,7 @@ public class Board {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                cells.add(new Cell(new Point(x, y, y * height + x)));
+                cells.add(new Cell(new Point(x, y, y * width + x)));
             }
         }
     }
@@ -98,8 +98,8 @@ public class Board {
         }
 
         // check bottom most row
-        if (cellIndex / this.width != this.height - 1) {
-            neighbourCells.add(cells.get(cellIndex + this.height));
+        if (cellIndex < cells.size() - width) {
+            neighbourCells.add(cells.get(cellIndex + this.width));
         }
 
         return neighbourCells;

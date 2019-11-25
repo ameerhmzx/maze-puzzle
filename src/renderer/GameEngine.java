@@ -55,7 +55,7 @@ public class GameEngine extends Application implements Constants , GameActions, 
     }
 
     private void newGame(int size, LayoutStrategy layoutStrategy){
-        puzzle = new Puzzle(size, layoutStrategy);
+        puzzle = new Puzzle(size, size, layoutStrategy);
         player = new Player(puzzle.getBoard(), this);
         gameState = GameState.PLAYING;
 
