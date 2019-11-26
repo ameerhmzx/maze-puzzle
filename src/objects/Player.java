@@ -1,8 +1,8 @@
 package objects;
 
+import Helper.Constants;
 import Helper.ScoreCounter;
 import enums.Direction;
-import interfaces.Constants;
 import interfaces.WonSignal;
 import javafx.animation.TranslateTransition;
 import javafx.scene.input.KeyCode;

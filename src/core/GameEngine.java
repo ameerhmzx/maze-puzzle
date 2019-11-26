@@ -1,7 +1,7 @@
-package renderer;
+package core;
 
+import Helper.Constants;
 import enums.GameState;
-import interfaces.Constants;
 import interfaces.GameActions;
 import interfaces.RenderAction;
 import interfaces.WonSignal;
@@ -111,7 +111,7 @@ public class GameEngine extends Application implements Constants, GameActions, W
     }
 
     @Override
-    public void cellUpdated(Runnable runnable) {
+    public void updated(Runnable runnable) {
         Platform.runLater(runnable);
     }
 }

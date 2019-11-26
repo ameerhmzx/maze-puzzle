@@ -1,7 +1,7 @@
-package renderer;
+package core;
 
+import Helper.Constants;
 import enums.CellWall;
-import interfaces.Constants;
 import interfaces.GameActions;
 import interfaces.RenderAction;
 import javafx.collections.FXCollections;
@@ -171,14 +171,14 @@ class RenderEngine implements Constants {
     }
 
     public void updateCell(Cell cell, int x, int y) {
-        renderAction.cellUpdated(() -> {
+        renderAction.updated(() -> {
             //noinspection SuspiciousNameCombination
             grid.add(renderCell(cell, y, x, puzzle.getWidth(), puzzle.getHeight()), y, x);
         });
     }
 
     public void animateRandom() {
-        renderAction.cellUpdated(() -> {
+        renderAction.updated(() -> {
             new Thread(() -> {
                 for (int i = 0; i < puzzle.getBoard().getHeight(); i++) {
                     for (int j = 0; j < puzzle.getBoard().getWidth(); j++) {

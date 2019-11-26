@@ -1,4 +1,4 @@
-package interfaces;
+package Helper;
 
 import enums.CellWall;
 import enums.Direction;

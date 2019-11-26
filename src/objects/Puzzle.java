@@ -1,7 +1,7 @@
 package objects;
 
+import Helper.Constants;
 import enums.CellWall;
-import interfaces.Constants;
 import layoutStrategies.LayoutStrategy;
 
 public class Puzzle implements Constants {

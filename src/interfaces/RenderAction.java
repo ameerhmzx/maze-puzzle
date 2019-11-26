@@ -1,5 +1,6 @@
 package interfaces;
 
+@FunctionalInterface
 public interface RenderAction {
-    void cellUpdated(Runnable runnable);
+    void updated(Runnable runnable);
 }
