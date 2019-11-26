@@ -36,7 +36,7 @@ public class GameEngine extends Application implements Constants, GameActions, W
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         scene = new Scene(new Label("Loading..."));
-        newGame(DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
+        newGame(DEFAULT_MAZE_SIZE, DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
 
     private void kbdEvents(KeyEvent ke) {
@@ -54,8 +54,8 @@ public class GameEngine extends Application implements Constants, GameActions, W
         ke.consume();
     }
 
-    private void newGame(int size, LayoutStrategy layoutStrategy){
-        puzzle = new Puzzle(size, size, layoutStrategy);
+    private void newGame(int width, int height, LayoutStrategy layoutStrategy) {
+        puzzle = new Puzzle(width, height, layoutStrategy);
         player = new Player(puzzle.getBoard(), this);
         gameState = GameState.PLAYING;
 
@@ -79,14 +79,14 @@ public class GameEngine extends Application implements Constants, GameActions, W
 
     private void adjustStageSize(boolean maximixed) {
         if (!maximixed) {
-            primaryStage.setWidth((puzzle.getSize() + MAZE_PADDING) * PIXEL_SIZE);
-            primaryStage.setHeight((puzzle.getSize() + MAZE_PADDING) * PIXEL_SIZE);
+            primaryStage.setWidth((puzzle.getBoard().getWidth() + MAZE_PADDING) * PIXEL_SIZE);
+            primaryStage.setHeight((puzzle.getBoard().getHeight() + MAZE_PADDING) * PIXEL_SIZE);
         }
     }
 
     @Override
     public void shuffle() {
-        newGame(puzzle.getSize(), puzzle.getLayoutStrategy());
+        newGame(puzzle.getBoard().getWidth(), puzzle.getBoard().getHeight(), puzzle.getLayoutStrategy());
     }
 
     @Override
@@ -95,8 +95,8 @@ public class GameEngine extends Application implements Constants, GameActions, W
     }
 
     @Override
-    public void changeSize(int size) {
-        newGame(size, puzzle.getLayoutStrategy());
+    public void changeSize(int width, int height) {
+        newGame(width, height, puzzle.getLayoutStrategy());
     }
 
     @Override

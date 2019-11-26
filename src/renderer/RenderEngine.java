@@ -135,7 +135,7 @@ class RenderEngine implements Constants {
         comboBox.setPromptText(puzzle.getBoard().getHeight() + " x " + puzzle.getBoard().getWidth());
         comboBox.setOnAction((value) -> {
             int size = SIZE_OF_GAME.get(comboBox.getSelectionModel().getSelectedItem().toString());
-            gameActions.changeSize(size);
+            gameActions.changeSize(size, size);
         });
         return comboBox;
     }
