@@ -19,8 +19,8 @@ import objects.Puzzle;
 import static javafx.scene.input.KeyCode.*;
 
 public class GameEngine extends Application implements Constants, GameActions, WonSignal {
-    private Puzzle puzzle;
     private static GameState gameState;
+    private Puzzle puzzle;
     private Stage primaryStage;
     private Scene scene;
     private Player player;
@@ -36,7 +36,7 @@ public class GameEngine extends Application implements Constants, GameActions, W
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         scene = new Scene(new Label("Loading..."));
-        newGame(DEFAULT_MAZE_SIZE, DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
+        newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
 
     private void kbdEvents(KeyEvent ke) {

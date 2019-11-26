@@ -42,7 +42,7 @@ public class Board {
     }
 
     public Cell getLastCell() {
-        return getCell(width - 1, height - 1);
+        return getCell(height - 1, width - 1);
     }
 
     public Cell getRandomCell() {
@@ -61,8 +61,8 @@ public class Board {
                 break;
             case DOWN:
                 // check bottom most row
-                if (cellIndex / this.width != this.height - 1)
-                    return (cells.get(cellIndex + this.height));
+                if (cellIndex < cells.size() - width)
+                    return (cells.get(cellIndex + this.width));
                 break;
             case LEFT:
                 // check left most column

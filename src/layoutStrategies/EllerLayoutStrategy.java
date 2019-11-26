@@ -1,6 +1,10 @@
 package layoutStrategies;
 
 import objects.Board;
+import objects.Cell;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Eller's Maze Generation Algorithm
@@ -11,6 +15,6 @@ import objects.Board;
 public class EllerLayoutStrategy implements ILayoutStrategy {
     @Override
     public void layoutBoard(Board board) {
-
+        ArrayList<HashSet<Cell>> ellerSets = new ArrayList<>();
     }
 }

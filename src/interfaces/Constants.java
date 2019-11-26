@@ -13,7 +13,8 @@ public interface Constants {
     int CHARACTER_SIZE = 12;
     float ANIMATION_RATE = .1f;
     int MAZE_PADDING = 10;
-    int DEFAULT_MAZE_SIZE = 10;
+    int DEFAULT_MAZE_WIDTH = 24;
+    int DEFAULT_MAZE_HEIGHT = 20;
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
 
     String[] SIZE_LIST = {"10 x 10", "15 x 15" , "20 x 20", "30 x 30"};

@@ -78,13 +78,13 @@ class RenderEngine implements Constants {
         for (int y = 0; y < puzzle.getBoard().getHeight(); y++) {
             for (int x = 0; x < puzzle.getBoard().getWidth(); x++) {
                 Cell cell = puzzle.getBoard().getCell(y, x);
-                grid.add(renderCell(cell, x, y, puzzle.getSize()), x, y);
+                grid.add(renderCell(cell, x, y, puzzle.getWidth(), puzzle.getHeight()), x, y);
             }
         }
         return grid;
     }
 
-    private Region renderCell(Cell cell, int x, int y, int size) {
+    private Region renderCell(Cell cell, int x, int y, int width, int height) {
         Map<CellWall, Boolean> walls = cell.getWalls();
         Region box = new Region();
         box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
@@ -100,15 +100,15 @@ class RenderEngine implements Constants {
 
         style += String.format("-fx-border-radius: %d %d %d %d;",
                 cell.getIndex() == 0 ? 2 : 0,
-                cell.getIndex() == size - 1 ? 2 : 0,
-                cell.getIndex() == size * size - 1 ? 2 : 0,
-                cell.getIndex() == size * size - size ? 2 : 0
+                cell.getIndex() == width - 1 ? 2 : 0,
+                cell.getIndex() == width * height - 1 ? 2 : 0,
+                cell.getIndex() == width * height - width ? 2 : 0
         );
 
         style += String.format("-fx-border-width: %d %d %d %d;",
                 y == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
-                x == size - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
-                y == size - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                x == width - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                y == height - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
                 x == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH
         );
 

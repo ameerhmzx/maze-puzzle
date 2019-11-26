@@ -36,6 +36,14 @@ public class Puzzle implements Constants {
         return board;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
     private void drawBoard(Board board) {
         for (int x = 0; x < width * 2; x++) {
             Cell cell = board.getCell(0, x / 2);
