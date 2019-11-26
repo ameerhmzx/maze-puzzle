@@ -18,7 +18,7 @@ import objects.Puzzle;
 
 import static javafx.scene.input.KeyCode.*;
 
-public class GameEngine extends Application implements Constants , GameActions, WonSignal {
+public class GameEngine extends Application implements Constants, GameActions, WonSignal {
     private Puzzle puzzle;
     private static GameState gameState;
     private Stage primaryStage;
@@ -39,12 +39,12 @@ public class GameEngine extends Application implements Constants , GameActions, 
         newGame(DEFAULT_MAZE_SIZE, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
 
-    private void kbdEvents(KeyEvent ke){
+    private void kbdEvents(KeyEvent ke) {
         KeyCode kc = ke.getCode();
-        if((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING){
+        if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING) {
             player.move(kc);
-        }else{
-            switch (kc){
+        } else {
+            switch (kc) {
                 case R:
                     player.reset();
                     gameState = GameState.PLAYING;
@@ -59,9 +59,9 @@ public class GameEngine extends Application implements Constants , GameActions, 
         player = new Player(puzzle.getBoard(), this);
         gameState = GameState.PLAYING;
 
-        Parent root = (new RenderEngine(puzzle, player,this)).getRoot();
+        Parent root = (new RenderEngine(puzzle, player, this)).getRoot();
         scene.setRoot(root);
-        scene.removeEventHandler(KeyEvent.KEY_PRESSED,KbdEventsHandler);
+        scene.removeEventHandler(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         adjustStageSize(maximized);
 
         scene.getStylesheets().add(getClass().getResource("../styling/style.css").toExternalForm());
@@ -77,8 +77,8 @@ public class GameEngine extends Application implements Constants , GameActions, 
         primaryStage.show();
     }
 
-    private void adjustStageSize(boolean maximixed){
-        if(!maximixed) {
+    private void adjustStageSize(boolean maximixed) {
+        if (!maximixed) {
             primaryStage.setWidth((puzzle.getSize() + MAZE_PADDING) * PIXEL_SIZE);
             primaryStage.setHeight((puzzle.getSize() + MAZE_PADDING) * PIXEL_SIZE);
         }

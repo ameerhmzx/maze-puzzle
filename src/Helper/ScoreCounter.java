@@ -1,7 +1,5 @@
 package Helper;
 
-import objects.Puzzle;
-
 public class ScoreCounter {
     private int size;
     private int steps;
@@ -16,7 +14,7 @@ public class ScoreCounter {
     }
 
     public long getScore(){
-        long score = (size*size - steps) * size;
+        long score = (size - steps) * size/2;
         return score>0?score:0;
     }
 }

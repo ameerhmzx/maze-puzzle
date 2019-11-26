@@ -21,7 +21,7 @@ public class Player implements Constants {
         getShape();
         this.board = board;
         this.wonSignal = wonSignal;
-        scoreCounter = new ScoreCounter(board.getHeight());
+        scoreCounter = new ScoreCounter(board.getHeight()*board.getWidth());
     }
 
     public Rectangle getShape() {

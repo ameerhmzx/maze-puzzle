@@ -26,9 +26,10 @@ class RenderEngine implements Constants {
         this.puzzle = puzzle;
         this.player = player;
         this.gameActions = gameActions;
-        int size = this.puzzle.getSize();
+        int height = this.puzzle.getBoard().getHeight();
+        int width = this.puzzle.getBoard().getWidth();
 //        this.puzzle.getBoard().getCell(0).setWall(CellWall.LEFT, false);
-        this.puzzle.getBoard().getCell(size * size - 1).setWall(CellWall.RIGHT, false);
+        this.puzzle.getBoard().getCell(height * width - 1).setWall(CellWall.RIGHT, false);
     }
 
     Parent getRoot() {
@@ -131,7 +132,7 @@ class RenderEngine implements Constants {
 
     private ComboBox sizeSelectComboBox() {
         ComboBox comboBox = new ComboBox<>(FXCollections.observableArrayList(SIZE_LIST));
-        comboBox.setPromptText(puzzle.getSize() + " x " + puzzle.getSize());
+        comboBox.setPromptText(puzzle.getBoard().getHeight() + " x " + puzzle.getBoard().getWidth());
         comboBox.setOnAction((value) -> {
             int size = SIZE_OF_GAME.get(comboBox.getSelectionModel().getSelectedItem().toString());
             gameActions.changeSize(size);
