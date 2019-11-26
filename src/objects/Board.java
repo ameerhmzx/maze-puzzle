@@ -49,6 +49,8 @@ public class Board {
         return cells.get((int) (Math.random() * this.width * this.height));
     }
 
+
+    // TODO: remove redundant code between getNeighbourCell() & getNeighbourCells()
     public Cell getNeighbourCell(Cell currCell, Direction direction) {
 
         int cellIndex = currCell.getIndex();
