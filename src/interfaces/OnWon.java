@@ -1,6 +1,6 @@
 package interfaces;
 
 @FunctionalInterface
-public interface WonSignal {
+public interface OnWon {
     void gameWon();
 }

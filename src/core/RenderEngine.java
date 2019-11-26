@@ -1,9 +1,9 @@
 package core;
 
-import Helper.Constants;
+import Helpers.Constants;
 import enums.CellWall;
-import interfaces.GameActions;
-import interfaces.RenderAction;
+import interfaces.OnButtonClick;
+import interfaces.OnLayoutUpdate;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -20,16 +20,16 @@ import java.util.Map;
 
 class RenderEngine implements Constants {
     private Puzzle puzzle;
-    private GameActions gameActions;
+    private OnButtonClick onButtonClick;
     private Player player;
-    private RenderAction renderAction;
+    private OnLayoutUpdate onLayoutUpdate;
     private GridPane grid;
 
-    RenderEngine(Puzzle puzzle, Player player, GameActions gameActions, RenderAction renderAction) {
+    RenderEngine(Puzzle puzzle, Player player, OnButtonClick onButtonClick, OnLayoutUpdate onLayoutUpdate) {
         this.puzzle = puzzle;
         this.player = player;
-        this.renderAction = renderAction;
-        this.gameActions = gameActions;
+        this.onLayoutUpdate = onLayoutUpdate;
+        this.onButtonClick = onButtonClick;
         int height = this.puzzle.getBoard().getHeight();
         int width = this.puzzle.getBoard().getWidth();
         this.puzzle.getBoard().getCell(height * width - 1).setWall(CellWall.RIGHT, false);
@@ -140,14 +140,14 @@ class RenderEngine implements Constants {
     private Button SolveButton() {
         Button btn = new Button("Solve");
         btn.getStyleClass().add("button");
-        btn.setOnAction((value) -> gameActions.solve());
+        btn.setOnAction((value) -> onButtonClick.solve());
         return btn;
     }
 
     private Button ShuffleButton() {
         Button btn = new Button("Shuffle");
         btn.getStyleClass().add("button");
-        btn.setOnAction((value) -> gameActions.shuffle());
+        btn.setOnAction((value) -> onButtonClick.shuffle());
         return btn;
     }
 
@@ -156,7 +156,7 @@ class RenderEngine implements Constants {
         comboBox.setPromptText(puzzle.getBoard().getHeight() + " x " + puzzle.getBoard().getWidth());
         comboBox.setOnAction((value) -> {
             int size = SIZE_OF_GAME.get(comboBox.getSelectionModel().getSelectedItem().toString());
-            gameActions.changeSize(size, size);
+            onButtonClick.changeSize(size, size);
         });
         return comboBox;
     }
@@ -171,14 +171,14 @@ class RenderEngine implements Constants {
     }
 
     public void updateCell(Cell cell, int x, int y) {
-        renderAction.updated(() -> {
+        onLayoutUpdate.updated(() -> {
             //noinspection SuspiciousNameCombination
             grid.add(renderCell(cell, y, x, puzzle.getWidth(), puzzle.getHeight()), y, x);
         });
     }
 
     public void animateRandom() {
-        renderAction.updated(() -> {
+        onLayoutUpdate.updated(() -> {
             new Thread(() -> {
                 for (int i = 0; i < puzzle.getBoard().getHeight(); i++) {
                     for (int j = 0; j < puzzle.getBoard().getWidth(); j++) {

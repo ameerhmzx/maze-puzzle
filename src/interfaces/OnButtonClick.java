@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface GameActions {
+public interface OnButtonClick {
     void shuffle();
     void solve();
 

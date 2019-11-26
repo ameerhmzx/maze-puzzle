@@ -1,9 +1,9 @@
 package objects;
 
-import Helper.Constants;
-import Helper.ScoreCounter;
+import Helpers.Constants;
+import Helpers.ScoreCounter;
 import enums.Direction;
-import interfaces.WonSignal;
+import interfaces.OnWon;
 import javafx.animation.TranslateTransition;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
@@ -14,13 +14,13 @@ public class Player implements Constants {
     private Rectangle rect;
     private Board board;
     private int[] location; //(x,y)
-    private WonSignal wonSignal;
+    private OnWon onWon;
     private ScoreCounter scoreCounter;
 
-    public Player(Board board, WonSignal wonSignal) {
+    public Player(Board board, OnWon onWon) {
         getShape();
         this.board = board;
-        this.wonSignal = wonSignal;
+        this.onWon = onWon;
         scoreCounter = new ScoreCounter(board.getHeight()*board.getWidth());
     }
 
@@ -53,7 +53,7 @@ public class Player implements Constants {
         boolean parallelCell2 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[1]);
 
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
-            wonSignal.gameWon();
+            onWon.gameWon();
             move(board.getWidth() * PIXEL_SIZE, (board.getHeight() - 1) * PIXEL_SIZE);
             return;
         }

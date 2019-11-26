@@ -1,6 +1,6 @@
 package objects;
 
-import Helper.Constants;
+import Helpers.Constants;
 import enums.CellWall;
 import layoutStrategies.LayoutStrategy;
 

@@ -1,6 +1,6 @@
 package interfaces;
 
 @FunctionalInterface
-public interface RenderAction {
+public interface OnLayoutUpdate {
     void updated(Runnable runnable);
 }
