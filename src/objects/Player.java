@@ -54,7 +54,7 @@ public class Player implements Constants {
 
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
             wonSignal.gameWon();
-            move(board.getHeight()*PIXEL_SIZE, (board.getWidth()-1)*PIXEL_SIZE);
+            move(board.getWidth() * PIXEL_SIZE, (board.getHeight() - 1) * PIXEL_SIZE);
             return;
         }
 
