@@ -3,10 +3,11 @@ package renderer;
 import enums.GameState;
 import interfaces.Constants;
 import interfaces.GameActions;
+import interfaces.RenderAction;
 import interfaces.WonSignal;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -18,12 +19,13 @@ import objects.Puzzle;
 
 import static javafx.scene.input.KeyCode.*;
 
-public class GameEngine extends Application implements Constants, GameActions, WonSignal {
+public class GameEngine extends Application implements Constants, GameActions, WonSignal, RenderAction {
     private static GameState gameState;
     private Puzzle puzzle;
     private Stage primaryStage;
     private Scene scene;
     private Player player;
+    private RenderEngine renderEngine;
 
     private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
     private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
@@ -59,8 +61,9 @@ public class GameEngine extends Application implements Constants, GameActions, W
         player = new Player(puzzle.getBoard(), this);
         gameState = GameState.PLAYING;
 
-        Parent root = (new RenderEngine(puzzle, player, this)).getRoot();
-        scene.setRoot(root);
+        renderEngine = new RenderEngine(puzzle, player, this, this);
+
+        scene.setRoot(renderEngine.getRoot());
         scene.removeEventHandler(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         adjustStageSize(maximized);
 
@@ -75,6 +78,7 @@ public class GameEngine extends Application implements Constants, GameActions, W
         primaryStage.setScene(scene);
         primaryStage.setMaximized(maximized);
         primaryStage.show();
+        renderEngine.animateRandom();
     }
 
     private void adjustStageSize(boolean maximixed) {
@@ -104,5 +108,10 @@ public class GameEngine extends Application implements Constants, GameActions, W
         gameState = GameState.WON;
         System.out.println("WON");
         System.out.println("SCORE : " + player.getScore());
+    }
+
+    @Override
+    public void cellUpdated(Runnable runnable) {
+        Platform.runLater(runnable);
     }
 }

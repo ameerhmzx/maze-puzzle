@@ -3,6 +3,7 @@ package renderer;
 import enums.CellWall;
 import interfaces.Constants;
 import interfaces.GameActions;
+import interfaces.RenderAction;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -21,22 +22,25 @@ class RenderEngine implements Constants {
     private Puzzle puzzle;
     private GameActions gameActions;
     private Player player;
+    private RenderAction renderAction;
+    private GridPane grid;
 
-    RenderEngine(Puzzle puzzle, Player player, GameActions gameActions) {
+    RenderEngine(Puzzle puzzle, Player player, GameActions gameActions, RenderAction renderAction) {
         this.puzzle = puzzle;
         this.player = player;
+        this.renderAction = renderAction;
         this.gameActions = gameActions;
         int height = this.puzzle.getBoard().getHeight();
         int width = this.puzzle.getBoard().getWidth();
-//        this.puzzle.getBoard().getCell(0).setWall(CellWall.LEFT, false);
         this.puzzle.getBoard().getCell(height * width - 1).setWall(CellWall.RIGHT, false);
     }
 
     Parent getRoot() {
         BorderPane root = new BorderPane();
         StackPane stackPane = new StackPane();
-        GridPane grid = renderBoard();
         Pane canvas = new Pane();
+
+        grid = renderEmptyBoard();
 
         final Pane leftSpacer = new Pane();
         HBox.setHgrow(leftSpacer, Priority.SOMETIMES);
@@ -84,6 +88,17 @@ class RenderEngine implements Constants {
         return grid;
     }
 
+    private GridPane renderEmptyBoard() {
+        GridPane grid = new GridPane();
+
+        for (int y = 0; y < puzzle.getBoard().getHeight(); y++) {
+            for (int x = 0; x < puzzle.getBoard().getWidth(); x++) {
+                grid.add(renderEmptyCell(), x, y);
+            }
+        }
+        return grid;
+    }
+
     private Region renderCell(Cell cell, int x, int y, int width, int height) {
         Map<CellWall, Boolean> walls = cell.getWalls();
         Region box = new Region();
@@ -113,6 +128,12 @@ class RenderEngine implements Constants {
         );
 
         box.setStyle(style);
+        return box;
+    }
+
+    private Region renderEmptyCell() {
+        Region box = new Region();
+        box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
         return box;
     }
 
@@ -147,6 +168,35 @@ class RenderEngine implements Constants {
         btn.setPickOnBounds(true);
 
         return btn;
+    }
+
+    public void updateCell(Cell cell, int x, int y) {
+        renderAction.cellUpdated(() -> {
+            //noinspection SuspiciousNameCombination
+            grid.add(renderCell(cell, y, x, puzzle.getWidth(), puzzle.getHeight()), y, x);
+        });
+    }
+
+    public void animateRandom() {
+        renderAction.cellUpdated(() -> {
+            new Thread(() -> {
+                for (int i = 0; i < puzzle.getBoard().getHeight(); i++) {
+                    for (int j = 0; j < puzzle.getBoard().getWidth(); j++) {
+                        int finalJ = j;
+                        int finalI = i;
+                        new Thread(() -> {
+                            Cell cell = puzzle.getBoard().getCell(finalI, finalJ);
+                            try {
+                                Thread.sleep((int) (Math.random() * MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            updateCell(cell, finalI, finalJ);
+                        }).start();
+                    }
+                }
+            }).start();
+        });
     }
 
 }

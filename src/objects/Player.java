@@ -44,7 +44,7 @@ public class Player implements Constants {
     }
 
     public void move(Direction direction){
-        TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(PLAYER_ANIMATION_RATE), rect);
 
         Cell currCell = board.getCell(getLocation()[1], getLocation()[0]);
         Cell proceedingCell = board.getNeighbourCell(currCell, direction);
@@ -88,7 +88,7 @@ public class Player implements Constants {
         move(DIR_CORR_KC.get(kc));
     }
     protected void move(int x, int y) {
-        TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(PLAYER_ANIMATION_RATE), rect);
         tt.setToX(x);
         tt.setToY(y);
         tt.play();
