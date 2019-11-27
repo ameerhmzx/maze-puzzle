@@ -1,12 +1,13 @@
-package renderer;
+package core;
 
+import Helpers.Constants;
 import enums.GameState;
-import interfaces.Constants;
-import interfaces.GameActions;
-import interfaces.WonSignal;
+import interfaces.OnButtonClick;
+import interfaces.OnLayoutUpdate;
+import interfaces.OnWon;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -18,7 +19,7 @@ import objects.Puzzle;
 
 import static javafx.scene.input.KeyCode.*;
 
-public class GameEngine extends Application implements Constants, GameActions, WonSignal {
+public class GameEngine extends Application implements Constants, OnButtonClick, OnWon, OnLayoutUpdate {
     private static GameState gameState;
     private Puzzle puzzle;
     private Stage primaryStage;
@@ -39,28 +40,14 @@ public class GameEngine extends Application implements Constants, GameActions, W
         newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, LayoutStrategy.RECURSIVE_BACK_TRACK);
     }
 
-    private void kbdEvents(KeyEvent ke) {
-        KeyCode kc = ke.getCode();
-        if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING) {
-            player.move(kc);
-        } else {
-            switch (kc) {
-                case R:
-                    player.reset();
-                    gameState = GameState.PLAYING;
-                    break;
-            }
-        }
-        ke.consume();
-    }
-
     private void newGame(int width, int height, LayoutStrategy layoutStrategy) {
         puzzle = new Puzzle(width, height, layoutStrategy);
         player = new Player(puzzle.getBoard(), this);
         gameState = GameState.PLAYING;
 
-        Parent root = (new RenderEngine(puzzle, player, this)).getRoot();
-        scene.setRoot(root);
+        RenderEngine renderEngine = new RenderEngine(puzzle, player, this, this);
+
+        scene.setRoot(renderEngine.getRoot());
         scene.removeEventHandler(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         adjustStageSize(maximized);
 
@@ -75,6 +62,20 @@ public class GameEngine extends Application implements Constants, GameActions, W
         primaryStage.setScene(scene);
         primaryStage.setMaximized(maximized);
         primaryStage.show();
+        renderEngine.animateRandom();
+    }
+
+    private void kbdEvents(KeyEvent ke) {
+        KeyCode kc = ke.getCode();
+        if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING) {
+            player.move(kc);
+        } else {
+            if (kc == R) {
+                player.reset();
+                gameState = GameState.PLAYING;
+            }
+        }
+        ke.consume();
     }
 
     private void adjustStageSize(boolean maximixed) {
@@ -104,5 +105,10 @@ public class GameEngine extends Application implements Constants, GameActions, W
         gameState = GameState.WON;
         System.out.println("WON");
         System.out.println("SCORE : " + player.getScore());
+    }
+
+    @Override
+    public void updated(Runnable runnable) {
+        Platform.runLater(runnable);
     }
 }

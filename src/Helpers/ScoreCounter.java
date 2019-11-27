@@ -1,4 +1,4 @@
-package Helper;
+package Helpers;
 
 public class ScoreCounter {
     private int size;

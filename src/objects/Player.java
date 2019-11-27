@@ -1,9 +1,9 @@
 package objects;
 
-import Helper.ScoreCounter;
+import Helpers.Constants;
+import Helpers.ScoreCounter;
 import enums.Direction;
-import interfaces.Constants;
-import interfaces.WonSignal;
+import interfaces.OnWon;
 import javafx.animation.TranslateTransition;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
@@ -14,13 +14,13 @@ public class Player implements Constants {
     private Rectangle rect;
     private Board board;
     private int[] location; //(x,y)
-    private WonSignal wonSignal;
+    private OnWon onWon;
     private ScoreCounter scoreCounter;
 
-    public Player(Board board, WonSignal wonSignal) {
+    public Player(Board board, OnWon onWon) {
         getShape();
         this.board = board;
-        this.wonSignal = wonSignal;
+        this.onWon = onWon;
         scoreCounter = new ScoreCounter(board.getHeight()*board.getWidth());
     }
 
@@ -44,7 +44,7 @@ public class Player implements Constants {
     }
 
     public void move(Direction direction){
-        TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(PLAYER_ANIMATION_RATE), rect);
 
         Cell currCell = board.getCell(getLocation()[1], getLocation()[0]);
         Cell proceedingCell = board.getNeighbourCell(currCell, direction);
@@ -53,8 +53,8 @@ public class Player implements Constants {
         boolean parallelCell2 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[1]);
 
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
-            wonSignal.gameWon();
-            move(board.getHeight()*PIXEL_SIZE, (board.getWidth()-1)*PIXEL_SIZE);
+            onWon.gameWon();
+            move(board.getWidth() * PIXEL_SIZE, (board.getHeight() - 1) * PIXEL_SIZE);
             return;
         }
 
@@ -88,7 +88,7 @@ public class Player implements Constants {
         move(DIR_CORR_KC.get(kc));
     }
     protected void move(int x, int y) {
-        TranslateTransition tt = new TranslateTransition(Duration.seconds(ANIMATION_RATE), rect);
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(PLAYER_ANIMATION_RATE), rect);
         tt.setToX(x);
         tt.setToY(y);
         tt.play();

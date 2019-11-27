@@ -1,4 +1,4 @@
-package interfaces;
+package Helpers;
 
 import enums.CellWall;
 import enums.Direction;
@@ -11,10 +11,11 @@ public interface Constants {
     String APP_NAME = "Maze Puzzle";
     int PIXEL_SIZE = 20;
     int CHARACTER_SIZE = 12;
-    float ANIMATION_RATE = .1f;
+    float PLAYER_ANIMATION_RATE = .1f;
+    int MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE = 500;
     int MAZE_PADDING = 10;
-    int DEFAULT_MAZE_WIDTH = 24;
-    int DEFAULT_MAZE_HEIGHT = 20;
+    int DEFAULT_MAZE_WIDTH = 13;
+    int DEFAULT_MAZE_HEIGHT = 8;
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
 
     String[] SIZE_LIST = {"10 x 10", "15 x 15" , "20 x 20", "30 x 30"};
