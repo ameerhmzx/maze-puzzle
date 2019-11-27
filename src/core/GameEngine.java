@@ -34,7 +34,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         scene = new Scene(new Label("Loading..."));
         newGame();

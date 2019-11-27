@@ -178,25 +178,23 @@ class RenderEngine implements Constants {
     }
 
     public void animateRandom() {
-        onLayoutUpdate.updated(() -> {
-            new Thread(() -> {
-                for (int i = 0; i < puzzle.getBoard().getHeight(); i++) {
-                    for (int j = 0; j < puzzle.getBoard().getWidth(); j++) {
-                        int finalJ = j;
-                        int finalI = i;
-                        new Thread(() -> {
-                            Cell cell = puzzle.getBoard().getCell(finalI, finalJ);
-                            try {
-                                Thread.sleep((int) (Math.random() * MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            updateCell(cell, finalI, finalJ);
-                        }).start();
-                    }
+        onLayoutUpdate.updated(() -> new Thread(() -> {
+            for (int i = 0; i < puzzle.getBoard().getHeight(); i++) {
+                for (int j = 0; j < puzzle.getBoard().getWidth(); j++) {
+                    int finalJ = j;
+                    int finalI = i;
+                    new Thread(() -> {
+                        Cell cell = puzzle.getBoard().getCell(finalI, finalJ);
+                        try {
+                            Thread.sleep((int) (Math.random() * MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        updateCell(cell, finalI, finalJ);
+                    }).start();
                 }
-            }).start();
-        });
+            }
+        }).start());
     }
 
 }
