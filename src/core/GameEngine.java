@@ -37,7 +37,11 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         scene = new Scene(new Label("Loading..."));
-        newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, LayoutStrategy.RECURSIVE_BACK_TRACK);
+        newGame();
+    }
+
+    private void newGame() {
+        newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, DEFAULT_LAYOUT_STRATEGY);
     }
 
     private void newGame(int width, int height, LayoutStrategy layoutStrategy) {
@@ -78,8 +82,8 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         ke.consume();
     }
 
-    private void adjustStageSize(boolean maximixed) {
-        if (!maximixed) {
+    private void adjustStageSize(boolean maximized) {
+        if (!maximized) {
             primaryStage.setWidth((puzzle.getBoard().getWidth() + MAZE_PADDING) * PIXEL_SIZE);
             primaryStage.setHeight((puzzle.getBoard().getHeight() + MAZE_PADDING) * PIXEL_SIZE);
         }

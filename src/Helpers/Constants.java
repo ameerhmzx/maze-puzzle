@@ -4,6 +4,7 @@ import enums.CellWall;
 import enums.Direction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import layoutStrategies.LayoutStrategy;
 
 import java.util.HashMap;
 
@@ -17,6 +18,7 @@ public interface Constants {
     int DEFAULT_MAZE_WIDTH = 67;
     int DEFAULT_MAZE_HEIGHT = 32;
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
+    LayoutStrategy DEFAULT_LAYOUT_STRATEGY = LayoutStrategy.RECURSIVE_BACK_TRACK;
 
     String[] SIZE_LIST = {"10 x 10", "15 x 15" , "20 x 20", "30 x 30"};
     HashMap<String, Integer> SIZE_OF_GAME = new HashMap<String, Integer>(){{
