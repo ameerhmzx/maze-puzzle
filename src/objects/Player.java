@@ -49,8 +49,8 @@ public class Player implements Constants {
         Cell currCell = board.getCell(getLocation()[1], getLocation()[0]);
         Cell proceedingCell = board.getNeighbourCell(currCell, direction);
 
-        boolean parallelCell1 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[0]);
-        boolean parallelCell2 = proceedingCell.hasWall(CELLS_PER_DIR.get(direction)[1]);
+        boolean parallelCell1 = proceedingCell.hasWall(CELLS_PERPENDICULAR_TO_DIRECTION.get(direction)[0]);
+        boolean parallelCell2 = proceedingCell.hasWall(CELLS_PERPENDICULAR_TO_DIRECTION.get(direction)[1]);
 
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
             onWon.gameWon();
@@ -58,7 +58,7 @@ public class Player implements Constants {
             return;
         }
 
-        if (!currCell.hasWall(CELLWALL_CORR_DIR.get(direction))) {
+        if (!currCell.hasWall(CELL_WALL_CORRESPONDING_DIRECTION.get(direction))) {
             switch (direction) {
                 case UP:
                     tt.setToY(location[1] - PIXEL_SIZE);
@@ -85,7 +85,7 @@ public class Player implements Constants {
         }
     }
     public void move(KeyCode kc) {
-        move(DIR_CORR_KC.get(kc));
+        move(DIRECTION_CORRESPONDING_KEY_CODE.get(kc));
     }
     protected void move(int x, int y) {
         TranslateTransition tt = new TranslateTransition(Duration.seconds(PLAYER_ANIMATION_RATE), rect);

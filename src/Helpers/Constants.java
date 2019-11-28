@@ -4,6 +4,7 @@ import enums.CellWall;
 import enums.Direction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import layoutStrategies.LayoutStrategy;
 
 import java.util.HashMap;
 
@@ -14,9 +15,10 @@ public interface Constants {
     float PLAYER_ANIMATION_RATE = .1f;
     int MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE = 500;
     int MAZE_PADDING = 10;
-    int DEFAULT_MAZE_WIDTH = 13;
-    int DEFAULT_MAZE_HEIGHT = 8;
+    int DEFAULT_MAZE_WIDTH = 67;
+    int DEFAULT_MAZE_HEIGHT = 32;
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
+    LayoutStrategy DEFAULT_LAYOUT_STRATEGY = LayoutStrategy.RECURSIVE_BACK_TRACK;
 
     String[] SIZE_LIST = {"10 x 10", "15 x 15" , "20 x 20", "30 x 30"};
     HashMap<String, Integer> SIZE_OF_GAME = new HashMap<String, Integer>(){{
@@ -26,21 +28,21 @@ public interface Constants {
         put(SIZE_LIST[3], 30);
     }};
 
-    HashMap<KeyCode, Direction> DIR_CORR_KC = new HashMap<KeyCode, Direction>(){{
+    HashMap<KeyCode, Direction> DIRECTION_CORRESPONDING_KEY_CODE = new HashMap<KeyCode, Direction>() {{
         put(KeyCode.UP, Direction.UP);
         put(KeyCode.DOWN, Direction.DOWN);
         put(KeyCode.LEFT, Direction.LEFT);
         put(KeyCode.RIGHT, Direction.RIGHT);
     }};
 
-    HashMap<Direction, CellWall> CELLWALL_CORR_DIR = new HashMap<Direction, CellWall>(){{
+    HashMap<Direction, CellWall> CELL_WALL_CORRESPONDING_DIRECTION = new HashMap<Direction, CellWall>() {{
         put(Direction.UP, CellWall.TOP);
         put(Direction.DOWN, CellWall.BOTTOM);
         put(Direction.LEFT, CellWall.LEFT);
         put(Direction.RIGHT, CellWall.RIGHT);
     }};
 
-    HashMap<Direction, CellWall[]> CELLS_PER_DIR = new HashMap<Direction, CellWall[]>(){{
+    HashMap<Direction, CellWall[]> CELLS_PERPENDICULAR_TO_DIRECTION = new HashMap<Direction, CellWall[]>() {{
         put(Direction.UP, new CellWall[]{CellWall.LEFT, CellWall.RIGHT});
         put(Direction.DOWN, new CellWall[]{CellWall.LEFT, CellWall.RIGHT});
         put(Direction.LEFT, new CellWall[]{CellWall.TOP, CellWall.BOTTOM});
