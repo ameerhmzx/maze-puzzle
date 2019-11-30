@@ -1,8 +1,9 @@
 package interfaces;
 
+import layoutStrategies.LayoutStrategy;
+
 public interface OnButtonClick {
-    void shuffle();
     void solve();
 
-    void changeSize(int width, int height);
+    void generate(int width, int height, LayoutStrategy layoutStrategy);
 }

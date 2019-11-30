@@ -15,18 +15,12 @@ public interface Constants {
     float PLAYER_ANIMATION_RATE = .1f;
     int MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE = 500;
     int MAZE_PADDING = 10;
-    int DEFAULT_MAZE_WIDTH = 67;
-    int DEFAULT_MAZE_HEIGHT = 32;
+    int DEFAULT_MAZE_WIDTH = 30;
+    int DEFAULT_MAZE_HEIGHT = 20;
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
     LayoutStrategy DEFAULT_LAYOUT_STRATEGY = LayoutStrategy.RECURSIVE_BACK_TRACK;
 
-    String[] SIZE_LIST = {"10 x 10", "15 x 15" , "20 x 20", "30 x 30"};
-    HashMap<String, Integer> SIZE_OF_GAME = new HashMap<String, Integer>(){{
-        put(SIZE_LIST[0], 10);
-        put(SIZE_LIST[1], 15);
-        put(SIZE_LIST[2], 20);
-        put(SIZE_LIST[3], 30);
-    }};
+    String[] SIZE_LIST = {"10", "15" , "20", "30"};
 
     HashMap<KeyCode, Direction> DIRECTION_CORRESPONDING_KEY_CODE = new HashMap<KeyCode, Direction>() {{
         put(KeyCode.UP, Direction.UP);
