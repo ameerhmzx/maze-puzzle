@@ -1,7 +1,8 @@
 package layoutStrategies;
 
+import layoutChanges.LayoutChanges;
 import objects.Board;
 
 public interface ILayoutStrategy {
-    void layoutBoard(Board board);
+    LayoutChanges layoutBoard(Board board);
 }

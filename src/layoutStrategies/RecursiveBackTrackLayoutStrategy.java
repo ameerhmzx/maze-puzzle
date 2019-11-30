@@ -1,5 +1,7 @@
 package layoutStrategies;
 
+import layoutChanges.LayoutChange;
+import layoutChanges.LayoutChanges;
 import objects.Board;
 import objects.Cell;
 
@@ -7,29 +9,36 @@ import java.util.ArrayList;
 
 /**
  * Depth first recursive backtrack maze generation algorithm
- * https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker
- *
+ * https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
+ * <p>
  * Generates long dead ends making the solution little difficult
  */
 public class RecursiveBackTrackLayoutStrategy implements ILayoutStrategy {
     @Override
-    public void layoutBoard(Board board) {
-        ArrayList<Integer> visitedCellIndices = new ArrayList<>();
+    public LayoutChanges layoutBoard(Board board) {
+        LayoutChanges layoutChanges = new LayoutChanges();
+        ArrayList<Cell> visitedCells = new ArrayList<>();
+        Cell randomCell = board.getRandomCell();
 
-        this.visitCell(board.getRandomCell(), visitedCellIndices, board);
+        layoutChanges.add(LayoutChange.SET_CURRENT_CELL, randomCell);
+        this.visitCell(randomCell, visitedCells, board, layoutChanges);
+        return layoutChanges;
     }
 
-    private void visitCell(Cell cell, ArrayList<Integer> visitedCellIndices, Board board) {
-        visitedCellIndices.add(cell.getIndex());
+    private void visitCell(Cell cell, ArrayList<Cell> visitedCells, Board board, LayoutChanges layoutChanges) {
+        visitedCells.add(cell);
         ArrayList<Cell> cells = board.getNeighbourCells(cell);
 
         while (cells.size() != 0) {
             Cell randomCell = cells.get((int) (Math.random() * cells.size()));
-            if (!visitedCellIndices.contains(randomCell.getIndex())) {
+            if (!visitedCells.contains(randomCell)) {
                 cell.removeInterWall(randomCell);
-                this.visitCell(randomCell, visitedCellIndices, board);
+                layoutChanges.add(LayoutChange.MOVE, cell, cell.getInterWall(randomCell));
+                layoutChanges.add(LayoutChange.TOUCH_CELL, randomCell);
+                this.visitCell(randomCell, visitedCells, board, layoutChanges);
             }
             cells.remove(randomCell);
+            layoutChanges.add(LayoutChange.UNTOUCH_CELL, randomCell);
         }
     }
 }

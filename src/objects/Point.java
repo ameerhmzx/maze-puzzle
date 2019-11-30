@@ -1,8 +1,8 @@
 package objects;
 
 class Point {
-    private int x;
-    private int y;
+    int x;
+    int y;
     int index;
 
     Point(int x, int y, int index) {

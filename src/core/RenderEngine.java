@@ -1,11 +1,9 @@
 package core;
 
 import Helpers.Constants;
-import enums.CellWall;
+import enums.Direction;
 import interfaces.OnButtonClick;
 import interfaces.OnLayoutUpdate;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -16,7 +14,6 @@ import objects.Cell;
 import objects.Player;
 import objects.Puzzle;
 
-import java.nio.channels.Pipe;
 import java.util.Map;
 
 
@@ -42,7 +39,7 @@ class RenderEngine implements Constants {
         this.onButtonClick = onButtonClick;
         int height = this.puzzle.getBoard().getHeight();
         int width = this.puzzle.getBoard().getWidth();
-        this.puzzle.getBoard().getCell(height * width - 1).setWall(CellWall.RIGHT, false);
+        this.puzzle.getBoard().getCell(height * width - 1).setWall(Direction.RIGHT, false);
     }
 
     Parent getRoot() {
@@ -108,17 +105,17 @@ class RenderEngine implements Constants {
     }
 
     private Region renderCell(Cell cell, int x, int y, int width, int height) {
-        Map<CellWall, Boolean> walls = cell.getWalls();
+        Map<Direction, Boolean> walls = cell.getWalls();
         Region box = new Region();
         box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
 
         String style = String.format("-fx-border-color: %s;", BORDER_COLOR);
 
         style += String.format("-fx-border-style: %s %s %s %s;",
-                walls.get(CellWall.TOP) ? "solid" : "hidden",
-                walls.get(CellWall.RIGHT) ? "solid" : "hidden",
-                walls.get(CellWall.BOTTOM) ? "solid" : "hidden",
-                walls.get(CellWall.LEFT) ? "solid" : "hidden"
+                walls.get(Direction.UP) ? "solid" : "hidden",
+                walls.get(Direction.RIGHT) ? "solid" : "hidden",
+                walls.get(Direction.DOWN) ? "solid" : "hidden",
+                walls.get(Direction.LEFT) ? "solid" : "hidden"
         );
 
         style += String.format("-fx-border-radius: %d %d %d %d;",

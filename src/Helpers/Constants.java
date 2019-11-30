@@ -1,6 +1,5 @@
 package Helpers;
 
-import enums.CellWall;
 import enums.Direction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -29,18 +28,18 @@ public interface Constants {
         put(KeyCode.RIGHT, Direction.RIGHT);
     }};
 
-    HashMap<Direction, CellWall> CELL_WALL_CORRESPONDING_DIRECTION = new HashMap<Direction, CellWall>() {{
-        put(Direction.UP, CellWall.TOP);
-        put(Direction.DOWN, CellWall.BOTTOM);
-        put(Direction.LEFT, CellWall.LEFT);
-        put(Direction.RIGHT, CellWall.RIGHT);
+    HashMap<Direction, Direction> CELL_WALL_CORRESPONDING_DIRECTION = new HashMap<Direction, Direction>() {{
+        put(Direction.UP, Direction.UP);
+        put(Direction.DOWN, Direction.DOWN);
+        put(Direction.LEFT, Direction.LEFT);
+        put(Direction.RIGHT, Direction.RIGHT);
     }};
 
-    HashMap<Direction, CellWall[]> CELLS_PERPENDICULAR_TO_DIRECTION = new HashMap<Direction, CellWall[]>() {{
-        put(Direction.UP, new CellWall[]{CellWall.LEFT, CellWall.RIGHT});
-        put(Direction.DOWN, new CellWall[]{CellWall.LEFT, CellWall.RIGHT});
-        put(Direction.LEFT, new CellWall[]{CellWall.TOP, CellWall.BOTTOM});
-        put(Direction.RIGHT, new CellWall[]{CellWall.TOP, CellWall.BOTTOM});
+    HashMap<Direction, Direction[]> CELLS_PERPENDICULAR_TO_DIRECTION = new HashMap<Direction, Direction[]>() {{
+        put(Direction.UP, new Direction[]{Direction.LEFT, Direction.RIGHT});
+        put(Direction.DOWN, new Direction[]{Direction.LEFT, Direction.RIGHT});
+        put(Direction.LEFT, new Direction[]{Direction.UP, Direction.DOWN});
+        put(Direction.RIGHT, new Direction[]{Direction.UP, Direction.DOWN});
     }};
 
     String BORDER_COLOR = "#333";

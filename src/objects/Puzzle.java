@@ -1,7 +1,7 @@
 package objects;
 
 import Helpers.Constants;
-import enums.CellWall;
+import enums.Direction;
 import layoutStrategies.LayoutStrategy;
 
 public class Puzzle implements Constants {
@@ -16,12 +16,13 @@ public class Puzzle implements Constants {
         this.layoutStrategy = layoutStrategy;
 
         this.board = new Board(width, height);
-        layoutStrategy.layoutBoard(this.board);
+        drawBoard(this.board);
+        layoutStrategy.layoutBoard(this.board).display();
         drawBoard(this.board);
     }
 
     public static void main(String[] args) {
-        new Puzzle(35, 5, LayoutStrategy.SIMPLE_BACK_TRACK);
+        new Puzzle(6, 6, LayoutStrategy.WILSON_MAZE);
     }
 
     public int getSize() {
@@ -48,9 +49,9 @@ public class Puzzle implements Constants {
         for (int x = 0; x < width * 2; x++) {
             Cell cell = board.getCell(0, x / 2);
             if (x % 2 == 0) {
-                System.out.print(x == 0 ? "╔" : cell.hasWall(CellWall.LEFT) ? "╤" : "═");
+                System.out.print(x == 0 ? "╔" : cell.hasWall(Direction.LEFT) ? "╤" : "═");
             } else {
-                System.out.print(cell.hasWall(CellWall.TOP) ? "═══" : "   ");
+                System.out.print(cell.hasWall(Direction.UP) ? "═══" : "   ");
                 if (x / 2 == this.width - 1) {
                     System.out.print("╗\n");
                 }
@@ -62,18 +63,18 @@ public class Puzzle implements Constants {
                 Cell cell = board.getCell(y / 2, x / 2);
 
                 if (y % 2 != 0 && x % 2 == 0) {
-                    System.out.print(cell.hasWall(CellWall.LEFT) ? x == 0 ? "║" : "│" : " ");
+                    System.out.print(cell.hasWall(Direction.LEFT) ? x == 0 ? "║" : "│" : " ");
                 } else if (y % 2 != 0) {
                     System.out.print("   ");
                     if (x / 2 == this.width - 1) {
-                        System.out.print(cell.hasWall(CellWall.RIGHT) ? "║\n" : " \n");
+                        System.out.print(cell.hasWall(Direction.RIGHT) ? "║\n" : " \n");
                     }
                 } else if (x % 2 == 0) {
-                    System.out.print(x == 0 ? cell.hasWall(CellWall.TOP) ? "╟" : "║" : "┼");
+                    System.out.print(x == 0 ? cell.hasWall(Direction.UP) ? "╟" : "║" : "┼");
                 } else {
-                    System.out.print(cell.hasWall(CellWall.TOP) ? "───" : "   ");
+                    System.out.print(cell.hasWall(Direction.UP) ? "───" : "   ");
                     if (x / 2 == this.width - 1) {
-                        System.out.print(cell.hasWall(CellWall.TOP) ? "╢\n" : "║\n");
+                        System.out.print(cell.hasWall(Direction.UP) ? "╢\n" : "║\n");
                     }
                 }
             }
@@ -82,9 +83,9 @@ public class Puzzle implements Constants {
         for (int x = 0; x < width * 2; x++) {
             Cell cell = board.getCell(height - 1, x / 2);
             if (x % 2 == 0) {
-                System.out.print(x == 0 ? "╚" : cell.hasWall(CellWall.LEFT) ? "╧" : "═");
+                System.out.print(x == 0 ? "╚" : cell.hasWall(Direction.LEFT) ? "╧" : "═");
             } else {
-                System.out.print(cell.hasWall(CellWall.BOTTOM) ? "═══" : "   ");
+                System.out.print(cell.hasWall(Direction.DOWN) ? "═══" : "   ");
                 if (x / 2 == this.width - 1) {
                     System.out.print("╝\n");
                 }

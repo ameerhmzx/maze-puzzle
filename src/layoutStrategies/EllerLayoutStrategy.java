@@ -1,5 +1,6 @@
 package layoutStrategies;
 
+import layoutChanges.LayoutChanges;
 import objects.Board;
 import objects.Cell;
 
@@ -14,7 +15,9 @@ import java.util.HashSet;
  */
 public class EllerLayoutStrategy implements ILayoutStrategy {
     @Override
-    public void layoutBoard(Board board) {
+    public LayoutChanges layoutBoard(Board board) {
+        LayoutChanges layoutChanges = new LayoutChanges();
         ArrayList<HashSet<Cell>> ellerSets = new ArrayList<>();
+        return layoutChanges;
     }
 }

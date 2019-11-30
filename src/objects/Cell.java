@@ -1,31 +1,31 @@
 package objects;
 
-import enums.CellWall;
+import enums.Direction;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cell {
-    private static Map<CellWall, CellWall> opposingWalls = new HashMap<CellWall, CellWall>() {{
-        put(CellWall.LEFT, CellWall.RIGHT);
-        put(CellWall.RIGHT, CellWall.LEFT);
-        put(CellWall.TOP, CellWall.BOTTOM);
-        put(CellWall.BOTTOM, CellWall.TOP);
+    private static Map<Direction, Direction> opposingWalls = new HashMap<Direction, Direction>() {{
+        put(Direction.LEFT, Direction.RIGHT);
+        put(Direction.RIGHT, Direction.LEFT);
+        put(Direction.UP, Direction.DOWN);
+        put(Direction.DOWN, Direction.UP);
     }};
 
     private Point location;
-    private Map<CellWall, Boolean> walls;
+    private Map<Direction, Boolean> walls;
 
     Cell(Point location) {
         walls = new HashMap<>();
         this.location = location;
 
-        for (CellWall wall : CellWall.values()) {
+        for (Direction wall : Direction.values()) {
             walls.put(wall, true);
         }
     }
 
-    public Map<CellWall, Boolean> getWalls() {
+    public Map<Direction, Boolean> getWalls() {
         return walls;
     }
 
@@ -33,40 +33,45 @@ public class Cell {
         return this.location.index;
     }
 
-    public void setWall(CellWall wall, boolean val) {
+    public void setWall(Direction wall, boolean val) {
         this.walls.put(wall, val);
     }
 
-    public boolean hasWall(CellWall wall) {
+    public boolean hasWall(Direction wall) {
         return this.walls.get(wall);
     }
 
     public boolean hasWall(Cell cell) {
-        CellWall interWall = getInterWall(cell);
+        Direction interWall = getInterWall(cell);
         return hasWall(interWall);
     }
 
-    private void removeWall(CellWall wall) {
+    private void removeWall(Direction wall) {
         this.walls.put(wall, false);
     }
 
-    CellWall getInterWall(Cell cell) {
-        CellWall interWall;
+    public Direction getInterWall(Cell cell) {
+        Direction interWall;
         if (cell.getIndex() == this.getIndex() + 1) {
-            interWall = CellWall.RIGHT;
+            interWall = Direction.RIGHT;
         } else if (cell.getIndex() == this.getIndex() - 1) {
-            interWall = CellWall.LEFT;
+            interWall = Direction.LEFT;
         } else if (cell.getIndex() < this.getIndex()) {
-            interWall = CellWall.TOP;
+            interWall = Direction.UP;
         } else {
-            interWall = CellWall.BOTTOM;
+            interWall = Direction.DOWN;
         }
         return interWall;
     }
 
     public void removeInterWall(Cell cell) {
-        CellWall interWall = getInterWall(cell);
+        Direction interWall = getInterWall(cell);
         this.removeWall(interWall);
         cell.removeWall(opposingWalls.get(interWall));
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Cell@%d (%d,%d)", this.location.index, this.location.x, this.location.y);
     }
 }

@@ -1,5 +1,7 @@
 package layoutStrategies;
 
+import layoutChanges.LayoutChange;
+import layoutChanges.LayoutChanges;
 import objects.Board;
 import objects.Cell;
 
@@ -12,29 +14,37 @@ import java.util.Stack;
  */
 public class SimpleBackTrackLayoutStrategy implements ILayoutStrategy {
     @Override
-    public void layoutBoard(Board board) {
-        ArrayList<Integer> visitedCellIndices = new ArrayList<>();
+    public LayoutChanges layoutBoard(Board board) {
+        LayoutChanges layoutChanges = new LayoutChanges();
+        ArrayList<Cell> visitedCells = new ArrayList<>();
         Stack<Cell> stack = new Stack<>();
         stack.push(board.getRandomCell());
+        layoutChanges.add(LayoutChange.SET_CURRENT_CELL, stack.get(0));
+
 
         while (!stack.empty()) {
             Cell cell = stack.pop();
-            visitedCellIndices.add(cell.getIndex());
+            visitedCells.add(cell);
             ArrayList<Cell> neighbourCells = board.getNeighbourCells(cell);
+            neighbourCells.removeAll(visitedCells);
 
-            while (neighbourCells.size() != 0) {
+            if (neighbourCells.size() > 0) {
                 Cell randomCell = neighbourCells.get((int) (Math.random() * neighbourCells.size()));
-                if (!visitedCellIndices.contains(randomCell.getIndex())) {
+                if (!visitedCells.contains(randomCell)) {
                     cell.removeInterWall(randomCell);
+                    layoutChanges.add(LayoutChange.MOVE, cell, randomCell.getInterWall(cell));
+                    layoutChanges.add(LayoutChange.TOUCH_CELL, randomCell);
 
                     stack.push(cell);
-                    visitedCellIndices.add(randomCell.getIndex());
+                    visitedCells.add(randomCell);
                     stack.push(randomCell);
-                    break;
                 } else {
                     neighbourCells.remove(randomCell);
                 }
+            } else {
+                layoutChanges.add(LayoutChange.UNTOUCH_CELL, cell);
             }
         }
+        return layoutChanges;
     }
 }
