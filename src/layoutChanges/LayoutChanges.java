@@ -66,10 +66,6 @@ public class LayoutChanges {
             throw new UnsupportedOperationException(layoutChange + " not supported");
     }
 
-    public void getCurrentCell() {
-
-    }
-
     public void display() {
         for (Dictionary change : this.layoutChanges) {
             switch ((LayoutChange) change.get("type")) {
