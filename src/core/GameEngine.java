@@ -1,6 +1,7 @@
 package core;
 
 import Helpers.Constants;
+import Helpers.ScoreCounter;
 import enums.GameState;
 import interfaces.OnButtonClick;
 import interfaces.OnLayoutUpdate;
@@ -26,6 +27,8 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     private Scene scene;
     private Player player;
 
+    private RenderEngine renderEngine;
+
     private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
     private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
 
@@ -49,7 +52,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         player = new Player(puzzle.getBoard(), this);
         gameState = GameState.PLAYING;
 
-        RenderEngine renderEngine = new RenderEngine(puzzle, player, this, this);
+        renderEngine = new RenderEngine(puzzle, player, this, this);
 
         scene.setRoot(renderEngine.getRoot());
         scene.removeEventHandler(KeyEvent.KEY_PRESSED, KbdEventsHandler);
@@ -73,6 +76,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         KeyCode kc = ke.getCode();
         if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING) {
             player.move(kc);
+            renderEngine.updateScore(player.getScore());
             ke.consume();
         } else {
             if (kc == R) {

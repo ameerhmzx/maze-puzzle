@@ -28,9 +28,11 @@ class RenderEngine implements Constants {
     private GridPane grid;
 
     private ToolBar toolBar;
+    private ToolBar statusBar;
     private SplitMenuButton solveButton, generateMazeButton;
     private CheckBox rectangularCB;
     private ComboBox heightSelectBox, widthSelectBox;
+    private Label scoreLabel;
 
 
     RenderEngine(Puzzle puzzle, Player player, OnButtonClick onButtonClick, OnLayoutUpdate onLayoutUpdate) {
@@ -51,6 +53,7 @@ class RenderEngine implements Constants {
         grid = renderEmptyBoard();
 
         generateToolbar();
+        generateStatusBar();
 
         canvas.getChildren().add(player.getShape());
 
@@ -67,7 +70,19 @@ class RenderEngine implements Constants {
 
         root.setCenter(hBox);
         root.setTop(toolBar);
+        root.setBottom(statusBar);
         return root;
+    }
+
+    private void generateStatusBar() {
+        statusBar = new ToolBar();
+        statusBar.setPrefHeight(10);
+        scoreLabel = new Label("Score");
+        statusBar.getItems().add(scoreLabel);
+    }
+
+    public void updateScore(long score){
+        scoreLabel.setText("Score : " + score);
     }
 
     private GridPane renderBoard() {
