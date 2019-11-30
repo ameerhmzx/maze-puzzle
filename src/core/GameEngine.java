@@ -58,7 +58,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         scene.removeEventHandler(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         adjustStageSize(maximized);
 
-        scene.getStylesheets().add(getClass().getResource("../styling/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("../styles/style.css").toExternalForm());
         scene.addEventFilter(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         primaryStage.maximizedProperty().addListener((ov, t, t1) -> {
             maximized = t1;

@@ -22,27 +22,8 @@ public class Puzzle implements Constants {
     }
 
     public static void main(String[] args) {
-        drawBoard(new Puzzle(6, 6, LayoutStrategy.WILSON_MAZE).board);
-    }
-
-    public int getSize() {
-        return this.width * this.height;
-    }
-
-    public LayoutStrategy getLayoutStrategy() {
-        return layoutStrategy;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
+        Puzzle puzzle = new Puzzle(6, 6, LayoutStrategy.WILSON_MAZE);
+        drawBoard(puzzle.board);
     }
 
     private static void drawBoard(Board board) {
@@ -91,6 +72,26 @@ public class Puzzle implements Constants {
                 }
             }
         }
+    }
+
+    public int getSize() {
+        return this.width * this.height;
+    }
+
+    public LayoutStrategy getLayoutStrategy() {
+        return layoutStrategy;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 }
 
