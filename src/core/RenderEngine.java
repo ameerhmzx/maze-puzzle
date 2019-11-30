@@ -4,17 +4,19 @@ import Helpers.Constants;
 import enums.CellWall;
 import interfaces.OnButtonClick;
 import interfaces.OnLayoutUpdate;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import layoutStrategies.LayoutStrategy;
 import objects.Cell;
 import objects.Player;
 import objects.Puzzle;
 
+import java.nio.channels.Pipe;
 import java.util.Map;
 
 
@@ -24,6 +26,12 @@ class RenderEngine implements Constants {
     private Player player;
     private OnLayoutUpdate onLayoutUpdate;
     private GridPane grid;
+
+    private ToolBar toolBar;
+    private SplitMenuButton solveButton, generateMazeButton;
+    private CheckBox rectangularCB;
+    private ComboBox heightSelectBox, widthSelectBox;
+
 
     RenderEngine(Puzzle puzzle, Player player, OnButtonClick onButtonClick, OnLayoutUpdate onLayoutUpdate) {
         this.puzzle = puzzle;
@@ -42,21 +50,7 @@ class RenderEngine implements Constants {
 
         grid = renderEmptyBoard();
 
-        final Pane leftSpacer = new Pane();
-        HBox.setHgrow(leftSpacer, Priority.SOMETIMES);
-
-        final Pane rightSpacer = new Pane();
-        HBox.setHgrow(rightSpacer, Priority.SOMETIMES);
-
-        ToolBar toolBar = new ToolBar(
-                leftSpacer,
-                SolveButton(),
-                ShuffleButton(),
-                sizeSelectComboBox(),
-                rightSpacer,
-                SettingButton()
-        );
-        toolBar.setMaxHeight(10);
+        generateToolbar();
 
         canvas.getChildren().add(player.getShape());
 
@@ -78,7 +72,6 @@ class RenderEngine implements Constants {
 
     private GridPane renderBoard() {
         GridPane grid = new GridPane();
-
         for (int y = 0; y < puzzle.getBoard().getHeight(); y++) {
             for (int x = 0; x < puzzle.getBoard().getWidth(); x++) {
                 Cell cell = puzzle.getBoard().getCell(y, x);
@@ -137,37 +130,112 @@ class RenderEngine implements Constants {
         return box;
     }
 
-    private Button SolveButton() {
-        Button btn = new Button("Solve");
-        btn.getStyleClass().add("button");
-        btn.setOnAction((value) -> onButtonClick.solve());
-        return btn;
+    private void generateToolbar() {
+
+        final Pane leftSpacer = new Pane();
+        HBox.setHgrow(leftSpacer, Priority.SOMETIMES);
+
+        final Pane rightSpacer = new Pane();
+        HBox.setHgrow(rightSpacer, Priority.SOMETIMES);
+
+        generateSolveButton();
+        generateMazeButton();
+
+        generateRectangleCheckBox();
+
+        generateWidthSelectBox();
+        generateHeightSelectBox();
+
+        toolBar = new ToolBar(
+                leftSpacer,
+                solveButton,
+                new Label("Size"),
+                heightSelectBox,
+                new Label(" x "),
+                widthSelectBox,
+                rectangularCB,
+                generateMazeButton,
+                rightSpacer
+        );
+        toolBar.setMaxHeight(10);
     }
 
-    private Button ShuffleButton() {
-        Button btn = new Button("Shuffle");
-        btn.getStyleClass().add("button");
-        btn.setOnAction((value) -> onButtonClick.shuffle());
-        return btn;
-    }
+    private void generateRectangleCheckBox() {
+        rectangularCB = new CheckBox("Rectangular");
+        if (puzzle.getHeight() != puzzle.getWidth())
+            rectangularCB.setSelected(true);
 
-    private ComboBox sizeSelectComboBox() {
-        ComboBox comboBox = new ComboBox<>(FXCollections.observableArrayList(SIZE_LIST));
-        comboBox.setPromptText(puzzle.getBoard().getHeight() + " x " + puzzle.getBoard().getWidth());
-        comboBox.setOnAction((value) -> {
-            int size = SIZE_OF_GAME.get(comboBox.getSelectionModel().getSelectedItem().toString());
-            onButtonClick.changeSize(size, size);
+        rectangularCB.setOnAction(e -> {
+            widthSelectBox.setPromptText(heightSelectBox.getPromptText());
+            widthSelectBox.getEditor().setText(heightSelectBox.getEditor().getText());
         });
-        return comboBox;
     }
 
-    private Button SettingButton() {
-        Button btn = new Button();
+    private void generateMazeButton() {
+        generateMazeButton = new SplitMenuButton();
+        generateMazeButton.setText("Generate");
 
-        btn.getStyleClass().add("icon-button");
-        btn.setPickOnBounds(true);
+        ToggleGroup generateMethodGroup = new ToggleGroup();
+        for (LayoutStrategy layoutStrategy : LayoutStrategy.values()) {
+            RadioMenuItem x = new RadioMenuItem(layoutStrategy.getName());
+            x.setToggleGroup(generateMethodGroup);
+            if (layoutStrategy.equals(puzzle.getLayoutStrategy()))
+                x.setSelected(true);
+            generateMazeButton.getItems().add(x);
+        }
 
-        return btn;
+        generateMazeButton.setOnAction((value) -> {
+            int width = (widthSelectBox.getEditor().getText()==null || widthSelectBox.getEditor().getText().equals(""))?puzzle.getWidth():Integer.parseInt(widthSelectBox.getEditor().getText());
+            int height = (heightSelectBox.getEditor().getText()==null || heightSelectBox.getEditor().getText().equals(""))?puzzle.getHeight():Integer.parseInt(heightSelectBox.getEditor().getText());
+            LayoutStrategy layoutStrategy = Puzzle.DEFAULT_LAYOUT_STRATEGY;
+
+            for(MenuItem menuItem : generateMazeButton.getItems()){
+                if(((RadioMenuItem) menuItem).isSelected()) {
+                    for(LayoutStrategy layoutStrategy1 : LayoutStrategy.values()){
+                        if(layoutStrategy1.getName().equals(menuItem.getText())){
+                            layoutStrategy = layoutStrategy1;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            onButtonClick.generate(width, height, layoutStrategy);
+        });
+    }
+
+    private void generateSolveButton() {
+        solveButton = new SplitMenuButton();
+        solveButton.setText("Solve");
+        ToggleGroup solveMethodGroup = new ToggleGroup();
+        RadioMenuItem btn1 = new RadioMenuItem("Method 1");
+        RadioMenuItem btn2 = new RadioMenuItem("Method 2");
+        btn1.setToggleGroup(solveMethodGroup);
+        btn2.setToggleGroup(solveMethodGroup);
+
+        solveButton.getItems().addAll(btn1, btn2);
+    }
+
+    private void generateWidthSelectBox() {
+        widthSelectBox = new ComboBox(FXCollections.observableArrayList(SIZE_LIST));
+        widthSelectBox.setPrefWidth(70);
+        widthSelectBox.setEditable(true);
+        widthSelectBox.getEditor().setText(puzzle.getBoard().getWidth() + "");
+        widthSelectBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!rectangularCB.isSelected())
+                heightSelectBox.getEditor().setText(newValue);
+        });
+    }
+
+    private void generateHeightSelectBox() {
+        heightSelectBox = new ComboBox(FXCollections.observableArrayList(SIZE_LIST));
+        heightSelectBox.setPrefWidth(70);
+        heightSelectBox.setEditable(true);
+        heightSelectBox.getEditor().setText(puzzle.getBoard().getHeight() + "");
+        heightSelectBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!rectangularCB.isSelected())
+                widthSelectBox.getEditor().setText(newValue);
+        });
     }
 
     public void updateCell(Cell cell, int x, int y) {

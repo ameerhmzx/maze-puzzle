@@ -73,13 +73,14 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         KeyCode kc = ke.getCode();
         if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING) {
             player.move(kc);
+            ke.consume();
         } else {
             if (kc == R) {
                 player.reset();
                 gameState = GameState.PLAYING;
+                ke.consume();
             }
         }
-        ke.consume();
     }
 
     private void adjustStageSize(boolean maximized) {
@@ -90,18 +91,13 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     }
 
     @Override
-    public void shuffle() {
-        newGame(puzzle.getBoard().getWidth(), puzzle.getBoard().getHeight(), puzzle.getLayoutStrategy());
-    }
-
-    @Override
     public void solve() {
         // TODO:: SOLVE
     }
 
     @Override
-    public void changeSize(int width, int height) {
-        newGame(width, height, puzzle.getLayoutStrategy());
+    public void generate(int width, int height, LayoutStrategy layoutStrategy) {
+        newGame(width, height, layoutStrategy);
     }
 
     @Override
