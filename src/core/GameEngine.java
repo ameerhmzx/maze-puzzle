@@ -1,7 +1,7 @@
 package core;
 
 import Helpers.Constants;
-import Helpers.ScoreCounter;
+import Helpers.Context;
 import enums.GameState;
 import interfaces.OnButtonClick;
 import interfaces.OnLayoutUpdate;
@@ -21,13 +21,9 @@ import objects.Puzzle;
 import static javafx.scene.input.KeyCode.*;
 
 public class GameEngine extends Application implements Constants, OnButtonClick, OnWon, OnLayoutUpdate {
-    private static GameState gameState;
-    private Puzzle puzzle;
+    private Context context;
     private Stage primaryStage;
     private Scene scene;
-    private Player player;
-
-    private RenderEngine renderEngine;
 
     private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
     private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
@@ -38,6 +34,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
 
     @Override
     public void start(Stage primaryStage) {
+        this.context = new Context();
         this.primaryStage = primaryStage;
         scene = new Scene(new Label("Loading..."));
         newGame();
@@ -48,13 +45,12 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     }
 
     private void newGame(int width, int height, LayoutStrategy layoutStrategy) {
-        puzzle = new Puzzle(width, height, layoutStrategy);
-        player = new Player(puzzle.getBoard(), this);
-        gameState = GameState.PLAYING;
+        context.setPuzzle(new Puzzle(width, height, layoutStrategy));
+        context.setPlayer(new Player(context.getBoard(), this));
 
-        renderEngine = new RenderEngine(puzzle, player, this, this);
+        context.setRenderEngine(new RenderEngine(context, this, this));
 
-        scene.setRoot(renderEngine.getRoot());
+        scene.setRoot(context.getRenderEngine().getRoot());
         scene.removeEventHandler(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         adjustStageSize(maximized);
 
@@ -69,19 +65,19 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         primaryStage.setScene(scene);
         primaryStage.setMaximized(maximized);
         primaryStage.show();
-        renderEngine.animateRandom();
+        context.getRenderEngine().animateRandom();
     }
 
     private void kbdEvents(KeyEvent ke) {
         KeyCode kc = ke.getCode();
-        if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && gameState == GameState.PLAYING) {
-            player.move(kc);
-            renderEngine.updateScore(player.getScore());
+        if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && context.getGameState() == GameState.PLAYING) {
+            context.getPlayer().move(kc);
+            context.getRenderEngine().updateScore(context.getPlayer().getScore());
             ke.consume();
         } else {
             if (kc == R) {
-                player.reset();
-                gameState = GameState.PLAYING;
+                context.getPlayer().reset();
+                context.setGameState(GameState.PLAYING);
                 ke.consume();
             }
         }
@@ -89,8 +85,8 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
 
     private void adjustStageSize(boolean maximized) {
         if (!maximized) {
-            primaryStage.setWidth((puzzle.getBoard().getWidth() + MAZE_PADDING) * PIXEL_SIZE);
-            primaryStage.setHeight((puzzle.getBoard().getHeight() + MAZE_PADDING) * PIXEL_SIZE);
+            primaryStage.setWidth((context.getPuzzle().getWidth() + MAZE_PADDING) * PIXEL_SIZE);
+            primaryStage.setHeight((context.getPuzzle().getHeight() + MAZE_PADDING) * PIXEL_SIZE);
         }
     }
 
@@ -106,9 +102,9 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
 
     @Override
     public void gameWon() {
-        gameState = GameState.WON;
+        context.setGameState(GameState.WON);
         System.out.println("WON");
-        System.out.println("SCORE : " + player.getScore());
+        System.out.println("SCORE : " + context.getPlayer().getScore());
     }
 
     @Override

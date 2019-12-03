@@ -1,6 +1,7 @@
 package core;
 
 import Helpers.Constants;
+import Helpers.Context;
 import enums.Direction;
 import interfaces.OnButtonClick;
 import interfaces.OnLayoutUpdate;
@@ -17,7 +18,7 @@ import objects.Puzzle;
 import java.util.Map;
 
 
-class RenderEngine implements Constants {
+public class RenderEngine implements Constants {
     private Puzzle puzzle;
     private OnButtonClick onButtonClick;
     private Player player;
@@ -31,6 +32,10 @@ class RenderEngine implements Constants {
     private ComboBox heightSelectBox, widthSelectBox;
     private Label scoreLabel;
 
+
+    RenderEngine(Context context, OnButtonClick onButtonClick, OnLayoutUpdate onLayoutUpdate) {
+        this(context.getPuzzle(), context.getPlayer(), onButtonClick, onLayoutUpdate);
+    }
 
     RenderEngine(Puzzle puzzle, Player player, OnButtonClick onButtonClick, OnLayoutUpdate onLayoutUpdate) {
         this.puzzle = puzzle;
@@ -250,14 +255,14 @@ class RenderEngine implements Constants {
         });
     }
 
-    public void updateCell(Cell cell, int x, int y) {
+    private void updateCell(Cell cell, int x, int y) {
         onLayoutUpdate.updated(() -> {
             //noinspection SuspiciousNameCombination
             grid.add(renderCell(cell, y, x, puzzle.getWidth(), puzzle.getHeight()), y, x);
         });
     }
 
-    public void animateRandom() {
+    void animateRandom() {
         onLayoutUpdate.updated(() -> new Thread(() -> {
             for (int i = 0; i < puzzle.getBoard().getHeight(); i++) {
                 for (int j = 0; j < puzzle.getBoard().getWidth(); j++) {

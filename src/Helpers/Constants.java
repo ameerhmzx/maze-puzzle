@@ -28,14 +28,7 @@ public interface Constants {
         put(KeyCode.RIGHT, Direction.RIGHT);
     }};
 
-    HashMap<Direction, Direction> CELL_WALL_CORRESPONDING_DIRECTION = new HashMap<Direction, Direction>() {{
-        put(Direction.UP, Direction.UP);
-        put(Direction.DOWN, Direction.DOWN);
-        put(Direction.LEFT, Direction.LEFT);
-        put(Direction.RIGHT, Direction.RIGHT);
-    }};
-
-    HashMap<Direction, Direction[]> CELLS_PERPENDICULAR_TO_DIRECTION = new HashMap<Direction, Direction[]>() {{
+    HashMap<Direction, Direction[]> PERPENDICULAR_DIRECTIONS = new HashMap<Direction, Direction[]>() {{
         put(Direction.UP, new Direction[]{Direction.LEFT, Direction.RIGHT});
         put(Direction.DOWN, new Direction[]{Direction.LEFT, Direction.RIGHT});
         put(Direction.LEFT, new Direction[]{Direction.UP, Direction.DOWN});

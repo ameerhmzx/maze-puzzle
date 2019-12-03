@@ -1,3 +1,3 @@
 package enums;
 
-public enum GameState {WON, PLAYING}
+public enum GameState {WON, PLAYING, ANIMATING}
