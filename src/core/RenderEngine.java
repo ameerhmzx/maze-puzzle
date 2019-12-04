@@ -45,7 +45,8 @@ public class RenderEngine implements Constants {
         StackPane stackPane = new StackPane();
         Pane canvas = new Pane();
 
-        grid = renderEmptyBoard();
+//        grid = renderEmptyBoard();
+        grid = renderWalledBoard();
 
         generateToolbar();
         generateStatusBar();
@@ -85,7 +86,18 @@ public class RenderEngine implements Constants {
         for (int y = 0; y < context.getBoard().getHeight(); y++) {
             for (int x = 0; x < context.getBoard().getWidth(); x++) {
                 Cell cell = context.getBoard().getCell(y, x);
-                grid.add(renderCell(cell, x, y, context.getBoard().getWidth(), context.getBoard().getHeight()), x, y);
+                grid.add(renderCell(cell, x, y), x, y);
+            }
+        }
+        return grid;
+    }
+
+    private GridPane renderWalledBoard() {
+        GridPane grid = new GridPane();
+        for (int y = 0; y < context.getBoard().getHeight(); y++) {
+            for (int x = 0; x < context.getBoard().getWidth(); x++) {
+                Cell cell = context.getBoard().getCell(y, x);
+                grid.add(renderAllWalledCell(cell, x, y), x, y);
             }
         }
         return grid;
@@ -102,7 +114,10 @@ public class RenderEngine implements Constants {
         return grid;
     }
 
-    private Region renderCell(Cell cell, int x, int y, int width, int height) {
+    private Region renderCell(Cell cell, int x, int y) {
+        int height = context.getBoard().getHeight();
+        int width = context.getBoard().getWidth();
+
         Map<Direction, Boolean> walls = cell.getWalls();
         Region box = new Region();
         box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
@@ -127,6 +142,32 @@ public class RenderEngine implements Constants {
                 y == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
                 x == width - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
                 y == height - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                x == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH
+        );
+
+        box.setStyle(style);
+        return box;
+    }
+
+    private Region renderAllWalledCell(Cell cell, int x, int y) {
+        Region box = new Region();
+        box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
+
+        String style = String.format("-fx-border-color: %s;", BORDER_COLOR);
+
+        style += "-fx-border-style: solid;";
+
+        style += String.format("-fx-border-radius: %d %d %d %d;",
+                cell.getIndex() == 0 ? 2 : 0,
+                cell.getIndex() == context.getBoard().getWidth() - 1 ? 2 : 0,
+                cell.getIndex() == context.getBoard().getWidth() * context.getBoard().getHeight() - 1 ? 2 : 0,
+                cell.getIndex() == context.getBoard().getWidth() * context.getBoard().getHeight() - context.getBoard().getWidth() ? 2 : 0
+        );
+
+        style += String.format("-fx-border-width: %d %d %d %d;",
+                y == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                x == context.getBoard().getWidth() - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                y == context.getBoard().getHeight() - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
                 x == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH
         );
 
@@ -250,8 +291,9 @@ public class RenderEngine implements Constants {
 
     private void updateCell(Cell cell, int x, int y) {
         onLayoutUpdate.updated(() -> {
+            grid.getChildren().set((y + (x * context.getBoard().getWidth())), renderEmptyCell());
             //noinspection SuspiciousNameCombination
-            grid.add(renderCell(cell, y, x, context.getBoard().getWidth(), context.getBoard().getHeight()), y, x);
+            grid.add(renderCell(cell, y, x), y, x);
         });
     }
 
