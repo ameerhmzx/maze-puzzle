@@ -20,17 +20,18 @@ public class Puzzle implements Constants {
         this.layoutStrategy = layoutStrategy;
 
         this.board = new Board(width, height);
+        drawBoard(this.board);
         LayoutChanges boardChanges = layoutStrategy.layoutBoard(this.board);
         // TODO: animate board changes
     }
 
     public static void main(String[] args) {
-        Puzzle puzzle = new Puzzle(4, 4, LayoutStrategy.BINARY_TREE);
+        Puzzle puzzle = new Puzzle(4, 4, LayoutStrategy.SIDEWINDER);
         drawBoard(puzzle.board);
-        ArrayList<Direction> solution = puzzle.solve(puzzle.board.getCell(0), SolutionStrategy.RECURSIVE_BACK_TRACK);
-        for (Direction dir : solution) {
-            System.out.printf("%s, ",dir);
-        }
+//        ArrayList<Direction> solution = puzzle.solve(puzzle.board.getCell(0), SolutionStrategy.RECURSIVE_BACK_TRACK);
+//        for (Direction dir : solution) {
+//            System.out.printf("%s, ",dir);
+//        }
     }
 
     private static void drawBoard(Board board) {

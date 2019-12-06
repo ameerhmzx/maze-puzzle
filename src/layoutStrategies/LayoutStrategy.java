@@ -38,6 +38,11 @@ public enum LayoutStrategy implements ILayoutStrategy {
         public LayoutChanges layoutBoard(Board board) {
             return new BinaryTreeLayoutStrategy().layoutBoard(board);
         }
+    },
+    SIDEWINDER("Sidewinder") {
+        public LayoutChanges layoutBoard(Board board) {
+            return new SidewinderLayoutStrategy().layoutBoard(board);
+        }
     };
 
     private String name;
