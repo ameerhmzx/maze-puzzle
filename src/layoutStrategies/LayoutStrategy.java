@@ -14,19 +14,25 @@ public enum LayoutStrategy implements ILayoutStrategy {
             return new SimpleBackTrackLayoutStrategy().layoutBoard(board);
         }
     },
-    PRIM_RANDOMIZATION("Prim's Randomization") {
+    PRIM_RANDOMIZATION("Prim Randomization") {
         public LayoutChanges layoutBoard(Board board) {
             return new PrimRandomizationLayoutStrategy().layoutBoard(board);
         }
     },
-    WILSON_MAZE("Wilson's Maze Algorithm") {
+    WILSON_MAZE("Wilson Maze") {
         public LayoutChanges layoutBoard(Board board) {
             return new WilsonLayoutStrategy().layoutBoard(board);
         }
     },
-    ELLER_MAZE_ALGORITHM("Eller's Maze Algorithm") {
+    ELLER_MAZE_ALGORITHM("Eller Maze") {
         public LayoutChanges layoutBoard(Board board) {
             return new EllerLayoutStrategy().layoutBoard(board);
+        }
+    },
+    ALDOUS_BRODER("Aldous Border") {
+        @Override
+        public LayoutChanges layoutBoard(Board board) {
+            return new AldousBroderLayoutStrategy().layoutBoard(board);
         }
     };
 
