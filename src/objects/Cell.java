@@ -2,6 +2,7 @@ package objects;
 
 import enums.Direction;
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,15 +14,21 @@ public class Cell {
         put(Direction.DOWN, Direction.UP);
     }};
 
-    private Point location;
+    public Point getLocation() {
+        return location;
+    }
+
+    private java.awt.Point location;
+    private int index;
     private Map<Direction, Boolean> walls;
 
-    Cell(Point location) {
-        walls = new HashMap<>();
-        this.location = location;
+    Cell(int x, int y, int index) {
+        this.index = index;
+        this.walls = new HashMap<>();
+        this.location = new Point(x, y);
 
         for (Direction wall : Direction.values()) {
-            walls.put(wall, true);
+            this.walls.put(wall, true);
         }
     }
 
@@ -30,7 +37,7 @@ public class Cell {
     }
 
     public int getIndex() {
-        return this.location.index;
+        return this.index;
     }
 
     public void setWall(Direction wall, boolean val) {
@@ -72,7 +79,7 @@ public class Cell {
 
     @Override
     public String toString() {
-        return String.format("Cell@%d (%d,%d)", this.location.index, this.location.x, this.location.y);
+        return String.format("Cell@%d (%d,%d)", this.index, this.location.x, this.location.y);
     }
 
     public boolean equals(Cell cell) {
