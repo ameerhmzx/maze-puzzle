@@ -9,6 +9,7 @@ public enum LayoutChange {
     TOUCH_ALL,
     UNTOUCH_ALL,
     SET_CURRENT_CELL,
-    CREATE_PATH,
-    APPEND_PATH
+    PATH_CREATED,
+    PATH_MERGED,
+    PATH_APPENDED
 }

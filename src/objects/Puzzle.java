@@ -25,7 +25,7 @@ public class Puzzle implements Constants {
     }
 
     public static void main(String[] args) {
-        Puzzle puzzle = new Puzzle(4, 4, LayoutStrategy.WILSON_MAZE);
+        Puzzle puzzle = new Puzzle(4, 4, LayoutStrategy.ELLER_MAZE_ALGORITHM);
         drawBoard(puzzle.board);
         ArrayList<Direction> solution = puzzle.solve(puzzle.board.getCell(0), SolutionStrategy.RECURSIVE_BACK_TRACK);
         for (Direction dir : solution) {
