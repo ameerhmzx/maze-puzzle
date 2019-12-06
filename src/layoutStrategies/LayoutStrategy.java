@@ -30,9 +30,13 @@ public enum LayoutStrategy implements ILayoutStrategy {
         }
     },
     ALDOUS_BRODER("Aldous Border") {
-        @Override
         public LayoutChanges layoutBoard(Board board) {
             return new AldousBroderLayoutStrategy().layoutBoard(board);
+        }
+    },
+    BINARY_TREE("Binary Tree") {
+        public LayoutChanges layoutBoard(Board board) {
+            return new BinaryTreeLayoutStrategy().layoutBoard(board);
         }
     };
 
