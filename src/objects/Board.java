@@ -108,10 +108,8 @@ public class Board {
     }
 
     public ArrayList<Cell> getVisitableNeighbourCells(Cell cell) {
-        ArrayList<Cell> neighbourCells = getNeighbourCells(cell);
-        for (Cell neighbourCell : neighbourCells) {
-            if (neighbourCell.hasWall(cell)) neighbourCells.remove(neighbourCell);
-        }
+        ArrayList<Cell> neighbourCells = new ArrayList<>(getNeighbourCells(cell));
+        neighbourCells.removeIf(neighbourCell -> neighbourCell.hasWall(cell));
         return neighbourCells;
     }
 

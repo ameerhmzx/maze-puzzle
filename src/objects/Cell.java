@@ -74,4 +74,8 @@ public class Cell {
     public String toString() {
         return String.format("Cell@%d (%d,%d)", this.location.index, this.location.x, this.location.y);
     }
+
+    public boolean equals(Cell cell) {
+        return cell.getIndex() == this.getIndex();
+    }
 }

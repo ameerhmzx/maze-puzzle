@@ -4,6 +4,9 @@ import Helpers.Constants;
 import enums.Direction;
 import layoutChanges.LayoutChanges;
 import layoutStrategies.LayoutStrategy;
+import solutionStrategies.SolutionStrategy;
+
+import java.util.ArrayList;
 
 public class Puzzle implements Constants {
     private LayoutStrategy layoutStrategy;
@@ -22,8 +25,12 @@ public class Puzzle implements Constants {
     }
 
     public static void main(String[] args) {
-        Puzzle puzzle = new Puzzle(6, 6, LayoutStrategy.WILSON_MAZE);
+        Puzzle puzzle = new Puzzle(4, 4, LayoutStrategy.WILSON_MAZE);
         drawBoard(puzzle.board);
+        ArrayList<Direction> solution = puzzle.solve(puzzle.board.getCell(0), SolutionStrategy.RECURSIVE_BACK_TRACK);
+        for (Direction dir : solution) {
+            System.out.printf("%s, ",dir);
+        }
     }
 
     private static void drawBoard(Board board) {
@@ -72,6 +79,10 @@ public class Puzzle implements Constants {
                 }
             }
         }
+    }
+
+    public ArrayList<Direction> solve(Cell currentCell, SolutionStrategy strategy) {
+        return strategy.solve(currentCell, this.board.getCell(this.getSize() - 1), board);
     }
 
     public int getSize() {
