@@ -31,6 +31,14 @@ public enum PostLayoutStrategy implements ILayoutStrategy {
         this.name = name;
     }
 
+    public static PostLayoutStrategy getFromName(String name) {
+        for (PostLayoutStrategy strategy : PostLayoutStrategy.values()) {
+            if (strategy.getName().equals(name))
+                return strategy;
+        }
+        throw new IllegalArgumentException(name);
+    }
+
     public String getName() {
         return name;
     }

@@ -11,9 +11,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import layoutStrategies.LayoutStrategy;
+import layoutStrategies.PostLayoutStrategy;
 import objects.Cell;
 import objects.Puzzle;
 
+import java.util.Arrays;
 import java.util.Map;
 
 
@@ -27,7 +29,7 @@ public class RenderEngine implements Constants {
     private ToolBar statusBar;
     private SplitMenuButton solveButton, generateMazeButton;
     private CheckBox rectangularCB;
-    private ComboBox heightSelectBox, widthSelectBox;
+    private ComboBox heightSelectBox, widthSelectBox, mazeTypeSelectBox;
     private Label scoreLabel;
 
 
@@ -77,7 +79,7 @@ public class RenderEngine implements Constants {
         statusBar.getItems().add(scoreLabel);
     }
 
-    public void updateScore(long score){
+    public void updateScore(long score) {
         scoreLabel.setText("Score : " + score);
     }
 
@@ -196,6 +198,7 @@ public class RenderEngine implements Constants {
 
         generateWidthSelectBox();
         generateHeightSelectBox();
+        generateMazeTypeButton();
 
         toolBar = new ToolBar(
                 leftSpacer,
@@ -206,6 +209,7 @@ public class RenderEngine implements Constants {
                 widthSelectBox,
                 rectangularCB,
                 generateMazeButton,
+                mazeTypeSelectBox,
                 rightSpacer
         );
         toolBar.setMaxHeight(10);
@@ -239,19 +243,16 @@ public class RenderEngine implements Constants {
             int width = (widthSelectBox.getEditor().getText() == null || widthSelectBox.getEditor().getText().equals("")) ? context.getBoard().getWidth() : Integer.parseInt(widthSelectBox.getEditor().getText());
             int height = (heightSelectBox.getEditor().getText() == null || heightSelectBox.getEditor().getText().equals("")) ? context.getBoard().getHeight() : Integer.parseInt(heightSelectBox.getEditor().getText());
             LayoutStrategy layoutStrategy = Puzzle.DEFAULT_LAYOUT_STRATEGY;
+            PostLayoutStrategy postLayoutStrategy = PostLayoutStrategy.getFromName(mazeTypeSelectBox.getValue().toString());
 
             for (MenuItem menuItem : generateMazeButton.getItems()) {
                 if (((RadioMenuItem) menuItem).isSelected()) {
-                    for (LayoutStrategy layoutStrategy1 : LayoutStrategy.values()) {
-                        if (layoutStrategy1.getName().equals(menuItem.getText())) {
-                            layoutStrategy = layoutStrategy1;
-                        }
-                    }
+                    layoutStrategy = LayoutStrategy.getFromName(menuItem.getText());
                     break;
                 }
             }
 
-            onButtonClick.generate(width, height, layoutStrategy);
+            onButtonClick.generate(width, height, layoutStrategy, postLayoutStrategy);
         });
     }
 
@@ -265,6 +266,11 @@ public class RenderEngine implements Constants {
         btn2.setToggleGroup(solveMethodGroup);
 
         solveButton.getItems().addAll(btn1, btn2);
+    }
+
+    private void generateMazeTypeButton() {
+        mazeTypeSelectBox = new ComboBox(FXCollections.observableArrayList(Arrays.stream(PostLayoutStrategy.values()).map(PostLayoutStrategy::getName).toArray()));
+        mazeTypeSelectBox.setValue(Puzzle.DEFAULT_POST_LAYOUT_STRATEGY.getName());
     }
 
     private void generateWidthSelectBox() {

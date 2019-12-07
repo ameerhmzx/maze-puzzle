@@ -61,6 +61,14 @@ public enum LayoutStrategy implements ILayoutStrategy {
         this.name = name;
     }
 
+    public static LayoutStrategy getFromName(String name) {
+        for (LayoutStrategy strategy : LayoutStrategy.values()) {
+            if (strategy.getName().equals(name))
+                return strategy;
+        }
+        throw new IllegalArgumentException(name);
+    }
+
     public String getName() {
         return name;
     }
