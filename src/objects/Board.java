@@ -113,6 +113,15 @@ public class Board {
         return neighbourCells;
     }
 
+    public ArrayList<Cell> getDeadEnds() {
+        ArrayList<Cell> deadEnds = new ArrayList<>();
+        for (Cell cell : this.getCells()) {
+            if(this.getVisitableNeighbourCells(cell).size() == 1)
+                deadEnds.add(cell);
+        }
+        return deadEnds;
+    }
+
     public int getWidth() {
         return width;
     }

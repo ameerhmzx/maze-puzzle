@@ -4,30 +4,56 @@ import Helpers.Constants;
 import enums.Direction;
 import layoutChanges.LayoutChanges;
 import layoutStrategies.LayoutStrategy;
+import layoutStrategies.PostLayoutStrategy;
 import solutionStrategies.SolutionStrategy;
 
 import java.util.ArrayList;
 
 public class Puzzle implements Constants {
     private LayoutStrategy layoutStrategy;
+    private PostLayoutStrategy postLayoutStrategies;
+    private LayoutChanges layoutChanges;
+    private LayoutChanges postLayoutChanges;
     private Board board;
     private int width;
     private int height;
 
+    public Puzzle(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.board = new Board(width, height);
+    }
+
     public Puzzle(int width, int height, LayoutStrategy layoutStrategy) {
         this.width = width;
         this.height = height;
-        this.layoutStrategy = layoutStrategy;
 
         this.board = new Board(width, height);
-        drawBoard(this.board);
-        LayoutChanges boardChanges = layoutStrategy.layoutBoard(this.board);
-        // TODO: animate board changes
+        this.applyLayoutStrategy(layoutStrategy);
+    }
+
+    public Puzzle(int width, int height, PostLayoutStrategy postLayoutStrategy) {
+        this.width = width;
+        this.height = height;
+
+        this.board = new Board(width, height);
+        this.applyPostLayoutStrategy(postLayoutStrategy);
+    }
+
+    public Puzzle(int width, int height, LayoutStrategy layoutStrategy, PostLayoutStrategy postLayoutStrategy) {
+        this.width = width;
+        this.height = height;
+
+        this.board = new Board(width, height);
+        this.applyLayoutStrategy(layoutStrategy);
+        this.applyPostLayoutStrategy(postLayoutStrategy);
     }
 
     public static void main(String[] args) {
-        Puzzle puzzle = new Puzzle(4, 4, LayoutStrategy.HUNT_AND_KILL);
+        Puzzle puzzle = new Puzzle(4, 4);
+        puzzle.applyLayoutStrategy(LayoutStrategy.RECURSIVE_BACK_TRACK);
         drawBoard(puzzle.board);
+
 //        ArrayList<Direction> solution = puzzle.solve(puzzle.board.getCell(0), SolutionStrategy.RECURSIVE_BACK_TRACK);
 //        for (Direction dir : solution) {
 //            System.out.printf("%s, ",dir);
@@ -82,6 +108,16 @@ public class Puzzle implements Constants {
         }
     }
 
+    public void applyLayoutStrategy(LayoutStrategy layoutStrategy) {
+        this.layoutStrategy = layoutStrategy;
+        this.layoutChanges = layoutStrategy.layoutBoard(this.board);
+    }
+
+    public void applyPostLayoutStrategy(PostLayoutStrategy postLayoutStrategy) {
+        this.postLayoutStrategies = postLayoutStrategy;
+        this.postLayoutChanges = postLayoutStrategy.layoutBoard(this.board);
+    }
+
     public ArrayList<Direction> solve(Cell currentCell, SolutionStrategy strategy) {
         return strategy.solve(currentCell, this.board.getCell(this.getSize() - 1), board);
     }
@@ -94,6 +130,10 @@ public class Puzzle implements Constants {
         return layoutStrategy;
     }
 
+    public PostLayoutStrategy getPostLayoutStrategies() {
+        return postLayoutStrategies;
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -104,6 +144,14 @@ public class Puzzle implements Constants {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public LayoutChanges getLayoutChanges() {
+        return layoutChanges;
+    }
+
+    public LayoutChanges getPostLayoutChanges() {
+        return postLayoutChanges;
     }
 }
 
