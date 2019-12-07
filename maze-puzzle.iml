@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="orm" level="project" />
     <orderEntry type="library" name="fx-linux" level="project" />
+    <orderEntry type="library" name="fx-win" level="project" />
   </component>
 </module>
