@@ -14,22 +14,22 @@ public enum LayoutStrategy implements ILayoutStrategy {
             return new SimpleBackTrackLayoutStrategy().layoutBoard(board);
         }
     },
-    PRIM_RANDOMIZATION("Prim Randomization") {
+    PRIM_RANDOMIZATION("Prim's Randomization") {
         public LayoutChanges layoutBoard(Board board) {
             return new PrimRandomizationLayoutStrategy().layoutBoard(board);
         }
     },
-    WILSON_MAZE("Wilson Maze") {
+    WILSON_MAZE("Wilson's Maze") {
         public LayoutChanges layoutBoard(Board board) {
             return new WilsonLayoutStrategy().layoutBoard(board);
         }
     },
-    ELLER_MAZE_ALGORITHM("Eller Maze") {
+    ELLER_MAZE_ALGORITHM("Eller's Maze") {
         public LayoutChanges layoutBoard(Board board) {
             return new EllerLayoutStrategy().layoutBoard(board);
         }
     },
-    ALDOUS_BRODER("Aldous Border") {
+    ALDOUS_BRODER("Aldou'ss Border") {
         public LayoutChanges layoutBoard(Board board) {
             return new AldousBroderLayoutStrategy().layoutBoard(board);
         }
@@ -39,9 +39,14 @@ public enum LayoutStrategy implements ILayoutStrategy {
             return new BinaryTreeLayoutStrategy().layoutBoard(board);
         }
     },
-    SIDEWINDER("Sidewinder") {
+    SIDEWINDER("Sidewinder's Maze") {
         public LayoutChanges layoutBoard(Board board) {
             return new SidewinderLayoutStrategy().layoutBoard(board);
+        }
+    },
+    KRUSKAL_MAZE("Kruskal's Maze") {
+        public LayoutChanges layoutBoard(Board board) {
+            return new KruskalMazeLayoutStrategy().layoutBoard(board);
         }
     };
 
