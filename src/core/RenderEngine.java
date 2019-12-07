@@ -36,8 +36,6 @@ public class RenderEngine implements Constants {
     private ComboBox heightSelectBox, widthSelectBox, mazeTypeSelectBox;
     private Label scoreLabel;
 
-    private ThreadGroup animationThread = new ThreadGroup("animation");
-
 
     RenderEngine(Context context, OnButtonClick onButtonClick, OnLayoutUpdate onLayoutUpdate) {
         this.context = context;
@@ -334,6 +332,7 @@ public class RenderEngine implements Constants {
     void animateGeneration() {
         LayoutChanges layoutChanges = context.getPuzzle().getLayoutChanges();
         ArrayList<Dictionary> changes = layoutChanges.getLayoutChanges();
+        ArrayList<Thread> threads = new ArrayList<>();
 
         for (Dictionary dictionary : changes) {
             switch ((LayoutChange) dictionary.get("type")) {
@@ -342,34 +341,27 @@ public class RenderEngine implements Constants {
                     break;
                 case MOVE:
                     // Remove wall in the given direction
-
-                    Thread thread = new Thread(animationThread, () -> {
+                    Thread thread = new Thread(() -> {
                         Cell currCell = (Cell) dictionary.get("currentCell");
                         Cell nextCell = context.getBoard().getNeighbourCell(currCell, (Direction) dictionary.get("direction"));
 
                         Cell tempCell1 = currCell.clone();
                         Cell tempCell2 = nextCell.clone();
-//
-//                        tempCell1.removeWall((Direction) dictionary.get("direction"));
-//                        tempCell2.removeWall(OPPOSING_WALLS.get(dictionary.get("direction")));
-
 
                         onLayoutUpdate.updated(() -> {
                             new Thread(() -> {
-                                new Thread(animationThread, () -> {
-                                    try {
-                                        Thread.sleep((int) (Math.random() * MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE));
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    updateCell(tempCell1);
-                                    updateCell(tempCell2);
-                                }).start();
+                                updateCell(tempCell1);
+                                updateCell(tempCell2);
                             }).start();
                         });
-                    });
-                    thread.start();
 
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    threads.add(thread);
                     break;
                 case TOUCH_CELL:
                     // Changes BG color
@@ -388,6 +380,18 @@ public class RenderEngine implements Constants {
                     break;
             }
         }
+
+        new Thread(() -> {
+            for (Thread thread : threads) {
+                thread.start();
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
 
     }
 
