@@ -10,6 +10,7 @@ public class Puzzle implements Constants {
     private Board board;
     private int width;
     private int height;
+    private LayoutChanges layoutChanges;
 
     public Puzzle(int width, int height, LayoutStrategy layoutStrategy) {
         this.width = width;
@@ -17,7 +18,7 @@ public class Puzzle implements Constants {
         this.layoutStrategy = layoutStrategy;
 
         this.board = new Board(width, height);
-        LayoutChanges boardChanges = layoutStrategy.layoutBoard(this.board);
+        layoutChanges = layoutStrategy.layoutBoard(this.board);
         // TODO: animate board changes
     }
 
@@ -92,6 +93,10 @@ public class Puzzle implements Constants {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public LayoutChanges getLayoutChanges() {
+        return layoutChanges;
     }
 }
 

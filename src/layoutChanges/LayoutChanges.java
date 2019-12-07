@@ -15,6 +15,10 @@ public class LayoutChanges {
         this.layoutChanges = new ArrayList<>();
     }
 
+    public ArrayList<Dictionary> getLayoutChanges() {
+        return layoutChanges;
+    }
+
     public void add(LayoutChange layoutChange, int width, int height) {
         if (layoutChange == LayoutChange.BOARD_CREATED)
             this.layoutChanges.add(new Hashtable() {{

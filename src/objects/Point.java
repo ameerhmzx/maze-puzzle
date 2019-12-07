@@ -1,13 +1,25 @@
 package objects;
 
-class Point {
-    int x;
-    int y;
-    int index;
+public class Point {
+    private int x;
+    private int y;
+    private int index;
 
-    Point(int x, int y, int index) {
+    public Point(int x, int y, int index) {
         this.x = x;
         this.y = y;
         this.index = index;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

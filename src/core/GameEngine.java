@@ -65,7 +65,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         primaryStage.setScene(scene);
         primaryStage.setMaximized(maximized);
         primaryStage.show();
-        context.getRenderEngine().animateRandom();
+        context.getRenderEngine().animateGeneration();
     }
 
     private void kbdEvents(KeyEvent ke) {

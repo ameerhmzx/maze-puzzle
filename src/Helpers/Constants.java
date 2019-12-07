@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import layoutStrategies.LayoutStrategy;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public interface Constants {
     String APP_NAME = "Maze Puzzle";
@@ -33,6 +34,13 @@ public interface Constants {
         put(Direction.DOWN, new Direction[]{Direction.LEFT, Direction.RIGHT});
         put(Direction.LEFT, new Direction[]{Direction.UP, Direction.DOWN});
         put(Direction.RIGHT, new Direction[]{Direction.UP, Direction.DOWN});
+    }};
+
+    Map<Direction, Direction> OPPOSING_WALLS = new HashMap<Direction, Direction>() {{
+        put(Direction.LEFT, Direction.RIGHT);
+        put(Direction.RIGHT, Direction.LEFT);
+        put(Direction.UP, Direction.DOWN);
+        put(Direction.DOWN, Direction.UP);
     }};
 
     String BORDER_COLOR = "#333";

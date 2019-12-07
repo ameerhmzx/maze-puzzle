@@ -16,7 +16,7 @@ public class Cell {
     private Point location;
     private Map<Direction, Boolean> walls;
 
-    Cell(Point location) {
+    public Cell(Point location) {
         walls = new HashMap<>();
         this.location = location;
 
@@ -25,12 +25,16 @@ public class Cell {
         }
     }
 
+    public Point getLocation() {
+        return location;
+    }
+
     public Map<Direction, Boolean> getWalls() {
         return walls;
     }
 
     public int getIndex() {
-        return this.location.index;
+        return this.location.getIndex();
     }
 
     public void setWall(Direction wall, boolean val) {
@@ -46,7 +50,7 @@ public class Cell {
         return hasWall(interWall);
     }
 
-    private void removeWall(Direction wall) {
+    public void removeWall(Direction wall) {
         this.walls.put(wall, false);
     }
 
@@ -72,6 +76,14 @@ public class Cell {
 
     @Override
     public String toString() {
-        return String.format("Cell@%d (%d,%d)", this.location.index, this.location.x, this.location.y);
+        return String.format("Cell@%d (%d,%d)", this.location.getIndex(), this.location.getX(), this.location.getY());
+    }
+
+    @Override
+    public Cell clone() {
+        Cell cell = new Cell(this.location);
+        for (Direction dir : this.getWalls().keySet())
+            cell.setWall(dir, this.hasWall(dir));
+        return cell;
     }
 }

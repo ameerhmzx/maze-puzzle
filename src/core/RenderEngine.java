@@ -10,10 +10,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import layoutChanges.LayoutChange;
+import layoutChanges.LayoutChanges;
 import layoutStrategies.LayoutStrategy;
 import objects.Cell;
 import objects.Puzzle;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.Map;
 
 
@@ -30,6 +34,8 @@ public class RenderEngine implements Constants {
     private ComboBox heightSelectBox, widthSelectBox;
     private Label scoreLabel;
 
+    private ThreadGroup animationThread = new ThreadGroup("animation");
+
 
     RenderEngine(Context context, OnButtonClick onButtonClick, OnLayoutUpdate onLayoutUpdate) {
         this.context = context;
@@ -45,8 +51,8 @@ public class RenderEngine implements Constants {
         StackPane stackPane = new StackPane();
         Pane canvas = new Pane();
 
-//        grid = renderEmptyBoard();
-        grid = renderWalledBoard();
+        grid = renderEmptyBoard();
+//        grid = renderWalledBoard();
 
         generateToolbar();
         generateStatusBar();
@@ -289,7 +295,9 @@ public class RenderEngine implements Constants {
         });
     }
 
-    private void updateCell(Cell cell, int x, int y) {
+    private void updateCell(Cell cell) {
+        int y = cell.getLocation().getX();
+        int x = cell.getLocation().getY();
         onLayoutUpdate.updated(() -> {
             grid.getChildren().set((y + (x * context.getBoard().getWidth())), renderEmptyCell());
             //noinspection SuspiciousNameCombination
@@ -310,11 +318,69 @@ public class RenderEngine implements Constants {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        updateCell(cell, finalI, finalJ);
+                        updateCell(cell);
                     }).start();
                 }
             }
         }).start());
+    }
+
+    void animateGeneration() {
+        LayoutChanges layoutChanges = context.getPuzzle().getLayoutChanges();
+        ArrayList<Dictionary> changes = layoutChanges.getLayoutChanges();
+
+        for (Dictionary dictionary : changes) {
+            switch ((LayoutChange) dictionary.get("type")) {
+                case BOARD_CREATED:
+                    grid = renderWalledBoard();
+                    break;
+                case MOVE:
+                    // Remove wall in the given direction
+
+                    Thread thread = new Thread(animationThread, () -> {
+                        Cell currCell = (Cell) dictionary.get("currentCell");
+                        Cell nextCell = context.getBoard().getNeighbourCell(currCell, (Direction) dictionary.get("direction"));
+
+                        Cell tempCell1 = currCell.clone();
+                        Cell tempCell2 = nextCell.clone();
+//
+//                        tempCell1.removeWall((Direction) dictionary.get("direction"));
+//                        tempCell2.removeWall(OPPOSING_WALLS.get(dictionary.get("direction")));
+
+
+                        onLayoutUpdate.updated(() -> {
+                            new Thread(() -> {
+                                updateCell(tempCell1);
+                                updateCell(tempCell2);
+                                try {
+                                    Thread.sleep(10);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        });
+                    });
+                    thread.start();
+
+                    break;
+                case TOUCH_CELL:
+                    // Changes BG color
+                    break;
+                case UNTOUCH_CELL:
+                    // reset colour
+                    break;
+                case TOUCH_ALL:
+                    // touch all cells given in Arr
+                    break;
+                case UNTOUCH_ALL:
+                    // untouch all cells given in Arr
+                    break;
+                case SET_CURRENT_CELL:
+                    // Change color of selected cell
+                    break;
+            }
+        }
+
     }
 
 }
