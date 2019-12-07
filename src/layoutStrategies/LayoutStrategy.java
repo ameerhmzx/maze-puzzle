@@ -29,7 +29,7 @@ public enum LayoutStrategy implements ILayoutStrategy {
             return new EllerLayoutStrategy().layoutBoard(board);
         }
     },
-    ALDOUS_BRODER("Aldou'ss Border") {
+    ALDOUS_BRODER("Aldous's Border") {
         public LayoutChanges layoutBoard(Board board) {
             return new AldousBroderLayoutStrategy().layoutBoard(board);
         }

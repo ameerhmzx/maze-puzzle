@@ -29,20 +29,20 @@ public class EllerLayoutStrategy extends PathSetLayoutStrategy implements ILayou
         }
 
         for (int y = 0; y < board.getHeight() - 1; y++) {
-            this.visitRow(y, board, ellerSets);
-            this.visitNextRow(y, board, ellerSets);
+            this.visitRow(y, board, ellerSets, layoutChanges);
+            this.visitNextRow(y, board, ellerSets, layoutChanges);
         }
 
-        this.visitRow(board.getHeight() - 1, true, board, ellerSets);
+        this.visitRow(board.getHeight() - 1, true, board, ellerSets, layoutChanges);
 
         return layoutChanges;
     }
 
-    private void visitRow(Integer index, Board board, ArrayList<HashSet<Cell>> ellerSets) {
-        visitRow(index, false, board, ellerSets);
+    private void visitRow(Integer index, Board board, ArrayList<HashSet<Cell>> ellerSets, LayoutChanges layoutChanges) {
+        visitRow(index, false, board, ellerSets, layoutChanges);
     }
 
-    private void visitRow(Integer index, boolean mergeAll, Board board, ArrayList<HashSet<Cell>> ellerSets) {
+    private void visitRow(Integer index, boolean mergeAll, Board board, ArrayList<HashSet<Cell>> ellerSets, LayoutChanges layoutChanges) {
         for (int x = 1; x < board.getWidth(); x++) {
             Cell cell1 = board.getCell(index, x - 1);
             Cell cell2 = board.getCell(index, x);
@@ -54,6 +54,7 @@ public class EllerLayoutStrategy extends PathSetLayoutStrategy implements ILayou
             if (Math.random() > 0.5 || mergeAll) {
                 cell1.removeInterWall(cell2);
                 this.joinCellSets(cell1, cell2, ellerSets);
+                layoutChanges.add(LayoutChange.MOVE, cell1, cell1.getInterWall(cell2));
             } else if (this.getSetFromCell(cell1, ellerSets) == null) {
                 ellerSets.add(new HashSet<>() {{
                     add(cell1);
@@ -66,7 +67,7 @@ public class EllerLayoutStrategy extends PathSetLayoutStrategy implements ILayou
         }
     }
 
-    private void visitNextRow(Integer index, Board board, ArrayList<HashSet<Cell>> ellerSets) {
+    private void visitNextRow(Integer index, Board board, ArrayList<HashSet<Cell>> ellerSets, LayoutChanges layoutChanges) {
         for (HashSet<Cell> set : ellerSets) {
             ArrayList<Cell> setCells = new ArrayList<>(set) {{
                 Collections.shuffle(this);
@@ -76,8 +77,10 @@ public class EllerLayoutStrategy extends PathSetLayoutStrategy implements ILayou
             int n = 1 + (int) (Math.random() * (setCells.size() - 1));
             for (int i = 0; i < n; i++) {
                 int cellIndex = setCells.get(i).getIndex();
-                board.getCell(cellIndex).removeInterWall(board.getCell(cellIndex + board.getWidth()));
-                set.add(board.getCell(cellIndex + board.getWidth()));
+                Cell nextCell = board.getCell(cellIndex + board.getWidth());
+                board.getCell(cellIndex).removeInterWall(nextCell);
+                set.add(nextCell);
+                layoutChanges.add(LayoutChange.MOVE, board.getCell(cellIndex), board.getCell(cellIndex).getInterWall(nextCell));
             }
         }
     }

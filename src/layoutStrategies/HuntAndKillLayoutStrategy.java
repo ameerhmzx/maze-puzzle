@@ -1,5 +1,6 @@
 package layoutStrategies;
 
+import layoutChanges.LayoutChange;
 import layoutChanges.LayoutChanges;
 import objects.Board;
 import objects.Cell;
@@ -20,10 +21,11 @@ public class HuntAndKillLayoutStrategy implements ILayoutStrategy {
             for (Cell neighbourCell : neighbourCells)
                 if (visitedCells.contains(neighbourCell)) {
                     cell.removeInterWall(neighbourCell);
+                    layoutChanges.add(LayoutChange.MOVE, cell, cell.getInterWall(neighbourCell));
                     break;
                 }
 
-            randomWalk(cell, visitedCells, board);
+            randomWalk(cell, visitedCells, board, layoutChanges);
         }
 
         return layoutChanges;
@@ -40,7 +42,7 @@ public class HuntAndKillLayoutStrategy implements ILayoutStrategy {
         return unvisitedCell;
     }
 
-    private void randomWalk(Cell cell, ArrayList<Cell> visitedCells, Board board) {
+    private void randomWalk(Cell cell, ArrayList<Cell> visitedCells, Board board, LayoutChanges layoutChanges) {
         visitedCells.add(cell);
         ArrayList<Cell> neighbourCells = board.getNeighbourCells(cell);
         neighbourCells.removeAll(visitedCells);
@@ -50,8 +52,9 @@ public class HuntAndKillLayoutStrategy implements ILayoutStrategy {
         Cell randomCell = neighbourCells.get(0);
         if (!visitedCells.contains(randomCell)) {
             cell.removeInterWall(randomCell);
+            layoutChanges.add(LayoutChange.MOVE, cell, cell.getInterWall(randomCell));
             visitedCells.add(randomCell);
-            randomWalk(randomCell, visitedCells, board);
+            randomWalk(randomCell, visitedCells, board, layoutChanges);
         }
     }
 }
