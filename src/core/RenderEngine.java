@@ -87,15 +87,13 @@ public class RenderEngine implements Constants {
         scoreLabel.setText("Score : " + score);
     }
 
-    private GridPane renderBoard() {
-        GridPane grid = new GridPane();
+    private void renderBoard() {
         for (int y = 0; y < context.getBoard().getHeight(); y++) {
             for (int x = 0; x < context.getBoard().getWidth(); x++) {
                 Cell cell = context.getBoard().getCell(y, x);
-                grid.add(renderCell(cell, x, y), x, y);
+                updateCell(cell);
             }
         }
-        return grid;
     }
 
     private GridPane renderWalledBoard() {
@@ -109,20 +107,23 @@ public class RenderEngine implements Constants {
         return grid;
     }
 
-    private GridPane renderEmptyBoard() {
-        GridPane grid = new GridPane();
+//    private GridPane renderEmptyBoard() {
+//        GridPane grid = new GridPane();
+//
+//        for (int y = 0; y < context.getBoard().getHeight(); y++) {
+//            for (int x = 0; x < context.getBoard().getWidth(); x++) {
+//                grid.add(renderEmptyCell(), x, y);
+//            }
+//        }
+//        return grid;
+//    }
 
-        for (int y = 0; y < context.getBoard().getHeight(); y++) {
-            for (int x = 0; x < context.getBoard().getWidth(); x++) {
-                grid.add(renderEmptyCell(), x, y);
-            }
-        }
-        return grid;
-    }
-
-    private Region renderCell(Cell cell, int x, int y) {
+    private Region renderCell(Cell cell) {
         int height = context.getBoard().getHeight();
         int width = context.getBoard().getWidth();
+
+        int x = cell.getLocation().x;
+        int y = cell.getLocation().y;
 
         Map<Direction, Boolean> walls = cell.getWalls();
         Region box = new Region();
@@ -300,35 +301,35 @@ public class RenderEngine implements Constants {
     }
 
     private void updateCell(Cell cell) {
-        int y = cell.getLocation().x;
-        int x = cell.getLocation().y;
+        int x = cell.getLocation().x;
+        int y = cell.getLocation().y;
         onLayoutUpdate.updated(() -> {
-            grid.getChildren().set((y + (x * context.getBoard().getWidth())), renderEmptyCell());
-            //noinspection SuspiciousNameCombination
-            grid.add(renderCell(cell, y, x), y, x);
+            grid.getChildren().set((x + (y * context.getBoard().getWidth())), renderEmptyCell());
+            grid.add(renderCell(cell), x, y);
         });
     }
 
-    void animateRandom() {
-        onLayoutUpdate.updated(() -> new Thread(() -> {
-            for (int i = 0; i < context.getBoard().getHeight(); i++) {
-                for (int j = 0; j < context.getBoard().getWidth(); j++) {
-                    int finalJ = j;
-                    int finalI = i;
-                    new Thread(() -> {
-                        Cell cell = context.getBoard().getCell(finalI, finalJ);
-                        try {
-                            Thread.sleep((int) (Math.random() * MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        updateCell(cell);
-                    }).start();
-                }
-            }
-        }).start());
-    }
+//    void animateRandom() {
+//        onLayoutUpdate.updated(() -> new Thread(() -> {
+//            for (int i = 0; i < context.getBoard().getHeight(); i++) {
+//                for (int j = 0; j < context.getBoard().getWidth(); j++) {
+//                    int finalJ = j;
+//                    int finalI = i;
+//                    new Thread(() -> {
+//                        Cell cell = context.getBoard().getCell(finalI, finalJ);
+//                        try {
+//                            Thread.sleep((int) (Math.random() * MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE));
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                        updateCell(cell);
+//                    }).start();
+//                }
+//            }
+//        }).start());
+//    }
 
+    //TODO:: add all animations
     void animateGeneration() {
         LayoutChanges layoutChanges = context.getPuzzle().getLayoutChanges();
         ArrayList<Dictionary> changes = layoutChanges.getLayoutChanges();
@@ -356,7 +357,7 @@ public class RenderEngine implements Constants {
                         });
 
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(MAZE_DRAW_ANIMATION_RATE);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -380,6 +381,16 @@ public class RenderEngine implements Constants {
                     break;
             }
         }
+
+        threads.add(new Thread(() -> {
+            //ensure board rendering
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            onLayoutUpdate.updated(this::renderBoard);
+        }));
 
         new Thread(() -> {
             for (Thread thread : threads) {

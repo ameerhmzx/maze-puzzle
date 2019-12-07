@@ -14,7 +14,7 @@ public interface Constants {
     int PIXEL_SIZE = 20;
     int CHARACTER_SIZE = 12;
     float PLAYER_ANIMATION_RATE = .1f;
-    int MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE = 500;
+    int MAZE_DRAW_ANIMATION_RATE = 500;
     int MAZE_PADDING = 10;
     int DEFAULT_MAZE_WIDTH = 30;
     int DEFAULT_MAZE_HEIGHT = 20;
