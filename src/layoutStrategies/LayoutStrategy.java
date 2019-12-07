@@ -48,6 +48,11 @@ public enum LayoutStrategy implements ILayoutStrategy {
         public LayoutChanges layoutBoard(Board board) {
             return new KruskalMazeLayoutStrategy().layoutBoard(board);
         }
+    },
+    HUNT_AND_KILL("Hunt and Kill") {
+        public LayoutChanges layoutBoard(Board board) {
+            return new HuntAndKillLayoutStrategy().layoutBoard(board);
+        }
     };
 
     private String name;
