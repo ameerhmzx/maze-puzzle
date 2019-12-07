@@ -275,7 +275,7 @@ public class RenderEngine implements Constants {
 
     private void generateMazeTypeButton() {
         mazeTypeSelectBox = new ComboBox(FXCollections.observableArrayList(Arrays.stream(PostLayoutStrategy.values()).map(PostLayoutStrategy::getName).toArray()));
-        mazeTypeSelectBox.setValue(Puzzle.DEFAULT_POST_LAYOUT_STRATEGY.getName());
+        mazeTypeSelectBox.setValue(context.getPuzzle().getPostLayoutStrategies().getName());
     }
 
     private void generateWidthSelectBox() {
@@ -304,7 +304,7 @@ public class RenderEngine implements Constants {
         int x = cell.getLocation().x;
         int y = cell.getLocation().y;
         onLayoutUpdate.updated(() -> {
-            grid.getChildren().set((x + (y * context.getBoard().getWidth())), renderEmptyCell());
+            grid.getChildren().set(cell.getIndex(), renderEmptyCell());
             grid.add(renderCell(cell), x, y);
         });
     }

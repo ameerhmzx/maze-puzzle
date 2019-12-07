@@ -1,18 +1,13 @@
 package objects;
 
+import Helpers.Constants;
 import enums.Direction;
 
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cell {
-    private static Map<Direction, Direction> opposingWalls = new HashMap<Direction, Direction>() {{
-        put(Direction.LEFT, Direction.RIGHT);
-        put(Direction.RIGHT, Direction.LEFT);
-        put(Direction.UP, Direction.DOWN);
-        put(Direction.DOWN, Direction.UP);
-    }};
+public class Cell implements Constants {
 
     public Point getLocation() {
         return location;
@@ -74,7 +69,7 @@ public class Cell {
     public void removeInterWall(Cell cell) {
         Direction interWall = getInterWall(cell);
         this.removeWall(interWall);
-        cell.removeWall(opposingWalls.get(interWall));
+        cell.removeWall(OPPOSING_WALLS.get(interWall));
     }
 
     @Override

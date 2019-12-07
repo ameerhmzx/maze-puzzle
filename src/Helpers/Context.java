@@ -7,7 +7,6 @@ import objects.Player;
 import objects.Puzzle;
 
 public class Context {
-    private String nameOfPlayer;
     private GameState gameState;
     private Player player;
     private Puzzle puzzle;
@@ -16,16 +15,7 @@ public class Context {
     private RenderEngine renderEngine;
 
     public Context() {
-        setNameOfPlayer("unnamed");
         setGameState(GameState.PLAYING);
-    }
-
-    public String getNameOfPlayer() {
-        return nameOfPlayer;
-    }
-
-    public void setNameOfPlayer(String nameOfPlayer) {
-        this.nameOfPlayer = nameOfPlayer;
     }
 
     public GameState getGameState() {
