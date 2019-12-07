@@ -4,6 +4,7 @@ import enums.Direction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import layoutStrategies.LayoutStrategy;
+import layoutStrategies.PostLayoutStrategy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ public interface Constants {
     int DEFAULT_MAZE_HEIGHT = 20;
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
     LayoutStrategy DEFAULT_LAYOUT_STRATEGY = LayoutStrategy.RECURSIVE_BACK_TRACK;
+    PostLayoutStrategy DEFAULT_POST_LAYOUT_STRATEGY = PostLayoutStrategy.PERFECT_MAZE;
 
     String[] SIZE_LIST = {"10", "15" , "20", "30"};
 

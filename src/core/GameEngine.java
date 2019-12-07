@@ -15,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import layoutStrategies.LayoutStrategy;
+import layoutStrategies.PostLayoutStrategy;
 import objects.Player;
 import objects.Puzzle;
 
@@ -41,11 +42,11 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     }
 
     private void newGame() {
-        newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, DEFAULT_LAYOUT_STRATEGY);
+        newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, DEFAULT_LAYOUT_STRATEGY, DEFAULT_POST_LAYOUT_STRATEGY);
     }
 
-    private void newGame(int width, int height, LayoutStrategy layoutStrategy) {
-        context.setPuzzle(new Puzzle(width, height, layoutStrategy));
+    private void newGame(int width, int height, LayoutStrategy layoutStrategy, PostLayoutStrategy postLayoutStrategy) {
+        context.setPuzzle(new Puzzle(width, height, layoutStrategy, postLayoutStrategy));
         context.setPlayer(new Player(context.getBoard(), this));
 
         context.setRenderEngine(new RenderEngine(context, this, this));
@@ -96,8 +97,8 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     }
 
     @Override
-    public void generate(int width, int height, LayoutStrategy layoutStrategy) {
-        newGame(width, height, layoutStrategy);
+    public void generate(int width, int height, LayoutStrategy layoutStrategy, PostLayoutStrategy postLayoutStrategy) {
+        newGame(width, height, layoutStrategy, postLayoutStrategy);
     }
 
     @Override

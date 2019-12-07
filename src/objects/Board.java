@@ -16,7 +16,7 @@ public class Board {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                cells.add(new Cell(new Point(x, y, y * width + x)));
+                cells.add(new Cell(x, y, y * width + x));
             }
         }
     }
@@ -108,11 +108,18 @@ public class Board {
     }
 
     public ArrayList<Cell> getVisitableNeighbourCells(Cell cell) {
-        ArrayList<Cell> neighbourCells = getNeighbourCells(cell);
-        for (Cell neighbourCell : neighbourCells) {
-            if (neighbourCell.hasWall(cell)) neighbourCells.remove(neighbourCell);
-        }
+        ArrayList<Cell> neighbourCells = new ArrayList<>(getNeighbourCells(cell));
+        neighbourCells.removeIf(neighbourCell -> neighbourCell.hasWall(cell));
         return neighbourCells;
+    }
+
+    public ArrayList<Cell> getDeadEnds() {
+        ArrayList<Cell> deadEnds = new ArrayList<>();
+        for (Cell cell : this.getCells()) {
+            if(this.getVisitableNeighbourCells(cell).size() == 1)
+                deadEnds.add(cell);
+        }
+        return deadEnds;
     }
 
     public int getWidth() {
@@ -121,5 +128,9 @@ public class Board {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getSize() {
+        return this.width * this.height;
     }
 }

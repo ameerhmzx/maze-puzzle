@@ -2,6 +2,7 @@ package objects;
 
 import enums.Direction;
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,20 +14,22 @@ public class Cell {
         put(Direction.DOWN, Direction.UP);
     }};
 
-    private Point location;
-    private Map<Direction, Boolean> walls;
-
-    public Cell(Point location) {
-        walls = new HashMap<>();
-        this.location = location;
-
-        for (Direction wall : Direction.values()) {
-            walls.put(wall, true);
-        }
-    }
-
     public Point getLocation() {
         return location;
+    }
+
+    private java.awt.Point location;
+    private int index;
+    private Map<Direction, Boolean> walls;
+
+    public Cell(int x, int y, int index) {
+        this.index = index;
+        this.walls = new HashMap<>();
+        this.location = new Point(x, y);
+
+        for (Direction wall : Direction.values()) {
+            this.walls.put(wall, true);
+        }
     }
 
     public Map<Direction, Boolean> getWalls() {
@@ -34,7 +37,7 @@ public class Cell {
     }
 
     public int getIndex() {
-        return this.location.getIndex();
+        return this.index;
     }
 
     public void setWall(Direction wall, boolean val) {
@@ -76,12 +79,16 @@ public class Cell {
 
     @Override
     public String toString() {
-        return String.format("Cell@%d (%d,%d)", this.location.getIndex(), this.location.getX(), this.location.getY());
+        return String.format("Cell@%d (%d,%d)", this.index, this.location.x, this.location.y);
+    }
+
+    public boolean equals(Cell cell) {
+        return cell.getIndex() == this.getIndex();
     }
 
     @Override
     public Cell clone() {
-        Cell cell = new Cell(this.location);
+        Cell cell = new Cell(this.location.x, this.location.y, this.index);
         for (Direction dir : this.getWalls().keySet())
             cell.setWall(dir, this.hasWall(dir));
         return cell;
