@@ -18,8 +18,8 @@ import objects.Cell;
 import objects.Puzzle;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.Map;
 
 
@@ -302,8 +302,8 @@ public class RenderEngine implements Constants {
     }
 
     private void updateCell(Cell cell) {
-        int y = cell.getLocation().getX();
-        int x = cell.getLocation().getY();
+        int y = cell.getLocation().x;
+        int x = cell.getLocation().y;
         onLayoutUpdate.updated(() -> {
             grid.getChildren().set((y + (x * context.getBoard().getWidth())), renderEmptyCell());
             //noinspection SuspiciousNameCombination
@@ -356,13 +356,15 @@ public class RenderEngine implements Constants {
 
                         onLayoutUpdate.updated(() -> {
                             new Thread(() -> {
-                                updateCell(tempCell1);
-                                updateCell(tempCell2);
-                                try {
-                                    Thread.sleep(10);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                                new Thread(animationThread, () -> {
+                                    try {
+                                        Thread.sleep((int) (Math.random() * MAX_RANDOM_MAZE_DRAW_ANIMATION_RATE));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    updateCell(tempCell1);
+                                    updateCell(tempCell2);
+                                }).start();
                             }).start();
                         });
                     });
