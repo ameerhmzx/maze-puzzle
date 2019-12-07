@@ -2,6 +2,7 @@ package layoutStrategies;
 
 import enums.BinaryTreeBias;
 import enums.Direction;
+import layoutChanges.LayoutChange;
 import layoutChanges.LayoutChanges;
 import objects.Board;
 import objects.Cell;
@@ -20,7 +21,9 @@ public class BinaryTreeLayoutStrategy implements ILayoutStrategy {
             neighbourCells.removeIf(e -> this.isOpposingBiasCell(cell.getInterWall(e), bias));
 
             if (neighbourCells.size() != 0) {
-                cell.removeInterWall(neighbourCells.get((int) (Math.random() * neighbourCells.size())));
+                Cell randomCell = neighbourCells.get((int) (Math.random() * neighbourCells.size()));
+                cell.removeInterWall(randomCell);
+                layoutChanges.add(LayoutChange.MOVE, cell, cell.getInterWall(randomCell));
             }
         }
         return layoutChanges;

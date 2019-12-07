@@ -1,5 +1,6 @@
 package layoutStrategies;
 
+import layoutChanges.LayoutChange;
 import layoutChanges.LayoutChanges;
 import objects.Board;
 import objects.Cell;
@@ -18,8 +19,9 @@ public class AldousBroderLayoutStrategy implements ILayoutStrategy {
             ArrayList<Cell> randomCellNeighbours = board.getNeighbourCells(cell);
             Cell randomCell = randomCellNeighbours.get((int) (randomCellNeighbours.size() * Math.random()));
 
-            if(!visitedCells.contains(randomCell)){
+            if (!visitedCells.contains(randomCell)) {
                 randomCell.removeInterWall(cell);
+                layoutChanges.add(LayoutChange.MOVE, cell, cell.getInterWall(randomCell));
                 visitedCells.add(randomCell);
             }
             cell = randomCell;
