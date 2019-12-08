@@ -16,11 +16,9 @@ import layoutStrategies.LayoutStrategy;
 import layoutStrategies.PostLayoutStrategy;
 import objects.Cell;
 import objects.Puzzle;
+import solutionStrategies.SolutionStrategy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Map;
+import java.util.*;
 
 
 public class RenderEngine implements Constants {
@@ -155,7 +153,6 @@ public class RenderEngine implements Constants {
         box.setStyle(style);
         return box;
     }
-
     private Region renderAllWalledCell(Cell cell, int x, int y) {
         Region box = new Region();
         box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
@@ -185,6 +182,46 @@ public class RenderEngine implements Constants {
     private Region renderEmptyCell() {
         Region box = new Region();
         box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
+        return box;
+    }
+
+    private Region renderColoredCell(String color, Cell cell) {
+        int height = context.getBoard().getHeight();
+        int width = context.getBoard().getWidth();
+
+        int x = cell.getLocation().x;
+        int y = cell.getLocation().y;
+
+        Map<Direction, Boolean> walls = cell.getWalls();
+        Region box = new Region();
+        box.setMinSize(PIXEL_SIZE, PIXEL_SIZE);
+
+        String style = String.format("-fx-border-color: %s;", BORDER_COLOR);
+
+        style = String.format("-fx-background-color: %s;", color);
+
+        style += String.format("-fx-border-style: %s %s %s %s;",
+                walls.get(Direction.UP) ? "solid" : "hidden",
+                walls.get(Direction.RIGHT) ? "solid" : "hidden",
+                walls.get(Direction.DOWN) ? "solid" : "hidden",
+                walls.get(Direction.LEFT) ? "solid" : "hidden"
+        );
+
+        style += String.format("-fx-border-radius: %d %d %d %d;",
+                cell.getIndex() == 0 ? 2 : 0,
+                cell.getIndex() == width - 1 ? 2 : 0,
+                cell.getIndex() == width * height - 1 ? 2 : 0,
+                cell.getIndex() == width * height - width ? 2 : 0
+        );
+
+        style += String.format("-fx-border-width: %d %d %d %d;",
+                y == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                x == width - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                y == height - 1 ? BORDER_WIDTH * 2 : BORDER_WIDTH,
+                x == 0 ? BORDER_WIDTH * 2 : BORDER_WIDTH
+        );
+
+        box.setStyle(style);
         return box;
     }
 
@@ -265,12 +302,13 @@ public class RenderEngine implements Constants {
         solveButton = new SplitMenuButton();
         solveButton.setText("Solve");
         ToggleGroup solveMethodGroup = new ToggleGroup();
-        RadioMenuItem btn1 = new RadioMenuItem("Method 1");
-        RadioMenuItem btn2 = new RadioMenuItem("Method 2");
-        btn1.setToggleGroup(solveMethodGroup);
-        btn2.setToggleGroup(solveMethodGroup);
-
-        solveButton.getItems().addAll(btn1, btn2);
+        for (SolutionStrategy solutionStrategy : SolutionStrategy.values()) {
+            RadioMenuItem x = new RadioMenuItem(solutionStrategy.getName());
+            x.setToggleGroup(solveMethodGroup);
+            if (solutionStrategy.getName().equals(DEFAULT_SOLUTION_STRATEGY.getName()))
+                x.setSelected(true);
+            solveButton.getItems().add(x);
+        }
     }
 
     private void generateMazeTypeButton() {
@@ -309,6 +347,15 @@ public class RenderEngine implements Constants {
         });
     }
 
+    private void updateCell(Region cellImage, Cell cell) {
+        int x = cell.getLocation().x;
+        int y = cell.getLocation().y;
+        onLayoutUpdate.updated(() -> {
+            grid.getChildren().set(cell.getIndex(), renderEmptyCell());
+            grid.add(cellImage, x, y);
+        });
+    }
+
 //    void animateRandom() {
 //        onLayoutUpdate.updated(() -> new Thread(() -> {
 //            for (int i = 0; i < context.getBoard().getHeight(); i++) {
@@ -335,6 +382,8 @@ public class RenderEngine implements Constants {
         ArrayList<Dictionary> changes = layoutChanges.getLayoutChanges();
         ArrayList<Thread> threads = new ArrayList<>();
 
+        Thread thread;
+
         for (Dictionary dictionary : changes) {
             switch ((LayoutChange) dictionary.get("type")) {
                 case BOARD_CREATED:
@@ -342,7 +391,7 @@ public class RenderEngine implements Constants {
                     break;
                 case MOVE:
                     // Remove wall in the given direction
-                    Thread thread = new Thread(() -> {
+                    thread = new Thread(() -> {
                         Cell currCell = (Cell) dictionary.get("currentCell");
                         Cell nextCell = context.getBoard().getNeighbourCell(currCell, (Direction) dictionary.get("direction"));
 
@@ -366,17 +415,107 @@ public class RenderEngine implements Constants {
                     break;
                 case TOUCH_CELL:
                     // Changes BG color
+                    thread = new Thread(() -> {
+                        Cell currCell = (Cell) dictionary.get("cell");
+
+                        Cell tempCell = currCell.clone();
+
+                        onLayoutUpdate.updated(() -> {
+                            new Thread(() -> {
+                                updateCell(renderColoredCell(TOUCH_CELL_COLOR, tempCell), tempCell);
+                            }).start();
+                        });
+
+                        try {
+                            Thread.sleep(MAZE_DRAW_ANIMATION_RATE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    threads.add(thread);
                     break;
                 case UNTOUCH_CELL:
+                    thread = new Thread(() -> {
+                        Cell currCell = (Cell) dictionary.get("cell");
+
+                        Cell tempCell = currCell.clone();
+
+                        onLayoutUpdate.updated(() -> {
+                            new Thread(() -> {
+                                updateCell(renderColoredCell(DEFALT_CELL_COLOR, tempCell), tempCell);
+                            }).start();
+                        });
+
+                        try {
+                            Thread.sleep(MAZE_DRAW_ANIMATION_RATE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    threads.add(thread);
                     // reset colour
                     break;
                 case TOUCH_ALL:
                     // touch all cells given in Arr
+                    for (Cell cell : (Collection<Cell>) dictionary.get("cells")) {
+                        thread = new Thread(() -> {
+                            Cell tempCell = cell.clone();
+
+                            onLayoutUpdate.updated(() -> {
+                                new Thread(() -> {
+                                    updateCell(renderColoredCell(TOUCH_CELL_COLOR, tempCell), tempCell);
+                                }).start();
+                            });
+
+                            try {
+                                Thread.sleep(MAZE_DRAW_ANIMATION_RATE);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        threads.add(thread);
+                    }
                     break;
                 case UNTOUCH_ALL:
+                    for (Cell cell : (Collection<Cell>) dictionary.get("cells")) {
+                        thread = new Thread(() -> {
+                            Cell tempCell = cell.clone();
+
+                            onLayoutUpdate.updated(() -> {
+                                new Thread(() -> {
+                                    updateCell(renderColoredCell(DEFALT_CELL_COLOR, tempCell), tempCell);
+                                }).start();
+                            });
+
+                            try {
+                                Thread.sleep(MAZE_DRAW_ANIMATION_RATE);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        threads.add(thread);
+                    }
                     // untouch all cells given in Arr
                     break;
                 case SET_CURRENT_CELL:
+                    thread = new Thread(() -> {
+                        Cell currCell = (Cell) dictionary.get("cell");
+
+                        Cell tempCell = currCell.clone();
+
+                        onLayoutUpdate.updated(() -> {
+                            new Thread(() -> {
+                                updateCell(renderColoredCell(SELECT_CELL_COLOR, tempCell), tempCell);
+                            }).start();
+                        });
+
+                        try {
+                            Thread.sleep(MAZE_DRAW_ANIMATION_RATE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    threads.add(thread);
                     // Change color of selected cell
                     break;
             }
@@ -393,8 +532,8 @@ public class RenderEngine implements Constants {
         }));
 
         new Thread(() -> {
-            for (Thread thread : threads) {
-                thread.start();
+            for (Thread th : threads) {
+                th.start();
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -402,7 +541,6 @@ public class RenderEngine implements Constants {
                 }
             }
         }).start();
-
 
     }
 

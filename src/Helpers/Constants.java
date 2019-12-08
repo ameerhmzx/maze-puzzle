@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import layoutStrategies.LayoutStrategy;
 import layoutStrategies.PostLayoutStrategy;
+import solutionStrategies.SolutionStrategy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ public interface Constants {
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
     LayoutStrategy DEFAULT_LAYOUT_STRATEGY = LayoutStrategy.RECURSIVE_BACK_TRACK;
     PostLayoutStrategy DEFAULT_POST_LAYOUT_STRATEGY = PostLayoutStrategy.PERFECT_MAZE;
+    SolutionStrategy DEFAULT_SOLUTION_STRATEGY = SolutionStrategy.RECURSIVE_BACK_TRACK;
 
     String[] SIZE_LIST = {"10", "15" , "20", "30"};
 
@@ -46,6 +48,9 @@ public interface Constants {
     }};
 
     String BORDER_COLOR = "#333";
+    String TOUCH_CELL_COLOR = "#3c3f41";
+    String DEFALT_CELL_COLOR = "#f4f4f4";
+    String SELECT_CELL_COLOR = "#499c54";
     int BORDER_WIDTH = 1;
     Color PLAYER_COLOR = Color.color(.09, .46, .82);
 }
