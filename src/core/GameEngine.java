@@ -10,7 +10,10 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -18,6 +21,9 @@ import layoutStrategies.LayoutStrategy;
 import layoutStrategies.PostLayoutStrategy;
 import objects.Player;
 import objects.Puzzle;
+import objects.Score;
+
+import java.util.Optional;
 
 import static javafx.scene.input.KeyCode.*;
 
@@ -46,6 +52,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     }
 
     private void newGame(int width, int height, LayoutStrategy layoutStrategy, PostLayoutStrategy postLayoutStrategy) {
+        context.setGameState(GameState.PLAYING);
         context.setPuzzle(new Puzzle(width, height, layoutStrategy, postLayoutStrategy));
         context.setPlayer(new Player(context.getBoard(), this));
 
@@ -66,7 +73,11 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         primaryStage.setScene(scene);
         primaryStage.setMaximized(maximized);
         primaryStage.show();
-        context.getRenderEngine().animateGeneration();
+
+        if (context.animate)
+            context.getRenderEngine().animateGeneration();
+        else
+            context.getRenderEngine().renderBoard();
     }
 
     private void kbdEvents(KeyEvent ke) {
@@ -106,6 +117,28 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         context.setGameState(GameState.WON);
         System.out.println("WON");
         System.out.println("SCORE : " + context.getPlayer().getScore());
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(String.format("Do you want to save your score? (score = %d)", context.getPlayer().getScore()));
+
+        Optional<ButtonType> result = alert.showAndWait();
+        result.ifPresent(s -> {
+            if (s == ButtonType.OK) {
+                TextInputDialog dialog = new TextInputDialog("unnamed");
+                dialog.setTitle("Enter Name");
+                dialog.setHeaderText(null);
+                dialog.setContentText("Please enter your name:");
+
+                Optional<String> result2 = dialog.showAndWait();
+                result2.ifPresent(s2 -> {
+                    context.setPlayerName(s2);
+                    Score score = new Score(context);
+                    //TODO:: save @score to DB
+                });
+            }
+        });
     }
 
     @Override

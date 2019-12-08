@@ -6,13 +6,16 @@ import objects.Board;
 import objects.Player;
 import objects.Puzzle;
 
-public class Context {
+public class Context implements Constants {
     private GameState gameState;
     private Player player;
     private Puzzle puzzle;
     private Board board;
     private ScoreCounter scoreCounter;
     private RenderEngine renderEngine;
+
+    public boolean animate = ANIMATE_BY_DEFAULT;
+    private String playerName;
 
     public Context() {
         setGameState(GameState.PLAYING);
@@ -65,5 +68,13 @@ public class Context {
 
     public void setRenderEngine(RenderEngine renderEngine) {
         this.renderEngine = renderEngine;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 }

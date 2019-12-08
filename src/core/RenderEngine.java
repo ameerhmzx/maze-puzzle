@@ -85,7 +85,7 @@ public class RenderEngine implements Constants {
         scoreLabel.setText("Score : " + score);
     }
 
-    private void renderBoard() {
+    public void renderBoard() {
         for (int y = 0; y < context.getBoard().getHeight(); y++) {
             for (int x = 0; x < context.getBoard().getWidth(); x++) {
                 Cell cell = context.getBoard().getCell(y, x);

@@ -53,8 +53,8 @@ public class Player implements Constants {
         boolean parallelCell2 = proceedingCell.hasWall(PERPENDICULAR_DIRECTIONS.get(direction)[1]);
 
         if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
-            onWon.gameWon();
             move(board.getWidth() * PIXEL_SIZE, (board.getHeight() - 1) * PIXEL_SIZE);
+            onWon.gameWon();
             return;
         }
 

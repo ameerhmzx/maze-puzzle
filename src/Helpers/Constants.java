@@ -17,14 +17,15 @@ public interface Constants {
     float PLAYER_ANIMATION_RATE = .1f;
     int MAZE_DRAW_ANIMATION_RATE = 500;
     int MAZE_PADDING = 10;
-    int DEFAULT_MAZE_WIDTH = 30;
-    int DEFAULT_MAZE_HEIGHT = 20;
+    int DEFAULT_MAZE_WIDTH = 10;
+    int DEFAULT_MAZE_HEIGHT = 10;
     boolean DEFAULT_WINDOW_MAXIMIZED = true;
+    boolean ANIMATE_BY_DEFAULT = false;
     LayoutStrategy DEFAULT_LAYOUT_STRATEGY = LayoutStrategy.RECURSIVE_BACK_TRACK;
     PostLayoutStrategy DEFAULT_POST_LAYOUT_STRATEGY = PostLayoutStrategy.PERFECT_MAZE;
     SolutionStrategy DEFAULT_SOLUTION_STRATEGY = SolutionStrategy.RECURSIVE_BACK_TRACK;
 
-    String[] SIZE_LIST = {"10", "15" , "20", "30"};
+    String[] SIZE_LIST = {"10", "15", "20", "30"};
 
     HashMap<KeyCode, Direction> DIRECTION_CORRESPONDING_KEY_CODE = new HashMap<KeyCode, Direction>() {{
         put(KeyCode.UP, Direction.UP);
