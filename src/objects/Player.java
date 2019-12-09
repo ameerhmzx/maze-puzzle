@@ -1,6 +1,7 @@
 package objects;
 
 import Helpers.Constants;
+import Helpers.Context;
 import Helpers.ScoreCounter;
 import enums.Direction;
 import interfaces.OnWon;
@@ -12,22 +13,23 @@ import javafx.util.Duration;
 
 public class Player implements Constants {
     private Rectangle rect;
-    private Board board;
     private int[] location; //(x,y)
     private OnWon onWon;
     private ScoreCounter scoreCounter;
 
-    public Player(Board board, OnWon onWon) {
+    private Context context;
+
+    public Player(Context context, OnWon onWon) {
         getShape();
-        this.board = board;
+        this.context = context;
         this.onWon = onWon;
-        scoreCounter = new ScoreCounter(board.getHeight()*board.getWidth());
+        scoreCounter = new ScoreCounter(context.getBoard().getHeight() * context.getBoard().getWidth());
     }
 
     public Rectangle getShape() {
         if (rect == null) {
             rect = new Rectangle(CHARACTER_SIZE, CHARACTER_SIZE, PLAYER_COLOR);
-            rect.relocate((PIXEL_SIZE-CHARACTER_SIZE)/2, (PIXEL_SIZE-CHARACTER_SIZE)/2);
+            rect.relocate((PIXEL_SIZE - CHARACTER_SIZE) / 2, (PIXEL_SIZE - CHARACTER_SIZE) / 2);
 
             // Causes jerky transition
             // rect.setArcHeight(5.0);
@@ -43,17 +45,17 @@ public class Player implements Constants {
         move(0, 0);
     }
 
-    public void move(Direction direction){
+    public void move(Direction direction) {
         TranslateTransition tt = new TranslateTransition(Duration.seconds(PLAYER_ANIMATION_RATE), rect);
 
-        Cell currCell = board.getCell(getLocation()[1], getLocation()[0]);
-        Cell proceedingCell = board.getNeighbourCell(currCell, direction);
+        Cell currCell = context.getBoard().getCell(getLocation()[1], getLocation()[0]);
+        Cell proceedingCell = context.getBoard().getNeighbourCell(currCell, direction);
 
         boolean parallelCell1 = proceedingCell.hasWall(PERPENDICULAR_DIRECTIONS.get(direction)[0]);
         boolean parallelCell2 = proceedingCell.hasWall(PERPENDICULAR_DIRECTIONS.get(direction)[1]);
 
-        if (currCell.equals(board.getLastCell()) && direction == Direction.RIGHT) {
-            move(board.getWidth() * PIXEL_SIZE, (board.getHeight() - 1) * PIXEL_SIZE);
+        if (currCell.equals(context.getBoard().getLastCell()) && direction == Direction.RIGHT) {
+            move(context.getBoard().getWidth() * PIXEL_SIZE, (context.getBoard().getHeight() - 1) * PIXEL_SIZE);
             onWon.gameWon();
             return;
         }
@@ -78,6 +80,7 @@ public class Player implements Constants {
                     break;
             }
             scoreCounter.increaseStep();
+            context.setNumberOfMoves(context.getNumberOfMoves() + 1);
             System.out.println(getLocation()[0] + ", " + getLocation()[1] + " :: new Position");
             tt.play();
             if (parallelCell1 && parallelCell2)

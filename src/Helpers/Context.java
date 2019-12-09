@@ -14,11 +14,16 @@ public class Context implements Constants {
     private ScoreCounter scoreCounter;
     private RenderEngine renderEngine;
 
+    private int numberOfMoves;
+    //TODO:: set value
+    private int minimumMovesRequired;
+
     public boolean animate = ANIMATE_BY_DEFAULT;
     private String playerName;
 
     public Context() {
         setGameState(GameState.PLAYING);
+        numberOfMoves = 0;
     }
 
     public GameState getGameState() {
@@ -76,5 +81,21 @@ public class Context implements Constants {
 
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
+    }
+
+    public int getNumberOfMoves() {
+        return numberOfMoves;
+    }
+
+    public void setNumberOfMoves(int numberOfMoves) {
+        this.numberOfMoves = numberOfMoves;
+    }
+
+    public int getMinimumMovesRequired() {
+        return minimumMovesRequired;
+    }
+
+    public void setMinimumMovesRequired(int minimumMovesRequired) {
+        this.minimumMovesRequired = minimumMovesRequired;
     }
 }

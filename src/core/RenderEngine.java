@@ -30,7 +30,7 @@ public class RenderEngine implements Constants {
     private ToolBar toolBar;
     private ToolBar statusBar;
     private SplitMenuButton solveButton, generateMazeButton;
-    private CheckBox rectangularCB;
+    private CheckBox rectangularCB, animateCB;
     private ComboBox heightSelectBox, widthSelectBox, mazeTypeSelectBox;
     private Label scoreLabel;
 
@@ -225,6 +225,15 @@ public class RenderEngine implements Constants {
         return box;
     }
 
+    private void generateAnimateCheckBox() {
+        animateCB = new CheckBox("Animate");
+        if (context.animate) {
+            animateCB.setSelected(true);
+        }
+
+        animateCB.setOnAction(e -> context.animate = !context.animate);
+    }
+
     private void generateToolbar() {
 
         final Pane leftSpacer = new Pane();
@@ -237,6 +246,7 @@ public class RenderEngine implements Constants {
         generateMazeButton();
 
         generateRectangleCheckBox();
+        generateAnimateCheckBox();
 
         generateWidthSelectBox();
         generateHeightSelectBox();
@@ -250,6 +260,7 @@ public class RenderEngine implements Constants {
                 new Label(" x "),
                 widthSelectBox,
                 rectangularCB,
+                animateCB,
                 generateMazeButton,
                 mazeTypeSelectBox,
                 rightSpacer

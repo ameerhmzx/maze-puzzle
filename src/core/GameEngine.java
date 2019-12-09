@@ -2,6 +2,7 @@ package core;
 
 import Helpers.Constants;
 import Helpers.Context;
+import Helpers.Database;
 import enums.GameState;
 import interfaces.OnButtonClick;
 import interfaces.OnLayoutUpdate;
@@ -10,8 +11,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
@@ -54,7 +53,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     private void newGame(int width, int height, LayoutStrategy layoutStrategy, PostLayoutStrategy postLayoutStrategy) {
         context.setGameState(GameState.PLAYING);
         context.setPuzzle(new Puzzle(width, height, layoutStrategy, postLayoutStrategy));
-        context.setPlayer(new Player(context.getBoard(), this));
+        context.setPlayer(new Player(context, this));
 
         context.setRenderEngine(new RenderEngine(context, this, this));
 
@@ -118,26 +117,17 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         System.out.println("WON");
         System.out.println("SCORE : " + context.getPlayer().getScore());
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(String.format("Do you want to save your score? (score = %d)", context.getPlayer().getScore()));
+        TextInputDialog dialog = new TextInputDialog("unnamed");
+        dialog.setTitle("Enter Name");
+        dialog.setHeaderText("Your score will be saved for calculating High score.\nScore: " + context.getPlayer().getScore());
+        dialog.setContentText("Please enter your name:");
 
-        Optional<ButtonType> result = alert.showAndWait();
-        result.ifPresent(s -> {
-            if (s == ButtonType.OK) {
-                TextInputDialog dialog = new TextInputDialog("unnamed");
-                dialog.setTitle("Enter Name");
-                dialog.setHeaderText(null);
-                dialog.setContentText("Please enter your name:");
-
-                Optional<String> result2 = dialog.showAndWait();
-                result2.ifPresent(s2 -> {
-                    context.setPlayerName(s2);
-                    Score score = new Score(context);
-                    //TODO:: save @score to DB
-                });
-            }
+        Optional<String> result2 = dialog.showAndWait();
+        result2.ifPresent(s2 -> {
+            context.setPlayerName(s2);
+            Score score = new Score(context);
+            Database db = new Database();
+            db.addData(score);
         });
     }
 

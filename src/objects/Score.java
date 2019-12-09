@@ -3,8 +3,6 @@ package objects;
 import Helpers.Context;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import layoutStrategies.LayoutStrategy;
-import layoutStrategies.PostLayoutStrategy;
 
 @DatabaseTable(tableName = "score")
 public class Score {
@@ -19,15 +17,34 @@ public class Score {
     private long score;
 
     @DatabaseField
-    private LayoutStrategy layoutStrategy;
+    private String layoutStrategy;
 
     @DatabaseField
-    private PostLayoutStrategy postLayoutStrategy;
+    private String postLayoutStrategy;
+
+    @DatabaseField
+    private int width;
+
+    @DatabaseField
+    private int height;
+
+    @DatabaseField
+    private int minimumMovesRequired;
+
+    @DatabaseField
+    private int movesUsed;
+
+    public Score() {
+    }
 
     public Score(Context context) {
         this.playerName = context.getPlayerName();
         this.score = context.getPlayer().getScore();
-        this.layoutStrategy = context.getPuzzle().getLayoutStrategy();
-        this.postLayoutStrategy = context.getPuzzle().getPostLayoutStrategies();
+        this.layoutStrategy = context.getPuzzle().getLayoutStrategy().getName();
+        this.postLayoutStrategy = context.getPuzzle().getPostLayoutStrategies().getName();
+        this.height = context.getPuzzle().getHeight();
+        this.width = context.getPuzzle().getWidth();
+        this.movesUsed = context.getNumberOfMoves();
+        this.minimumMovesRequired = context.getMinimumMovesRequired();
     }
 }
