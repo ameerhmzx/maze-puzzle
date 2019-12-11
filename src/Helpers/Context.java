@@ -1,6 +1,7 @@
 package Helpers;
 
-import core.RenderEngine;
+import core.GameBoardRenderer;
+import core.MainFrameRenderer;
 import enums.GameState;
 import objects.Board;
 import objects.Player;
@@ -12,7 +13,9 @@ public class Context implements Constants {
     private Puzzle puzzle;
     private Board board;
     private ScoreCounter scoreCounter;
-    private RenderEngine renderEngine;
+
+    private MainFrameRenderer mainFrameRenderer;
+    private GameBoardRenderer gameBoardRenderer;
 
     private int numberOfMoves;
     //TODO:: set value
@@ -67,14 +70,6 @@ public class Context implements Constants {
         this.scoreCounter = scoreCounter;
     }
 
-    public RenderEngine getRenderEngine() {
-        return renderEngine;
-    }
-
-    public void setRenderEngine(RenderEngine renderEngine) {
-        this.renderEngine = renderEngine;
-    }
-
     public String getPlayerName() {
         return playerName;
     }
@@ -97,5 +92,21 @@ public class Context implements Constants {
 
     public void setMinimumMovesRequired(int minimumMovesRequired) {
         this.minimumMovesRequired = minimumMovesRequired;
+    }
+
+    public MainFrameRenderer getMainFrameRenderer() {
+        return mainFrameRenderer;
+    }
+
+    public void setMainFrameRenderer(MainFrameRenderer mainFrameRenderer) {
+        this.mainFrameRenderer = mainFrameRenderer;
+    }
+
+    public GameBoardRenderer getGameBoardRenderer() {
+        return gameBoardRenderer;
+    }
+
+    public void setGameBoardRenderer(GameBoardRenderer gameBoardRenderer) {
+        this.gameBoardRenderer = gameBoardRenderer;
     }
 }

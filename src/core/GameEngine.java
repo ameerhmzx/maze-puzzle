@@ -9,9 +9,7 @@ import interfaces.OnLayoutUpdate;
 import interfaces.OnWon;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -31,7 +29,7 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     private Stage primaryStage;
     private Scene scene;
 
-    private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
+//    private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
     private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
 
     public static void runGame() {
@@ -41,28 +39,15 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     @Override
     public void start(Stage primaryStage) {
         this.context = new Context();
-        this.primaryStage = primaryStage;
-        scene = new Scene(new Label("Loading..."));
-        newGame();
-    }
+//        this.primaryStage = primaryStage;
 
-    private void newGame() {
-        newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, DEFAULT_LAYOUT_STRATEGY, DEFAULT_POST_LAYOUT_STRATEGY);
-    }
+        context.setMainFrameRenderer(new MainFrameRenderer(context, this));
+        scene = new Scene(context.getMainFrameRenderer().getMainFrame());
+        scene.getStylesheets().add(getClass().getResource("../styles/style.css").toExternalForm());
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEvents);
 
-    private void newGame(int width, int height, LayoutStrategy layoutStrategy, PostLayoutStrategy postLayoutStrategy) {
-        context.setGameState(GameState.PLAYING);
-        context.setPuzzle(new Puzzle(width, height, layoutStrategy, postLayoutStrategy));
-        context.setPlayer(new Player(context, this));
-
-        context.setRenderEngine(new RenderEngine(context, this, this));
-
-        scene.setRoot(context.getRenderEngine().getRoot());
-        scene.removeEventHandler(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         adjustStageSize(maximized);
 
-        scene.getStylesheets().add(getClass().getResource("../styles/style.css").toExternalForm());
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, KbdEventsHandler);
         primaryStage.maximizedProperty().addListener((ov, t, t1) -> {
             maximized = t1;
             adjustStageSize(maximized);
@@ -73,17 +58,34 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         primaryStage.setMaximized(maximized);
         primaryStage.show();
 
-        if (context.animate)
-            context.getRenderEngine().animateGeneration();
-        else
-            context.getRenderEngine().renderBoard();
+        newGame();
+    }
+
+    private void newGame() {
+        newGame(DEFAULT_MAZE_WIDTH, DEFAULT_MAZE_HEIGHT, DEFAULT_LAYOUT_STRATEGY, DEFAULT_POST_LAYOUT_STRATEGY);
+    }
+
+    private void newGame(int width, int height, LayoutStrategy layoutStrategy, PostLayoutStrategy postLayoutStrategy) {
+        context.setPuzzle(new Puzzle(width, height, layoutStrategy, postLayoutStrategy));
+        context.setPlayer(new Player(context, this));
+
+        context.setGameBoardRenderer(new GameBoardRenderer(context, this));
+        context.getMainFrameRenderer().update();
+
+        if (context.animate) {
+            context.getGameBoardRenderer().animateGeneration();
+            context.setGameState(GameState.ANIMATING);
+        } else {
+            context.getGameBoardRenderer().renderBoard();
+            context.setGameState(GameState.PLAYING);
+        }
     }
 
     private void kbdEvents(KeyEvent ke) {
         KeyCode kc = ke.getCode();
         if ((kc == UP || kc == DOWN || kc == LEFT || kc == RIGHT) && context.getGameState() == GameState.PLAYING) {
             context.getPlayer().move(kc);
-            context.getRenderEngine().updateScore(context.getPlayer().getScore());
+            context.getMainFrameRenderer().updateScore(context.getPlayer().getScore());
             ke.consume();
         } else {
             if (kc == R) {
