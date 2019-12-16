@@ -45,7 +45,11 @@ public class Player implements Constants {
         move(0, 0);
     }
 
-    public void move(Direction direction) {
+    public void move(Direction direction){
+        move(direction, true);
+    }
+
+    public void move(Direction direction, boolean forward) {
         TranslateTransition tt = new TranslateTransition(Duration.seconds(PLAYER_ANIMATION_RATE), rect);
 
         Cell currCell = context.getBoard().getCell(getLocation()[1], getLocation()[0]);
@@ -83,7 +87,7 @@ public class Player implements Constants {
             context.setNumberOfMoves(context.getNumberOfMoves() + 1);
             System.out.println(getLocation()[0] + ", " + getLocation()[1] + " :: new Position");
             tt.play();
-            if (parallelCell1 && parallelCell2)
+            if (parallelCell1 && parallelCell2 && forward)
                 move(direction);
         }
     }

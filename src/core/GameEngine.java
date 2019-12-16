@@ -3,6 +3,7 @@ package core;
 import Helpers.Constants;
 import Helpers.Context;
 import Helpers.Database;
+import enums.Direction;
 import enums.GameState;
 import interfaces.OnButtonClick;
 import interfaces.OnLayoutUpdate;
@@ -16,10 +17,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import layoutStrategies.LayoutStrategy;
 import layoutStrategies.PostLayoutStrategy;
+import objects.Cell;
 import objects.Player;
 import objects.Puzzle;
 import objects.Score;
+import solutionStrategies.SolutionStrategy;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static javafx.scene.input.KeyCode.*;
@@ -104,8 +108,29 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     }
 
     @Override
-    public void solve() {
-        // TODO:: SOLVE
+    public void solve(SolutionStrategy solutionStrategy) {
+        int[] location = context.getPlayer().getLocation();
+        Cell currentCell = context.getBoard().getCell(location[0], location[1]);
+        ArrayList<Direction> moves = context.getPuzzle().solve(currentCell, solutionStrategy);
+
+        ArrayList<Thread> threads = new ArrayList<>();
+
+        for (Direction dir : moves) {
+            threads.add(new Thread(()->{
+                context.getPlayer().move(dir, false);
+            }));
+        }
+
+        new Thread(()->{
+            for (Thread thread: threads){
+                thread.start();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override

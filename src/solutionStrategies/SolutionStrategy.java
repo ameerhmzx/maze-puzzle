@@ -26,6 +26,14 @@ public enum SolutionStrategy implements ISolutionStrategy {
         this.name = name;
     }
 
+    public static SolutionStrategy getFromName(String name) {
+        for (SolutionStrategy strategy : SolutionStrategy.values()) {
+            if (strategy.getName().equals(name))
+                return strategy;
+        }
+        throw new IllegalArgumentException(name);
+    }
+
     public String getName() {
         return name;
     }
