@@ -161,6 +161,14 @@ public class MainFrameRenderer implements Constants {
                 x.setSelected(true);
             solve.getItems().add(x);
         }
+        solve.setOnAction(value -> {
+            for (MenuItem menuItem : solve.getItems()) {
+                if (((RadioMenuItem) menuItem).isSelected()) {
+                    onButtonClick.solve(SolutionStrategy.getFromName(menuItem.getText()));
+                    break;
+                }
+            }
+        });
         return solve;
     }
 

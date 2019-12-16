@@ -50,15 +50,14 @@ public class Puzzle implements Constants {
     }
 
     public static void main(String[] args) {
-        Puzzle puzzle = new Puzzle(6, 6);
+        Puzzle puzzle = new Puzzle(4, 4);
         puzzle.applyLayoutStrategy(LayoutStrategy.RECURSIVE_BACK_TRACK);
-        puzzle.applyPostLayoutStrategy(PostLayoutStrategy.BRAID_MAZE);
         drawBoard(puzzle.board);
 
-        ArrayList<Direction> solution = puzzle.solve(puzzle.board.getCell(0), SolutionStrategy.DIJKSTRA_PATH_FINDING);
-        for (Direction dir : solution) {
-            System.out.printf("%s, ",dir);
-        }
+//        ArrayList<Direction> solution = puzzle.solve(puzzle.board.getCell(0), SolutionStrategy.DIJKSTRA_PATH_FINDING);
+//        for (Direction dir : solution) {
+//            System.out.printf("%s, ",dir);
+//        }
     }
 
     private static void drawBoard(Board board) {

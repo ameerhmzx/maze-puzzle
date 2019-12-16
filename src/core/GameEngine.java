@@ -30,10 +30,6 @@ import static javafx.scene.input.KeyCode.*;
 
 public class GameEngine extends Application implements Constants, OnButtonClick, OnWon, OnLayoutUpdate {
     private Context context;
-    private Stage primaryStage;
-    private Scene scene;
-
-//    private EventHandler<KeyEvent> KbdEventsHandler = this::kbdEvents;
     private boolean maximized = DEFAULT_WINDOW_MAXIMIZED;
 
     public static void runGame() {
@@ -43,18 +39,23 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
     @Override
     public void start(Stage primaryStage) {
         this.context = new Context();
-//        this.primaryStage = primaryStage;
 
         context.setMainFrameRenderer(new MainFrameRenderer(context, this));
-        scene = new Scene(context.getMainFrameRenderer().getMainFrame());
+        Scene scene = new Scene(context.getMainFrameRenderer().getMainFrame());
         scene.getStylesheets().add(getClass().getResource("../styles/style.css").toExternalForm());
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::kbdEvents);
 
-        adjustStageSize(maximized);
+        if (!maximized) {
+            primaryStage.setWidth((context.getPuzzle().getWidth() + MAZE_PADDING) * PIXEL_SIZE);
+            primaryStage.setHeight((context.getPuzzle().getHeight() + MAZE_PADDING) * PIXEL_SIZE);
+        }
 
         primaryStage.maximizedProperty().addListener((ov, t, t1) -> {
             maximized = t1;
-            adjustStageSize(maximized);
+            if (!maximized) {
+                primaryStage.setWidth((context.getPuzzle().getWidth() + MAZE_PADDING) * PIXEL_SIZE);
+                primaryStage.setHeight((context.getPuzzle().getHeight() + MAZE_PADDING) * PIXEL_SIZE);
+            }
         });
 
         primaryStage.setTitle(APP_NAME);
@@ -100,13 +101,6 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         }
     }
 
-    private void adjustStageSize(boolean maximized) {
-        if (!maximized) {
-            primaryStage.setWidth((context.getPuzzle().getWidth() + MAZE_PADDING) * PIXEL_SIZE);
-            primaryStage.setHeight((context.getPuzzle().getHeight() + MAZE_PADDING) * PIXEL_SIZE);
-        }
-    }
-
     @Override
     public void solve(SolutionStrategy solutionStrategy) {
         int[] location = context.getPlayer().getLocation();
@@ -116,13 +110,13 @@ public class GameEngine extends Application implements Constants, OnButtonClick,
         ArrayList<Thread> threads = new ArrayList<>();
 
         for (Direction dir : moves) {
-            threads.add(new Thread(()->{
+            threads.add(new Thread(() -> {
                 context.getPlayer().move(dir, false);
             }));
         }
 
-        new Thread(()->{
-            for (Thread thread: threads){
+        new Thread(() -> {
+            for (Thread thread : threads) {
                 thread.start();
                 try {
                     Thread.sleep(100);

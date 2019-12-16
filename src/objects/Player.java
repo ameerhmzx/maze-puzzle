@@ -40,12 +40,12 @@ public class Player implements Constants {
     }
 
     public void reset() {
-        rect.relocate((PIXEL_SIZE-CHARACTER_SIZE)/2, (PIXEL_SIZE-CHARACTER_SIZE)/2);
+        rect.relocate((PIXEL_SIZE - CHARACTER_SIZE) / 2, (PIXEL_SIZE - CHARACTER_SIZE) / 2);
         location = new int[]{0, 0};
         move(0, 0);
     }
 
-    public void move(Direction direction){
+    public void move(Direction direction) {
         move(direction, true);
     }
 
