@@ -1,5 +1,5 @@
 # Maze Puzzle
-Maze game written using Java and JavaFX for UI
+Maze game written using Java (JavaFX for UI)
 
 Implementes different [Maze Generation Algorithms](/src/layoutStrategies)
 And also [Maze Solving algorithms](/src/solutionStrategies)
